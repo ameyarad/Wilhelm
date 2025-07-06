@@ -36,7 +36,7 @@ export default function Sidebar() {
   return (
     <div className={cn(
       "flex-none bg-nhs-blue text-white border-r border-gray-200 flex flex-col transition-all duration-300",
-      isCollapsed ? "w-16" : "w-64"
+      isCollapsed ? "w-16" : "w-48 md:w-64"
     )}>
       {/* Sidebar Header */}
       <div className="flex items-center justify-between p-4 border-b border-nhs-light-blue/20">
@@ -64,9 +64,9 @@ export default function Sidebar() {
           
           return (
             <Link key={item.name} href={item.href}>
-              <a
+              <div
                 className={cn(
-                  "flex items-center rounded-lg transition-colors",
+                  "flex items-center rounded-lg transition-colors cursor-pointer",
                   isCollapsed ? "px-3 py-2 justify-center" : "px-3 py-2 space-x-3",
                   isActive 
                     ? "bg-nhs-light-blue/20 text-white" 
@@ -76,7 +76,7 @@ export default function Sidebar() {
               >
                 <Icon className="w-5 h-5" />
                 {!isCollapsed && <span>{item.name}</span>}
-              </a>
+              </div>
             </Link>
           );
         })}

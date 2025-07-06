@@ -81,6 +81,18 @@ export default function Landing() {
             Secure authentication powered by Replit
           </p>
         </div>
+        
+        {/* Footer */}
+        <footer className="text-center text-white/80 mt-12 pt-8 border-t border-white/20">
+          <div className="text-sm">
+            <p className="mb-1">
+              © 2025 Ameya Kawthalkar. Wilhelm is a free and open source AI agent for medical imaging reporting.
+            </p>
+            <p className="text-xs text-white/60">
+              For educational and research purposes only. Not for clinical use.
+            </p>
+          </div>
+        </footer>
       </div>
     </div>
   );

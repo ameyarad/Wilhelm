@@ -161,10 +161,10 @@ export default function Home() {
   return (
     <div className="flex h-screen bg-nhs-light-grey">
       <Sidebar />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         <Header />
-        <main className="flex-1 p-6 overflow-y-auto">
-          <div className="max-w-4xl mx-auto space-y-6">
+        <main className="flex-1 p-4 md:p-6 overflow-y-auto">
+          <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
 
 
             {/* Chat Interface */}
@@ -175,7 +175,7 @@ export default function Home() {
                   <span>AI Report Generator</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 p-4 md:p-6">
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <label className="text-sm font-medium text-nhs-dark-grey">
@@ -199,7 +199,7 @@ export default function Home() {
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Type your clinical findings here or use voice dictation..."
-                      className="min-h-[120px] pr-16"
+                      className="min-h-[120px] pr-12 md:pr-16"
                       disabled={isProcessing}
                     />
                     <Button
@@ -235,7 +235,8 @@ export default function Home() {
                   ) : (
                     <>
                       <FileText className="w-4 h-4 mr-2" />
-                      Generate Report
+                      <span className="hidden sm:inline">Generate Report</span>
+                      <span className="sm:hidden">Generate</span>
                     </>
                   )}
                 </Button>

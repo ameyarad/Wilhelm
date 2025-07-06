@@ -168,6 +168,18 @@ export default function Reports() {
             </div>
           </div>
         </main>
+        
+        {/* Footer */}
+        <footer className="bg-white border-t border-gray-200 p-4 text-center">
+          <div className="text-sm text-nhs-dark-grey">
+            <p className="mb-1">
+              © 2025 Ameya Kawthalkar. Wilhelm is a free and open source AI agent for medical imaging reporting.
+            </p>
+            <p className="text-xs text-nhs-dark-grey/70">
+              For educational and research purposes only. Not for clinical use.
+            </p>
+          </div>
+        </footer>
       </div>
     </div>
   );
