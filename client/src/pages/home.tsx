@@ -165,15 +165,7 @@ export default function Home() {
         <Header />
         <main className="flex-1 p-6 overflow-y-auto">
           <div className="max-w-4xl mx-auto space-y-6">
-            {/* Welcome Section */}
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h1 className="text-2xl font-semibold text-nhs-dark-grey mb-2">
-                Welcome back, {(user && user.firstName) || "Doctor"}
-              </h1>
-              <p className="text-nhs-dark-grey/70">
-                Dictate or type your findings to generate professional radiology reports with AI assistance
-              </p>
-            </div>
+
 
             {/* Chat Interface */}
             <Card>
@@ -309,6 +301,18 @@ export default function Home() {
             </div>
           </div>
         </main>
+        
+        {/* Footer */}
+        <footer className="bg-white border-t border-gray-200 p-4 text-center">
+          <div className="text-sm text-nhs-dark-grey">
+            <p className="mb-1">
+              © 2025 Ameya Kawthalkar. Wilhelm is a free and open source AI agent for medical imaging reporting.
+            </p>
+            <p className="text-xs text-nhs-dark-grey/70">
+              For educational and research purposes only. Not for clinical use.
+            </p>
+          </div>
+        </footer>
       </div>
     </div>
   );
