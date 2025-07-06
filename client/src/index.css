@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(210, 11%, 15%);
+  --muted: hsl(210, 40%, 98%);
+  --muted-foreground: hsl(215, 13%, 65%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(210, 11%, 15%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(210, 11%, 15%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(222, 84%, 4%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(222, 84%, 4%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(207, 90%, 54%);
+  --radius: 0.5rem;
+  
+  /* NHS Color Scheme */
+  --nhs-blue: hsl(207, 90%, 54%);
+  --nhs-light-blue: hsl(198, 71%, 73%);
+  --nhs-green: hsl(174, 100%, 32%);
+  --nhs-dark-grey: hsl(210, 29%, 24%);
+  --nhs-red: hsl(10, 84%, 60%);
+  --nhs-light-grey: hsl(210, 40%, 96%);
+}
+
+.dark {
+  --background: hsl(222, 84%, 4%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32%, 17%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --popover: hsl(222, 84%, 4%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 84%, 4%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32%, 17%);
+  --input: hsl(217, 32%, 17%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(217, 32%, 17%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --accent: hsl(217, 32%, 17%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62%, 30%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(207, 90%, 54%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-nhs-blue {
+    color: var(--nhs-blue);
+  }
+  
+  .text-nhs-light-blue {
+    color: var(--nhs-light-blue);
+  }
+  
+  .text-nhs-green {
+    color: var(--nhs-green);
+  }
+  
+  .text-nhs-dark-grey {
+    color: var(--nhs-dark-grey);
+  }
+  
+  .text-nhs-red {
+    color: var(--nhs-red);
+  }
+  
+  .text-nhs-light-grey {
+    color: var(--nhs-light-grey);
+  }
+  
+  .bg-nhs-blue {
+    background-color: var(--nhs-blue);
+  }
+  
+  .bg-nhs-light-blue {
+    background-color: var(--nhs-light-blue);
+  }
+  
+  .bg-nhs-green {
+    background-color: var(--nhs-green);
+  }
+  
+  .bg-nhs-dark-grey {
+    background-color: var(--nhs-dark-grey);
+  }
+  
+  .bg-nhs-red {
+    background-color: var(--nhs-red);
+  }
+  
+  .bg-nhs-light-grey {
+    background-color: var(--nhs-light-grey);
+  }
+  
+  .border-nhs-blue {
+    border-color: var(--nhs-blue);
+  }
+  
+  .border-nhs-light-blue {
+    border-color: var(--nhs-light-blue);
+  }
+  
+  .border-nhs-green {
+    border-color: var(--nhs-green);
+  }
+  
+  .hover\:bg-nhs-blue\/90:hover {
+    background-color: hsl(207, 90%, 54%, 0.9);
+  }
+  
+  .hover\:bg-nhs-light-blue\/90:hover {
+    background-color: hsl(198, 71%, 73%, 0.9);
+  }
+  
+  .hover\:bg-nhs-green\/90:hover {
+    background-color: hsl(174, 100%, 32%, 0.9);
+  }
+}
