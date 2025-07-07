@@ -45,7 +45,7 @@ export default function Landing() {
               AI-powered radiology reporting platform with advanced voice transcription for CT, MRI, X-ray, ultrasound, and nuclear medicine studies
             </p>
             
-            <div className="mb-16 flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <div className="mb-16 flex justify-center">
               <Button 
                 onClick={handleLogin}
                 size="lg" 
@@ -53,13 +53,6 @@ export default function Landing() {
               >
                 <Sparkles className="w-6 h-6 mr-3 group-hover:animate-spin" />
                 Get Started
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="border-2 border-nhs-light-blue/50 text-white hover:bg-nhs-light-blue/20 hover:border-nhs-light-blue px-16 py-8 text-xl font-semibold backdrop-blur-sm transition-all duration-500 hover:scale-105"
-              >
-                Learn More
               </Button>
             </div>
           </div>
