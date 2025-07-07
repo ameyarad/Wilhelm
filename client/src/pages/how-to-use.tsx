@@ -39,9 +39,7 @@ export default function HowToUse() {
           <div className="container mx-auto max-w-4xl">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-nhs-dark-blue mb-2 text-center">How To Use Wilhelm</h1>
-              <p className="text-nhs-dark-grey/70 text-lg text-center">
-                Step-by-step guide to creating AI-powered radiology reports
-              </p>
+              <p className="text-nhs-dark-grey/70 text-lg text-center">Step-By-Step Guide For Creating AI-powered Radiology Reports</p>
             </div>
 
             {/* Step 1: Template Upload */}
