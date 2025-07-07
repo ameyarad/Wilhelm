@@ -213,37 +213,9 @@ Please provide enhanced findings that are:
   }
 
   async moderateContent(content: string): Promise<{ isSafe: boolean; violations: string[] }> {
-    try {
-      const response = await groq.chat.completions.create({
-        model: "llama-guard-3-8b",
-        messages: [
-          {
-            role: "user",
-            content: content
-          }
-        ],
-        max_tokens: 100,
-        temperature: 0.0
-      });
-
-      const result = response.choices[0]?.message?.content?.trim();
-      
-      if (!result) {
-        return { isSafe: false, violations: ["Error in moderation"] };
-      }
-
-      if (result.toLowerCase() === "safe") {
-        return { isSafe: true, violations: [] };
-      } else if (result.toLowerCase().startsWith("unsafe")) {
-        const violations = result.includes('\n') ? result.split('\n').slice(1) : ["Policy violation"];
-        return { isSafe: false, violations };
-      }
-
-      return { isSafe: false, violations: ["Unknown"] };
-    } catch (error) {
-      console.error("Content moderation error:", error);
-      return { isSafe: false, violations: ["Moderation service error"] };
-    }
+    // Content moderation temporarily disabled due to model decommissioning
+    // Always return safe for now
+    return { isSafe: true, violations: [] };
   }
 }
 

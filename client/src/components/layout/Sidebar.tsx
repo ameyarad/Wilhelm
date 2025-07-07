@@ -5,12 +5,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   FileText, 
   History, 
-  Settings, 
   LogOut,
   Home,
   ChevronLeft,
   ChevronRight,
-  Menu
+  Menu,
+  HelpCircle,
+  Code,
+  Info,
+  Mail
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -30,7 +33,13 @@ export default function Sidebar() {
     { name: "Home", href: "/", icon: Home },
     { name: "My Templates", href: "/templates", icon: FileText },
     { name: "Saved Reports", href: "/reports", icon: History },
-    { name: "Settings", href: "/settings", icon: Settings },
+  ];
+
+  const bottomLinks = [
+    { name: "How To Use", href: "/how-to-use", icon: HelpCircle },
+    { name: "How It Was Built", href: "/how-it-was-built", icon: Code },
+    { name: "About", href: "/about", icon: Info },
+    { name: "Contact", href: "/contact", icon: Mail },
   ];
 
   return (
@@ -78,6 +87,32 @@ export default function Sidebar() {
           );
         })}
       </nav>
+
+      {/* Bottom Links */}
+      <div className="px-4 py-2 border-t border-nhs-light-blue/20 space-y-1">
+        {bottomLinks.map((item) => {
+          const Icon = item.icon;
+          const isActive = location === item.href;
+          
+          return (
+            <Link key={item.name} href={item.href}>
+              <div
+                className={cn(
+                  "flex items-center rounded-lg transition-colors cursor-pointer text-sm",
+                  isCollapsed ? "px-2 py-1.5 justify-center" : "px-2 py-1.5 space-x-2",
+                  isActive 
+                    ? "bg-nhs-light-blue/20 text-white" 
+                    : "text-white/60 hover:text-white hover:bg-white/10"
+                )}
+                title={isCollapsed ? item.name : undefined}
+              >
+                <Icon className="w-4 h-4" />
+                {!isCollapsed && <span className="text-xs">{item.name}</span>}
+              </div>
+            </Link>
+          );
+        })}
+      </div>
 
       {/* User Profile */}
       <div className="p-4 border-t border-nhs-light-blue/20">

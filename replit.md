@@ -122,9 +122,12 @@ Changelog:
   - Enhanced keyboard shortcuts support (Ctrl+Z, Ctrl+Y, Ctrl+Shift+Z)
   - Improved CSS styling for better editor visibility and scrolling
   - Implemented optimal AI parameters: temperature=0.1, top_p=0.6-0.7 for consistent output
-  - Added Llama Guard 3 8B content moderation for input/output safety
+  - Added Llama Guard 3 8B content moderation for input/output safety (temporarily disabled due to model deprecation)
   - Enhanced document processing with word-extractor library for .doc files
   - Removed blockquote and unwanted toolbar buttons completely
+  - Fixed undo/redo functionality with custom buttons and proper visual separation
+  - Updated sidebar navigation: removed Settings, added How To Use, How It Was Built, About, Contact at bottom
+  - Centered chat interface on home page for better user experience
 - July 07, 2025. Advanced template management with full folder organization
   - Fixed .doc file upload issues by filtering out binary characters that cause UTF-8 database errors
   - Added comprehensive folder organization system with backend API endpoints:
