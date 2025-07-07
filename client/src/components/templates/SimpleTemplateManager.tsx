@@ -259,15 +259,16 @@ export default function SimpleTemplateManager() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-2">
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
                       onClick={() => handleEdit(template)}
-                      className="text-nhs-blue hover:text-nhs-blue/80 h-8 w-8 p-0"
+                      className="text-nhs-blue border-nhs-blue hover:bg-nhs-blue hover:text-white px-3 h-8"
                       title="View and Edit Template"
                     >
-                      <Eye className="w-4 h-4" />
+                      <Eye className="w-4 h-4 mr-1" />
+                      <span className="text-xs">Edit</span>
                     </Button>
                     <Button
                       variant="ghost"
