@@ -99,7 +99,7 @@ export default function HowToUse() {
                     3
                   </div>
                   <FileText className="w-6 h-6 text-nhs-blue" />
-                  <span>Generate AI Report</span>
+                  <span>Generate Report</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
