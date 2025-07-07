@@ -175,20 +175,4 @@
   display: none !important;
 }
 
-/* Custom undo/redo buttons */
-.ql-toolbar::before {
-  content: '';
-  display: inline-block;
-  width: 100%;
-}
-
-.ql-toolbar .ql-formats:first-child::before {
-  content: '↶ ↷';
-  font-size: 16px;
-  margin-right: 8px;
-  padding: 4px 6px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  cursor: pointer;
-  background: #f8f9fa;
-}
+/* Custom undo/redo buttons - removed since we're using external buttons now */

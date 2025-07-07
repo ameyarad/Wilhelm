@@ -11,7 +11,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { Template } from "@shared/schema";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { Save, X, FileText } from "lucide-react";
+import { Save, X, FileText, Undo, Redo } from "lucide-react";
 
 interface RichTextEditorProps {
   template?: Template;
@@ -26,6 +26,8 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const quillRef = useRef<ReactQuill>(null);
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
 
   // Update form state when template changes
   useEffect(() => {
@@ -138,6 +140,37 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
     }
   };
 
+  const handleUndo = () => {
+    if (quillRef.current) {
+      const quill = quillRef.current.getEditor();
+      quill.history.undo();
+      updateHistoryState();
+    }
+  };
+
+  const handleRedo = () => {
+    if (quillRef.current) {
+      const quill = quillRef.current.getEditor();
+      quill.history.redo();
+      updateHistoryState();
+    }
+  };
+
+  const updateHistoryState = () => {
+    if (quillRef.current) {
+      const quill = quillRef.current.getEditor();
+      const history = quill.history;
+      setCanUndo(history.stack.undo.length > 0);
+      setCanRedo(history.stack.redo.length > 0);
+    }
+  };
+
+  const handleTextChange = (value: string) => {
+    setContent(value);
+    // Update history state after text change
+    setTimeout(updateHistoryState, 100);
+  };
+
   const formats = [
     'header', 'bold', 'italic', 'underline', 'strike', 'script',
     'list', 'bullet', 'indent', 'link', 'color', 'background',
@@ -182,13 +215,39 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
 
           
           <div className="space-y-2 flex-1 min-h-0">
-            <Label>Template Content</Label>
+            <div className="flex items-center justify-between">
+              <Label>Template Content</Label>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleUndo}
+                  disabled={!canUndo}
+                  className="flex items-center gap-1"
+                >
+                  <Undo className="h-4 w-4" />
+                  Undo
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRedo}
+                  disabled={!canRedo}
+                  className="flex items-center gap-1"
+                >
+                  <Redo className="h-4 w-4" />
+                  Redo
+                </Button>
+              </div>
+            </div>
             <div className="border rounded-lg overflow-hidden" style={{ height: '450px' }}>
               <ReactQuill
                 ref={quillRef}
                 theme="snow"
                 value={content}
-                onChange={setContent}
+                onChange={handleTextChange}
                 modules={modules}
                 formats={formats}
                 style={{ height: '400px' }}
@@ -198,12 +257,16 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
                     const key = e.key.toLowerCase();
                     if (key === 'z' && !e.shiftKey) {
                       e.preventDefault();
-                      // Undo handled by Quill's history module
-                    } else if ((key === 'z' && e.shiftKey) || key === 'y') {
+                      handleUndo();
+                    } else if (key === 'z' && e.shiftKey || key === 'y') {
                       e.preventDefault();
-                      // Redo handled by Quill's history module
+                      handleRedo();
                     }
                   }
+                }}
+                onReady={() => {
+                  // Update history state when editor is ready
+                  setTimeout(updateHistoryState, 100);
                 }}
               />
             </div>
