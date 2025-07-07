@@ -128,9 +128,7 @@ export default function Reports() {
               <h1 className="text-2xl font-semibold text-nhs-dark-grey mb-2">
                 Report History
               </h1>
-              <p className="text-nhs-dark-grey/70">
-                View and manage your radiology reports
-              </p>
+              <p className="text-nhs-dark-grey/70">View and manage your saved reports</p>
             </div>
 
             {/* Reports List */}
