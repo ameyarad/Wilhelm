@@ -332,120 +332,216 @@
 
 /* Custom undo/redo buttons - removed since we're using external buttons now */
 
-/* Mobile responsive styles for ReactQuill */
-.mobile-quill .ql-toolbar {
-  border-top: 1px solid #ccc;
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-  border-bottom: none;
-  padding: 4px 8px;
-  font-size: 12px;
-  flex-wrap: wrap;
-  overflow-x: auto;
-  min-height: 40px;
+/* Enhanced ReactQuill with scrollbars - Desktop & Mobile */
+.scrollable-editor {
+  height: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollable-editor .ql-toolbar {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
   background: white;
-}
-
-.mobile-quill .ql-container {
   border-bottom: 1px solid #ccc;
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-  border-top: none;
+  border-radius: 8px 8px 0 0;
+  padding: 8px 12px;
   font-size: 14px;
-  line-height: 1.5;
-  height: auto !important;
-  flex: 1;
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
 }
 
-.mobile-quill .ql-editor {
-  padding: 12px 16px;
+.scrollable-editor .ql-toolbar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.scrollable-editor .ql-toolbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.scrollable-editor .ql-toolbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.scrollable-editor .ql-toolbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.scrollable-editor .ql-container {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: none;
+  font-family: inherit;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+.scrollable-editor .ql-editor {
+  padding: 16px;
   min-height: 200px;
   font-size: 16px;
   line-height: 1.6;
-  height: auto !important;
-  max-height: none !important;
   overflow-y: auto;
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
 }
 
+/* Custom scrollbar styling for WebKit browsers */
+.scrollable-editor .ql-container::-webkit-scrollbar,
+.scrollable-editor .ql-editor::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollable-editor .ql-container::-webkit-scrollbar-track,
+.scrollable-editor .ql-editor::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.scrollable-editor .ql-container::-webkit-scrollbar-thumb,
+.scrollable-editor .ql-editor::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+  min-height: 20px;
+}
+
+.scrollable-editor .ql-container::-webkit-scrollbar-thumb:hover,
+.scrollable-editor .ql-editor::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.scrollable-editor .ql-container::-webkit-scrollbar-corner,
+.scrollable-editor .ql-editor::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
+
+/* Tablet responsive styles */
+@media (max-width: 1024px) {
+  .scrollable-editor .ql-editor {
+    min-height: 180px;
+    font-size: 15px;
+    padding: 14px;
+  }
+  
+  .scrollable-editor .ql-toolbar {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
+
+/* Mobile responsive styles */
 @media (max-width: 768px) {
-  .mobile-quill .ql-toolbar {
-    padding: 4px 6px;
+  .scrollable-editor .ql-toolbar {
+    padding: 6px 8px;
     font-size: 12px;
     min-height: 48px;
-    border-radius: 8px 8px 0 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
   
-  .mobile-quill .ql-toolbar .ql-formats {
-    margin-right: 10px;
+  .scrollable-editor .ql-toolbar::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  .scrollable-editor .ql-toolbar .ql-formats {
+    margin-right: 8px;
     margin-bottom: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
   }
   
-  .mobile-quill .ql-toolbar button {
-    width: 32px;
-    height: 32px;
-    padding: 4px;
+  .scrollable-editor .ql-toolbar button {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
     border-radius: 4px;
     margin: 1px;
+    flex-shrink: 0;
   }
   
-  .mobile-quill .ql-toolbar button:hover {
+  .scrollable-editor .ql-toolbar button:hover {
     background: #f3f4f6;
   }
   
-  .mobile-quill .ql-toolbar button.ql-active {
+  .scrollable-editor .ql-toolbar button.ql-active {
     background: #3b82f6;
     color: white;
   }
   
-  .mobile-quill .ql-toolbar button svg {
-    width: 16px;
-    height: 16px;
+  .scrollable-editor .ql-toolbar button svg {
+    width: 18px;
+    height: 18px;
   }
   
-  .mobile-quill .ql-toolbar .ql-picker {
+  .scrollable-editor .ql-toolbar .ql-picker {
     font-size: 12px;
   }
   
-  .mobile-quill .ql-toolbar .ql-picker-label {
-    padding: 4px 8px;
+  .scrollable-editor .ql-toolbar .ql-picker-label {
+    padding: 6px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    min-height: 32px;
+    min-height: 36px;
     display: flex;
     align-items: center;
+    white-space: nowrap;
   }
   
-  .mobile-quill .ql-editor {
+  .scrollable-editor .ql-editor {
     padding: 16px 12px;
     font-size: 16px;
     line-height: 1.6;
-    min-height: 250px;
+    min-height: 220px;
   }
   
-  .mobile-quill .ql-container {
+  .scrollable-editor .ql-container {
     font-size: 16px;
-    border-radius: 0 0 8px 8px;
+  }
+  
+  /* Mobile scrollbar styling */
+  .scrollable-editor .ql-container::-webkit-scrollbar,
+  .scrollable-editor .ql-editor::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .scrollable-editor .ql-container::-webkit-scrollbar-thumb,
+  .scrollable-editor .ql-editor::-webkit-scrollbar-thumb {
+    min-height: 44px; /* Minimum touch target size */
+    background: #888;
   }
 }
 
+/* Extra small mobile responsive styles */
 @media (max-width: 480px) {
-  .mobile-quill .ql-toolbar {
-    padding: 6px 8px;
+  .scrollable-editor .ql-toolbar {
+    padding: 8px 6px;
     min-height: 52px;
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
   
-  .mobile-quill .ql-toolbar::-webkit-scrollbar {
-    display: none;
+  .scrollable-editor .ql-toolbar::-webkit-scrollbar {
+    height: 3px;
   }
   
-  .mobile-quill .ql-toolbar .ql-formats {
+  .scrollable-editor .ql-toolbar .ql-formats {
     display: inline-flex;
     white-space: nowrap;
     margin-right: 8px;
@@ -453,47 +549,60 @@
     gap: 2px;
   }
   
-  .mobile-quill .ql-toolbar button {
-    width: 36px;
-    height: 36px;
+  .scrollable-editor .ql-toolbar button {
+    width: 40px;
+    height: 40px;
     margin: 2px;
     flex-shrink: 0;
+    padding: 8px;
   }
   
-  .mobile-quill .ql-toolbar button svg {
-    width: 18px;
-    height: 18px;
+  .scrollable-editor .ql-toolbar button svg {
+    width: 20px;
+    height: 20px;
   }
   
-  .mobile-quill .ql-toolbar .ql-picker-label {
-    min-height: 36px;
-    padding: 6px 10px;
+  .scrollable-editor .ql-toolbar .ql-picker-label {
+    min-height: 40px;
+    padding: 8px 12px;
     white-space: nowrap;
   }
   
-  .mobile-quill .ql-editor {
+  .scrollable-editor .ql-editor {
     padding: 20px 16px;
     font-size: 16px;
     line-height: 1.6;
-    min-height: 300px;
+    min-height: 280px;
   }
   
   /* Prevent zoom on input focus */
-  .mobile-quill .ql-editor,
-  .mobile-quill input,
-  .mobile-quill textarea {
+  .scrollable-editor .ql-editor,
+  .scrollable-editor input,
+  .scrollable-editor textarea {
     font-size: 16px !important;
     transform-origin: left top;
     transform: scale(1);
   }
   
   /* Improve touch targets */
-  .mobile-quill .ql-picker-options {
+  .scrollable-editor .ql-picker-options {
     max-height: 200px;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
   }
   
-  .mobile-quill .ql-picker-item {
+  .scrollable-editor .ql-picker-options::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollable-editor .ql-picker-options::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+    min-height: 44px;
+  }
+  
+  .scrollable-editor .ql-picker-item {
     padding: 12px 16px;
     font-size: 16px;
   }
@@ -508,25 +617,6 @@
     max-height: 90vh !important;
     margin: 0 !important;
     border-radius: 12px !important;
-  }
-  
-  /* Ensure proper mobile scrolling */
-  .mobile-quill {
-    height: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-  }
-  
-  .mobile-quill .ql-container {
-    flex: 1 !important;
-    min-height: 0 !important;
-  }
-  
-  .mobile-quill .ql-editor {
-    height: 100% !important;
-    max-height: none !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
   }
 }
 

@@ -272,7 +272,7 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
               </div>
             </CardHeader>
             <CardContent className="p-2 md:p-4 flex-1 overflow-hidden min-h-0">
-              <div className="border border-gray-200 rounded-lg overflow-hidden h-full">
+              <div className="h-full">
                 <ReactQuill
                   ref={quillRef}
                   value={content}
@@ -284,7 +284,7 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
                     height: '100%',
                     minHeight: '200px'
                   }}
-                  className="mobile-quill"
+                  className="scrollable-editor"
                   placeholder="Generated report content will appear here..."
                 />
               </div>

@@ -240,13 +240,13 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
                 </Button>
               </div>
             </div>
-            <div className="border rounded-lg overflow-hidden flex-1 min-h-0">
+            <div className="flex-1 min-h-0">
               <ReactQuill
                 ref={quillRef}
                 theme="snow"
                 value={content}
                 onChange={handleTextChange}
-                className="mobile-quill h-full"
+                className="scrollable-editor h-full"
                 style={{ height: '100%' }}
                 modules={modules}
                 formats={formats}
