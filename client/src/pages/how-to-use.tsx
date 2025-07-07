@@ -170,7 +170,7 @@ export default function HowToUse() {
               <CardContent>
                 <ul className="text-sm text-nhs-dark-grey/80 space-y-2 ml-4">
                   <li>• Use clear, descriptive template names that include modality and anatomy</li>
-                  <li>• Speak clearly when using voice recording for better transcription accuracy</li>
+                  <li>• Speak clearly with microphone when using voice recording for better transcription accuracy</li>
                   <li>• Wilhelm works best on desktop/laptop computers</li>
                   <li>• For mobile use, select "Request Desktop Site" for optimal performance</li>
                   <li>• Include specific anatomical details in your findings for more accurate template selection</li>
