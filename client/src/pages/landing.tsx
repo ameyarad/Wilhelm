@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity, MessageSquare, FileText, Brain, Sparkles, Zap, Shield } from "lucide-react";
 import { useState, useEffect } from "react";
+// Using public folder path since the logo is served as static asset
 
 export default function Landing() {
   const [mounted, setMounted] = useState(false);
@@ -28,6 +29,12 @@ export default function Landing() {
           {/* Header */}
           <div className={`text-center text-white transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="flex items-center justify-center space-x-4 mb-8">
+              <img 
+                src="/wilhelm-logo.png" 
+                alt="Wilhelm - AI Radiology Reporting Platform" 
+                className="w-20 h-20 md:w-24 md:h-24 animate-float filter drop-shadow-2xl"
+                loading="eager"
+              />
               <div className="w-16 h-16 bg-gradient-to-r from-nhs-accent-blue to-nhs-light-blue rounded-2xl flex items-center justify-center shadow-2xl transform transition-all duration-500 hover:scale-110 hover:rotate-3">
                 <Activity className="w-8 h-8 text-white animate-pulse" />
               </div>
@@ -36,7 +43,7 @@ export default function Landing() {
               </h1>
             </div>
             <p className="text-2xl text-white/90 max-w-3xl mx-auto mb-12 leading-relaxed">
-              AI-powered radiology reporting platform with advanced transcription and intelligent template management
+              AI-powered radiology reporting platform with advanced voice transcription for CT, MRI, X-ray, ultrasound, and nuclear medicine studies
             </p>
             
             <div className="mb-12 flex flex-col sm:flex-row gap-4 justify-center items-center">

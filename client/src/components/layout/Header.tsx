@@ -1,15 +1,18 @@
 import { Activity } from "lucide-react";
+// Using public folder path since the logo is served as static asset
 
 export default function Header() {
   return (
     <header className="flex-none h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6">
       <div className="flex items-center space-x-3">
-        <div className="w-8 h-8 bg-nhs-blue rounded-lg flex items-center justify-center">
-          <Activity className="w-4 h-4 text-white" />
-        </div>
+        <img 
+          src="/wilhelm-logo.png" 
+          alt="Wilhelm - AI Radiology Platform" 
+          className="w-8 h-8 filter drop-shadow-sm"
+        />
         <div>
           <h1 className="text-xl font-semibold text-nhs-dark-grey">Wilhelm</h1>
-          <p className="text-xs text-nhs-dark-grey/70">Free And Open Source Medical Imaging Reporting AI Agent</p>
+          <p className="text-xs text-nhs-dark-grey/70">AI-Powered Radiology Reporting Platform</p>
         </div>
       </div>
       <div className="flex items-center space-x-4">
