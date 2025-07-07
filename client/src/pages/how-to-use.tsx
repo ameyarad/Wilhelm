@@ -133,7 +133,6 @@ export default function HowToUse() {
                   <li>• Click "View & Edit" to open the rich text editor</li>
                   <li>• Use formatting tools (bold, italic, headers, lists)</li>
                   <li>• Add or modify content as needed</li>
-                  <li>• Use Ctrl+Z for undo, Ctrl+Y for redo</li>
                   <li>• The editor preserves all HTML formatting</li>
                 </ul>
               </CardContent>
