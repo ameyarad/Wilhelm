@@ -118,11 +118,16 @@ export function useVoiceRecording() {
     }
   }, [toast]);
 
+  const clearTranscript = useCallback(() => {
+    setTranscript("");
+  }, []);
+
   return {
     isRecording,
     transcript,
     error,
     startRecording,
     stopRecording,
+    clearTranscript,
   };
 }

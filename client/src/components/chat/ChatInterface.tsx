@@ -33,6 +33,7 @@ export default function ChatInterface() {
     stopRecording,
     transcript,
     error: recordingError,
+    clearTranscript,
   } = useVoiceRecording();
 
   // Fetch chat messages
@@ -116,8 +117,10 @@ export default function ChatInterface() {
   useEffect(() => {
     if (transcript && !isRecording) {
       setMessage(prev => prev + (prev ? " " : "") + transcript);
+      // Clear the transcript after using it to prevent re-adding deleted text
+      clearTranscript();
     }
-  }, [transcript, isRecording]);
+  }, [transcript, isRecording, clearTranscript]);
 
   useEffect(() => {
     if (recordingError) {
