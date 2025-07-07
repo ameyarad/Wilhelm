@@ -48,21 +48,14 @@ export default function Sidebar() {
       "flex-none bg-nhs-blue text-white border-r border-gray-200 flex flex-col transition-all duration-300",
       isCollapsed ? "w-16" : "w-48 md:w-64"
     )}>
-      {/* Logo and More Features Button */}
+      {/* More Features Button */}
       <div className="p-4 border-b border-nhs-light-blue/20">
-        <div className="flex items-center space-x-3 mb-4">
-          <img 
-            src="/wilhelm-logo.png" 
-            alt="Wilhelm Logo" 
-            className="w-8 h-8 filter drop-shadow-sm"
-          />
-          {!isCollapsed && (
-            <div>
-              <h2 className="text-lg font-semibold text-white">Wilhelm</h2>
-              <p className="text-xs text-white/70">AI Radiology Platform</p>
-            </div>
-          )}
-        </div>
+        {!isCollapsed && (
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold text-white">Wilhelm</h2>
+            <p className="text-xs text-white/70">AI Radiology Platform</p>
+          </div>
+        )}
         <Button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className={cn(
