@@ -331,3 +331,115 @@
 }
 
 /* Custom undo/redo buttons - removed since we're using external buttons now */
+
+/* Mobile responsive styles for ReactQuill */
+.mobile-quill .ql-toolbar {
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: none;
+  padding: 4px 8px;
+  font-size: 12px;
+  flex-wrap: wrap;
+  overflow-x: auto;
+  min-height: 40px;
+}
+
+.mobile-quill .ql-container {
+  border-bottom: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-top: none;
+  font-size: 14px;
+  line-height: 1.5;
+  height: auto !important;
+}
+
+.mobile-quill .ql-editor {
+  padding: 8px 12px;
+  min-height: 150px;
+  font-size: 14px;
+  line-height: 1.6;
+  height: auto !important;
+}
+
+@media (max-width: 768px) {
+  .mobile-quill .ql-toolbar {
+    padding: 2px 4px;
+    font-size: 11px;
+    min-height: 35px;
+  }
+  
+  .mobile-quill .ql-toolbar .ql-formats {
+    margin-right: 8px;
+    margin-bottom: 2px;
+  }
+  
+  .mobile-quill .ql-toolbar button {
+    width: 24px;
+    height: 24px;
+    padding: 2px;
+  }
+  
+  .mobile-quill .ql-toolbar button svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .mobile-quill .ql-toolbar .ql-picker {
+    font-size: 11px;
+  }
+  
+  .mobile-quill .ql-toolbar .ql-picker-label {
+    padding: 2px 4px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .mobile-quill .ql-editor {
+    padding: 6px 8px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  
+  .mobile-quill .ql-container {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-quill .ql-toolbar {
+    padding: 1px 2px;
+    min-height: 32px;
+  }
+  
+  .mobile-quill .ql-toolbar button {
+    width: 22px;
+    height: 22px;
+    margin: 1px;
+  }
+  
+  .mobile-quill .ql-toolbar button svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .mobile-quill .ql-editor {
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+  
+  /* General mobile responsiveness improvements */
+  .ql-snow .ql-toolbar {
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    padding: 2px;
+  }
+  
+  .ql-snow .ql-toolbar .ql-formats {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+}

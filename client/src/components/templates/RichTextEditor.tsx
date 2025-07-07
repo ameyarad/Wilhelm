@@ -179,55 +179,53 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-nhs-blue" />
+      <DialogContent className="w-[95vw] max-w-4xl h-[90vh] md:h-[85vh] flex flex-col">
+        <DialogHeader className="flex-shrink-0">
+          <DialogTitle className="flex items-center gap-2 text-sm md:text-base">
+            <FileText className="h-4 w-4 md:h-5 md:w-5 text-nhs-blue" />
             {template ? "Edit Template" : "Create New Template"}
           </DialogTitle>
         </DialogHeader>
         
-        <div className="flex-1 min-h-0 flex flex-col gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Template Name</Label>
+        <div className="flex-1 min-h-0 flex flex-col gap-3 md:gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+            <div className="space-y-1 md:space-y-2">
+              <Label htmlFor="name" className="text-xs md:text-sm">Template Name</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter template name"
-                className="w-full"
+                className="w-full text-sm"
               />
             </div>
             
-            <div className="space-y-2">
-              <Label htmlFor="folder">Folder</Label>
+            <div className="space-y-1 md:space-y-2">
+              <Label htmlFor="folder" className="text-xs md:text-sm">Folder</Label>
               <Input
                 id="folder"
                 value={folder}
                 onChange={(e) => setFolder(e.target.value)}
                 placeholder="Enter folder name"
-                className="w-full"
+                className="w-full text-sm"
               />
             </div>
           </div>
 
-
-          
           <div className="space-y-2 flex-1 min-h-0">
-            <div className="flex items-center justify-between">
-              <Label>Template Content</Label>
-              <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <Label className="text-xs md:text-sm">Template Content</Label>
+              <div className="flex gap-1 md:gap-2">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={handleUndo}
                   disabled={!canUndo}
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-1 text-xs md:text-sm"
                 >
-                  <Undo className="h-4 w-4" />
-                  Undo
+                  <Undo className="h-3 w-3 md:h-4 md:w-4" />
+                  <span className="hidden sm:inline">Undo</span>
                 </Button>
                 <Button
                   type="button"
@@ -235,19 +233,21 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
                   size="sm"
                   onClick={handleRedo}
                   disabled={!canRedo}
-                  className="flex items-center gap-1"
+                  className="flex items-center gap-1 text-xs md:text-sm"
                 >
-                  <Redo className="h-4 w-4" />
-                  Redo
+                  <Redo className="h-3 w-3 md:h-4 md:w-4" />
+                  <span className="hidden sm:inline">Redo</span>
                 </Button>
               </div>
             </div>
-            <div className="border rounded-lg overflow-hidden" style={{ height: '450px' }}>
+            <div className="border rounded-lg overflow-hidden flex-1 min-h-0">
               <ReactQuill
                 ref={quillRef}
                 theme="snow"
                 value={content}
                 onChange={handleTextChange}
+                className="mobile-quill h-full"
+                style={{ height: '100%' }}
                 modules={modules}
                 formats={formats}
                 style={{ height: '400px' }}
