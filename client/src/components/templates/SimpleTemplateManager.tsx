@@ -30,7 +30,18 @@ export default function SimpleTemplateManager() {
   // Upload mutation
   const uploadMutation = useMutation({
     mutationFn: async (formData: FormData) => {
-      const response = await apiRequest("POST", "/api/templates/upload", formData);
+      // Use fetch directly for file uploads to avoid JSON serialization
+      const response = await fetch("/api/templates/upload", {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Upload failed");
+      }
+      
       return response.json();
     },
     onSuccess: () => {
@@ -114,6 +125,7 @@ export default function SimpleTemplateManager() {
     formData.append('template', file);
     
     console.log('Uploading file:', file.name, file.size, file.type);
+    console.log('FormData entries:', Array.from(formData.entries()));
     uploadMutation.mutate(formData);
   };
 
