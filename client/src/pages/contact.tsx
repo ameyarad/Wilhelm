@@ -103,10 +103,6 @@ export default function Contact() {
                 <p className="text-sm text-nhs-dark-grey/80 leading-relaxed mb-4">Wilhelm is free and open source software. Contributions, bug reports, and feature requests are welcome from the medical community.</p>
                 <div className="space-y-3">
                   <p className="text-sm text-nhs-dark-grey/80">
-                    <strong>Repository:</strong> Coming soon - GitHub repository will be available once the 
-                    initial development phase is complete.
-                  </p>
-                  <p className="text-sm text-nhs-dark-grey/80">
                     <strong>License:</strong> MIT License (Free for educational and research use)
                   </p>
                   <p className="text-sm text-nhs-dark-grey/80">
