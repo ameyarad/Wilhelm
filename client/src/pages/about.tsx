@@ -124,32 +124,30 @@ export default function About() {
           </CardHeader>
           <CardContent className="space-y-4 py-6">
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
-              Wilhelm was created by Ameya Kawthalkar, a musculoskeletal radiologist at Mersey and West Lancashire NHS Teaching Hospitals. 
-              I live in Liverpool with my wife and two young children, and I am grateful for my wife's unwavering support 
-              in my journey to make AI accessible for healthcare education and research.
+              I am a musculoskeletal radiologist currently working at Mersey and West Lancashire NHS Teaching Hospitals 
+              and living in Liverpool, England with my cardiologist wife and three-year old twin girls. Building Wilhelm 
+              would not have been possible without my wife's support and infinite patience while I pursue my crazy projects.
             </p>
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
-              I have worked as a radiologist in 8 hospitals across different healthcare systems, gaining extensive 
-              experience in diagnostic imaging and understanding the daily challenges faced by radiologists in 
-              clinical practice.
+              I have worked as a radiologist in 8 hospitals across 3 countries, across public and private sectors, 
+              from small diagnostic clinics to state of the art imaging departments, which gives me a unique insight 
+              into the challenges faced by different healthcare systems and how to build solutions for them.
             </p>
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
-              After radiology residency, I transitioned into healthcare technology and AI development, combining 
-              my clinical expertise with software engineering skills to create solutions that address real-world 
-              medical challenges.
+              After radiology residency in Tata Memorial Hospital, Mumbai and working as an assistant professor in 
+              Grant Government Medical College, Mumbai, I pursued a ESSR fellowship at Sint Maartenskliniek, Nijmegen, 
+              Netherlands. This was followed by work in the private sector in India before moving to the UK.
             </p>
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
-              My recent interests include advancing AI applications in medical imaging, developing open-source 
-              healthcare tools, and making sophisticated AI technologies accessible to healthcare professionals 
-              worldwide.
+              I have worked at the Paris Olympic Games 2024 as a musculoskeletal radiologist where I was first introduced 
+              to AI in radiology reporting (ChatGPT for report translation).
             </p>
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
-              The platform represents a commitment to open-source healthcare technology and the democratization 
-              of medical AI tools. Wilhelm aims to bridge the gap between advanced AI capabilities and 
-              practical healthcare applications.
+              My recent interests apart from coding & AI are hiking to various lakes across the British Isles 
+              (where the girls have found a new passion for throwing stones in the water), and drinking black coffee.
             </p>
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
-              Follow me on X: <a href="https://x.com/ask_msk" target="_blank" rel="noopener noreferrer" 
+              - Ameya Kawthalkar | Follow me on X: <a href="https://x.com/ask_msk" target="_blank" rel="noopener noreferrer" 
               className="text-nhs-blue hover:text-nhs-dark-blue underline font-medium">@ask_msk</a>
             </p>
           </CardContent>
