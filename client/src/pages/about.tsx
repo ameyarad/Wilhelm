@@ -110,12 +110,7 @@ export default function About() {
               </div>
             </div>
 
-            <div className="flex items-center justify-center pt-4">
-              <Badge className="bg-nhs-light-blue text-nhs-dark-blue">
-                <Clock className="w-4 h-4 mr-1" />
-                Complete workflow in under 3 seconds
-              </Badge>
-            </div>
+            
           </CardContent>
         </Card>
 
