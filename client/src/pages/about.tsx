@@ -151,7 +151,7 @@ export default function About() {
                   <p className="text-sm font-medium text-nhs-dark-blue mb-1 text-center">
                     HIPAA/GDPR Compliant Version Coming Soon
                   </p>
-                  <p className="text-xs text-nhs-dark-grey/80">
+                  <p className="text-xs text-nhs-dark-grey/80 text-center">
                     A fully local, HIPAA and GDPR compliant free and open source version of Wilhelm is currently 
                     under development and will be released soon.
                   </p>
