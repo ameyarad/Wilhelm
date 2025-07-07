@@ -239,7 +239,7 @@ export default function Home() {
                   <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center space-x-2">
                       <FileText className="w-5 h-5 text-nhs-green" />
-                      <span>Generated Report</span>
+                      <span>Your Report</span>
                     </CardTitle>
                     <div className="flex items-center space-x-2">
                       <Button
