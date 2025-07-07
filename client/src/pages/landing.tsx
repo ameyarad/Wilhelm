@@ -80,9 +80,7 @@ export default function Landing() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-white/90 text-base leading-relaxed">
-                  Intelligent report generation using advanced AI models with automatic template selection and clinical accuracy
-                </p>
+                <p className="text-white/90 text-base leading-relaxed">Instant report generation using artificial intelligence with automatic template selection and report formatting</p>
               </CardContent>
             </Card>
 
