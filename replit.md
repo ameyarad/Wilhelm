@@ -109,7 +109,7 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
-- July 07, 2025. Complete rich text editor implementation for generated reports
+- July 07, 2025. Complete rich text editor implementation and reports page enhancements
   - Fixed database schema: made templateId nullable to allow generated reports without template association
   - Enhanced GeneratedReportViewer with full rich text editor functionality and formatting preservation
   - Added undo/redo buttons with keyboard shortcuts (Ctrl+Z, Ctrl+Y, Ctrl+Shift+Z)
@@ -118,6 +118,11 @@ Changelog:
   - Enhanced reports page with date categorization (Today, Yesterday, specific dates)
   - Fixed report saving functionality with proper data structure
   - Added comprehensive toolbar with colors, alignment, headers, lists, and formatting options
+  - Reports page improvements: removed edit functionality, kept only view/copy/delete buttons
+  - Simplified report naming: changed from "Generated Report - [date]" to just date/time format
+  - Improved main page UI responsiveness when sidebar expands
+  - Added delete functionality with proper confirmation and error handling
+  - Enhanced copy functionality to strip HTML tags for plain text copying
 - July 07, 2025. Enhanced document processing and rich text editor
   - Fixed .doc file text extraction with multiple encoding methods (latin1, utf-8, binary)
   - Enhanced .docx file processing to preserve HTML formatting for rich text editor

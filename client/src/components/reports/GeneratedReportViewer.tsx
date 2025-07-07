@@ -121,7 +121,14 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
 
     const now = new Date();
     const reportData = {
-      title: `Generated Report - ${now.toLocaleDateString()}`,
+      title: now.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      }),
       content: content,
       status: "draft" as const,
       templateId: null, // No template association for generated reports

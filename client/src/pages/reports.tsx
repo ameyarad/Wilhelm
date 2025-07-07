@@ -1,19 +1,24 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
-import { useQuery } from "@tanstack/react-query";
+import GeneratedReportViewer from "@/components/reports/GeneratedReportViewer";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Eye, Edit, Trash2, Copy } from "lucide-react";
+import { FileText, Eye, Trash2, Copy } from "lucide-react";
 import { Report } from "@shared/schema";
 import { formatDistanceToNow, format, isToday, isYesterday, parseISO } from "date-fns";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function Reports() {
   const { isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   const { data: reports, isLoading: reportsLoading } = useQuery({
     queryKey: ['/api/reports'],
@@ -102,7 +107,12 @@ export default function Reports() {
 
   const handleCopyReport = async (report: Report) => {
     try {
-      await navigator.clipboard.writeText(report.content);
+      // Strip HTML tags for plain text copy
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = report.content;
+      const plainText = tempDiv.textContent || tempDiv.innerText || '';
+      
+      await navigator.clipboard.writeText(plainText);
       toast({
         title: "Report Copied",
         description: "Report content has been copied to clipboard.",
@@ -114,6 +124,43 @@ export default function Reports() {
         variant: "destructive",
       });
     }
+  };
+
+  const handleViewReport = (report: Report) => {
+    setSelectedReport(report);
+    setIsViewerOpen(true);
+  };
+
+  const handleDeleteReport = async (reportId: number) => {
+    try {
+      await apiRequest("DELETE", `/api/reports/${reportId}`, {});
+      
+      toast({
+        title: "Report deleted",
+        description: "The report has been deleted successfully.",
+      });
+      
+      // Refresh the reports list
+      queryClient.invalidateQueries({ queryKey: ['/api/reports'] });
+    } catch (error) {
+      toast({
+        title: "Failed to delete report",
+        description: "Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const formatReportName = (createdAt: string) => {
+    const date = new Date(createdAt);
+    return date.toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
   };
 
   return (
@@ -156,7 +203,7 @@ export default function Reports() {
                             <div className="flex items-center justify-between">
                               <CardTitle className="text-lg font-medium flex items-center space-x-2">
                                 <FileText className="h-5 w-5 text-nhs-blue" />
-                                <span>{report.title}</span>
+                                <span>{formatReportName(report.createdAt)}</span>
                               </CardTitle>
                               <Badge className={getStatusColor(report.status)}>
                                 {report.status}
@@ -180,13 +227,14 @@ export default function Reports() {
                               </p>
                             </div>
                             <div className="flex items-center space-x-2">
-                              <Button size="sm" variant="outline" className="text-nhs-blue">
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                className="text-nhs-blue"
+                                onClick={() => handleViewReport(report)}
+                              >
                                 <Eye className="h-3 w-3 mr-1" />
                                 View
-                              </Button>
-                              <Button size="sm" variant="outline" className="text-nhs-green">
-                                <Edit className="h-3 w-3 mr-1" />
-                                Edit
                               </Button>
                               <Button 
                                 size="sm" 
@@ -197,7 +245,12 @@ export default function Reports() {
                                 <Copy className="h-3 w-3 mr-1" />
                                 Copy
                               </Button>
-                              <Button size="sm" variant="outline" className="text-nhs-red hover:text-nhs-red">
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                className="text-nhs-red hover:text-nhs-red"
+                                onClick={() => handleDeleteReport(report.id)}
+                              >
                                 <Trash2 className="h-3 w-3 mr-1" />
                                 Delete
                               </Button>
@@ -220,6 +273,16 @@ export default function Reports() {
           </div>
         </footer>
       </div>
+
+      {/* Report Viewer Modal */}
+      <GeneratedReportViewer
+        report={selectedReport?.content || ""}
+        isOpen={isViewerOpen}
+        onClose={() => {
+          setIsViewerOpen(false);
+          setSelectedReport(null);
+        }}
+      />
     </div>
   );
 }
