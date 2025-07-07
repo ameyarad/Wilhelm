@@ -153,9 +153,7 @@ export default function Landing() {
                   Start Your Journey
                 </Button>
               </div>
-              <p className="text-white/60 text-sm mt-8">
-                Secure authentication • No credit card required • Educational use only
-              </p>
+              
             </div>
           </div>
         
