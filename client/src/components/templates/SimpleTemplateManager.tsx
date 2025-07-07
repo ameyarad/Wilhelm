@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CloudUpload, FileText, Upload, Loader2, Trash2, Plus } from "lucide-react";
+import { CloudUpload, FileText, Upload, Loader2, Trash2, Plus, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
@@ -260,13 +260,22 @@ export default function SimpleTemplateManager() {
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
-                    <TemplateViewer template={template} onEdit={handleEdit} />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleEdit(template)}
+                      className="text-nhs-blue hover:text-nhs-blue/80 h-8 w-8 p-0"
+                      title="View and Edit Template"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </Button>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDelete(template.id)}
                       disabled={deleteMutation.isPending}
                       className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8 p-0"
+                      title="Delete Template"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
