@@ -101,9 +101,7 @@ export default function Landing() {
 
           {/* Additional Features Section */}
           <div className={`mt-16 transition-all duration-1000 delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <h2 className="text-3xl font-bold text-white text-center mb-8">
-              Why Choose Wilhelm?
-            </h2>
+            <h2 className="text-3xl font-bold text-white text-center mb-8">Why Wilhelm?</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="text-center group">
                 <div className="w-20 h-20 bg-gradient-to-br from-nhs-accent-blue to-nhs-blue rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-2xl">
