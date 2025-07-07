@@ -35,18 +35,13 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Templates table
+// Templates table - simplified
 export const templates = pgTable("templates", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").references(() => users.id).notNull(),
   name: varchar("name").notNull(),
-  description: varchar("description"),
   content: text("content").notNull(),
-  category: varchar("category").notNull(),
-  folder: varchar("folder").default("General"), // New folder field
-  fileType: varchar("file_type").notNull().default("txt"), // doc, docx, txt
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Reports table
@@ -103,7 +98,6 @@ export const insertUserSchema = createInsertSchema(users).omit({
 export const insertTemplateSchema = createInsertSchema(templates).omit({
   id: true,
   createdAt: true,
-  updatedAt: true,
 });
 
 export const insertReportSchema = createInsertSchema(reports).omit({

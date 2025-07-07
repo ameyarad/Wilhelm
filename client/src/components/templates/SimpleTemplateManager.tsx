@@ -5,9 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+// Removed unused imports
 import { CloudUpload, FileText, Upload, Loader2, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { apiRequest } from "@/lib/queryClient";
@@ -21,8 +19,6 @@ export default function SimpleTemplateManager() {
   
   // Upload state
   const [file, setFile] = useState<File | null>(null);
-  const [category, setCategory] = useState("Custom");
-  const [folder, setFolder] = useState("General");
   const [dragOver, setDragOver] = useState(false);
 
   // Get templates
@@ -43,8 +39,6 @@ export default function SimpleTemplateManager() {
         description: "Template uploaded successfully",
       });
       setFile(null);
-      setCategory("Custom");
-      setFolder("General");
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
     },
     onError: (error) => {
@@ -118,9 +112,8 @@ export default function SimpleTemplateManager() {
 
     const formData = new FormData();
     formData.append('template', file);
-    formData.append('category', category);
-    formData.append('folder', folder);
     
+    console.log('Uploading file:', file.name, file.size, file.type);
     uploadMutation.mutate(formData);
   };
 
@@ -130,13 +123,10 @@ export default function SimpleTemplateManager() {
     }
   };
 
-  // Group templates by folder
-  const templatesByFolder = templates.reduce((acc: Record<string, Template[]>, template: Template) => {
-    const folderName = template.folder || "General";
-    if (!acc[folderName]) acc[folderName] = [];
-    acc[folderName].push(template);
-    return acc;
-  }, {});
+  // Display templates directly (no folder grouping)
+  const sortedTemplates = templates.sort((a: Template, b: Template) => 
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   return (
     <div className="space-y-6">
@@ -175,36 +165,11 @@ export default function SimpleTemplateManager() {
             className="hidden"
           />
           
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="category">Category</Label>
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Chest Imaging">Chest Imaging</SelectItem>
-                  <SelectItem value="CT Imaging">CT Imaging</SelectItem>
-                  <SelectItem value="MRI Imaging">MRI Imaging</SelectItem>
-                  <SelectItem value="Ultrasound">Ultrasound</SelectItem>
-                  <SelectItem value="Custom">Custom</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
-              <Label htmlFor="folder">Folder</Label>
-              <Input
-                value={folder}
-                onChange={(e) => setFolder(e.target.value)}
-                placeholder="Folder name"
-              />
-            </div>
-          </div>
+
           
           <Button 
             onClick={handleUpload} 
-            disabled={!file || !category || uploadMutation.isPending}
+            disabled={!file || uploadMutation.isPending}
             className="w-full bg-nhs-blue hover:bg-nhs-blue/90 text-white"
           >
             {uploadMutation.isPending ? (
@@ -234,43 +199,30 @@ export default function SimpleTemplateManager() {
               <p>No templates uploaded yet</p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {Object.entries(templatesByFolder).map(([folderName, folderTemplates]) => (
-                <div key={folderName}>
-                  <h3 className="font-semibold text-nhs-blue mb-2">{folderName}</h3>
-                  <div className="grid gap-2">
-                    {folderTemplates.map((template: Template) => (
-                      <div
-                        key={template.id}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                      >
-                        <div className="flex items-center space-x-3">
-                          <FileText className="w-4 h-4 text-nhs-blue" />
-                          <div>
-                            <p className="font-medium text-sm">{template.name}</p>
-                            <p className="text-xs text-gray-500">{template.description}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="secondary" className="text-xs">
-                            {template.category}
-                          </Badge>
-                          <Badge variant="outline" className="text-xs">
-                            {template.fileType}
-                          </Badge>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDelete(template.id)}
-                            disabled={deleteMutation.isPending}
-                            className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
+            <div className="space-y-2">
+              {sortedTemplates.map((template: Template) => (
+                <div
+                  key={template.id}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <div className="flex items-center space-x-3">
+                    <FileText className="w-4 h-4 text-nhs-blue" />
+                    <div>
+                      <p className="font-medium text-sm">{template.name}</p>
+                      <p className="text-xs text-gray-500">
+                        {template.createdAt ? new Date(template.createdAt).toLocaleDateString() : ''}
+                      </p>
+                    </div>
                   </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDelete(template.id)}
+                    disabled={deleteMutation.isPending}
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </div>
               ))}
             </div>

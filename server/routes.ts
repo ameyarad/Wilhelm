@@ -172,26 +172,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/templates/upload', isAuthenticated, upload.single('template'), async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
-      const { category, folder } = req.body;
       
       console.log("Upload request received:", {
         userId,
-        category,
-        folder,
-        file: req.file ? {
-          originalname: req.file.originalname,
-          mimetype: req.file.mimetype,
-          size: req.file.size
-        } : null
+        hasFile: !!req.file,
+        body: req.body,
+        headers: req.headers['content-type']
       });
       
       if (!req.file) {
+        console.log("No file in request");
         return res.status(400).json({ message: "No template file provided" });
       }
 
       let content = '';
       const fileName = req.file.originalname;
       const fileExtension = fileName.split('.').pop()?.toLowerCase();
+
+      console.log(`Processing file: ${fileName}, type: ${fileExtension}, size: ${req.file.size}`);
 
       // Handle different file types
       if (fileExtension === 'docx') {
@@ -215,9 +213,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const template = await templateService.processUploadedTemplate(
         userId,
         fileName,
-        content,
-        category || "Custom",
-        folder
+        content
       );
 
       res.json(template);

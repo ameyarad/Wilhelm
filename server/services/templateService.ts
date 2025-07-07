@@ -7,12 +7,9 @@ export class TemplateService {
   async processUploadedTemplate(
     userId: string,
     fileName: string,
-    content: string,
-    category: string,
-    folder?: string
+    content: string
   ): Promise<Template> {
     const name = fileName.replace(/\.[^/.]+$/, ""); // Remove file extension
-    const fileExtension = fileName.split('.').pop()?.toLowerCase();
     
     // Validate content
     if (!content || content.trim().length === 0) {
@@ -24,11 +21,7 @@ export class TemplateService {
     const template: InsertTemplate = {
       userId,
       name,
-      description: `Uploaded template: ${fileName}`,
       content: content.trim(),
-      category,
-      folder: folder || "General",
-      fileType: fileExtension === 'doc' || fileExtension === 'docx' ? fileExtension : 'txt',
     };
 
     return await storage.createTemplate(template);
