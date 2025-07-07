@@ -61,6 +61,15 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        // NHS Blue Theme
+        'nhs-blue': 'var(--nhs-blue)',
+        'nhs-light-blue': 'var(--nhs-light-blue)',
+        'nhs-dark-blue': 'var(--nhs-dark-blue)',
+        'nhs-accent-blue': 'var(--nhs-accent-blue)',
+        'nhs-pale-blue': 'var(--nhs-pale-blue)',
+        'nhs-dark-grey': 'var(--nhs-dark-grey)',
+        'nhs-light-grey': 'var(--nhs-light-grey)',
+        'nhs-red': 'var(--nhs-red)',
       },
       keyframes: {
         "accordion-down": {

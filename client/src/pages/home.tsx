@@ -164,23 +164,14 @@ export default function Home() {
       <div className="flex-1 flex flex-col min-w-0">
         <Header />
         <main className="flex-1 p-4 md:p-6 overflow-y-auto">
-          <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
+          <div className="max-w-6xl mx-auto space-y-4 md:space-y-6">
 
 
             {/* Chat Interface */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Brain className="w-5 h-5 text-nhs-blue" />
-                  <span>AI Report Generator</span>
-                </CardTitle>
-              </CardHeader>
               <CardContent className="space-y-4 p-4 md:p-6">
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-nhs-dark-grey">
-                      Clinical Findings
-                    </label>
+                  <div className="flex items-center justify-end">
                     <div className="flex items-center space-x-2">
                       {isRecording && (
                         <Badge variant="destructive" className="animate-pulse">
@@ -188,17 +179,13 @@ export default function Home() {
                           Recording
                         </Badge>
                       )}
-                      <div className="flex items-center space-x-1 text-xs text-nhs-green">
-                        <Circle className="w-2 h-2 fill-current" />
-                        <span>Whisper Ready</span>
-                      </div>
                     </div>
                   </div>
                   <div className="relative">
                     <Textarea
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Type your clinical findings here or use voice dictation..."
+                      placeholder="Type or dictate your findings here"
                       className="min-h-[120px] pr-12 md:pr-16"
                       disabled={isProcessing}
                     />
@@ -209,16 +196,14 @@ export default function Home() {
                       className={`absolute bottom-3 right-3 p-2 h-8 w-8 ${
                         isRecording 
                           ? "text-nhs-red hover:text-nhs-red" 
-                          : "text-gray-400 hover:text-nhs-blue"
+                          : "text-nhs-blue hover:text-nhs-dark-blue"
                       }`}
                       disabled={isProcessing}
                     >
                       {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                     </Button>
                   </div>
-                  <p className="text-xs text-gray-500">
-                    Press the microphone to start dictation or type directly
-                  </p>
+
                 </div>
 
                 <Button
@@ -273,45 +258,14 @@ export default function Home() {
               </Card>
             )}
 
-            {/* System Status */}
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h2 className="text-lg font-semibold text-nhs-dark-grey mb-4">System Status</h2>
-              <div className="grid md:grid-cols-3 gap-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-nhs-dark-grey">Whisper Turbo</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-nhs-green rounded-full"></div>
-                    <span className="text-xs text-nhs-green">Ready</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-nhs-dark-grey">Llama 3.1 8B</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-nhs-green rounded-full"></div>
-                    <span className="text-xs text-nhs-green">Ready</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-nhs-dark-grey">Templates</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-nhs-green rounded-full"></div>
-                    <span className="text-xs text-nhs-green">Loaded</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+
           </div>
         </main>
         
         {/* Footer */}
-        <footer className="bg-white border-t border-gray-200 p-4 text-center">
-          <div className="text-sm text-nhs-dark-grey">
-            <p className="mb-1">
-              © 2025 Ameya Kawthalkar. Wilhelm is a free and open source AI agent for medical imaging reporting.
-            </p>
-            <p className="text-xs text-nhs-dark-grey/70">
-              For educational and research purposes only. Not for clinical use.
-            </p>
+        <footer className="bg-white border-t border-gray-200 p-2 text-center">
+          <div className="text-xs text-nhs-dark-grey/70">
+            <p>© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
           </div>
         </footer>
       </div>

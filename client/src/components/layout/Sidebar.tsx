@@ -3,14 +3,14 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
-  Stethoscope, 
   FileText, 
   History, 
   Settings, 
   LogOut,
   Home,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Menu
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -20,7 +20,7 @@ export default function Sidebar() {
   const [location] = useLocation();
   const { user: userData } = useAuth();
   const user = userData as User;
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   const handleLogout = () => {
     window.location.href = "/api/logout";
@@ -38,21 +38,18 @@ export default function Sidebar() {
       "flex-none bg-nhs-blue text-white border-r border-gray-200 flex flex-col transition-all duration-300",
       isCollapsed ? "w-16" : "w-48 md:w-64"
     )}>
-      {/* Sidebar Header */}
-      <div className="flex items-center justify-between p-4 border-b border-nhs-light-blue/20">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-nhs-green rounded-lg flex items-center justify-center">
-            <Stethoscope className="w-4 h-4" />
-          </div>
-          {!isCollapsed && <span className="font-semibold text-lg">Wilhelm</span>}
-        </div>
+      {/* More Features Button */}
+      <div className="p-4 border-b border-nhs-light-blue/20">
         <Button
-          variant="ghost"
-          size="sm"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="text-white/70 hover:text-white hover:bg-white/10 p-2"
+          className={cn(
+            "w-full bg-nhs-accent-blue hover:bg-nhs-dark-blue text-white transition-all",
+            isCollapsed ? "px-2" : "px-4"
+          )}
+          size={isCollapsed ? "sm" : "default"}
         >
-          {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+          <Menu className="w-4 h-4" />
+          {!isCollapsed && <span className="ml-2">More Features</span>}
         </Button>
       </div>
 
@@ -90,7 +87,7 @@ export default function Sidebar() {
         )}>
           <Avatar>
             <AvatarImage src={user?.profileImageUrl} alt={user?.firstName} />
-            <AvatarFallback className="bg-nhs-green text-white">
+            <AvatarFallback className="bg-nhs-accent-blue text-white">
               {(user?.firstName?.[0] || user?.email?.[0] || "U")}
             </AvatarFallback>
           </Avatar>

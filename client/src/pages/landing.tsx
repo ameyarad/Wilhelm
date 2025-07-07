@@ -13,8 +13,8 @@ export default function Landing() {
         {/* Header */}
         <div className="text-center text-white">
           <div className="flex items-center justify-center space-x-3 mb-6">
-            <div className="w-12 h-12 bg-nhs-green rounded-xl flex items-center justify-center">
-              <Stethoscope className="w-6 h-6" />
+            <div className="w-12 h-12 bg-nhs-accent-blue rounded-xl flex items-center justify-center">
+              <Stethoscope className="w-6 h-6 text-white" />
             </div>
             <h1 className="text-4xl font-bold">Wilhelm</h1>
           </div>
@@ -73,7 +73,7 @@ export default function Landing() {
           <Button 
             onClick={handleLogin}
             size="lg" 
-            className="bg-nhs-green hover:bg-nhs-green/90 text-white px-8 py-4 text-lg"
+            className="bg-nhs-accent-blue hover:bg-nhs-dark-blue text-white px-8 py-4 text-lg"
           >
             Get Started
           </Button>
@@ -83,14 +83,9 @@ export default function Landing() {
         </div>
         
         {/* Footer */}
-        <footer className="text-center text-white/80 mt-12 pt-8 border-t border-white/20">
-          <div className="text-sm">
-            <p className="mb-1">
-              © 2025 Ameya Kawthalkar. Wilhelm is a free and open source AI agent for medical imaging reporting.
-            </p>
-            <p className="text-xs text-white/60">
-              For educational and research purposes only. Not for clinical use.
-            </p>
+        <footer className="text-center text-white/80 mt-12 pt-4 border-t border-white/20">
+          <div className="text-xs text-white/60">
+            <p>© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
           </div>
         </footer>
       </div>

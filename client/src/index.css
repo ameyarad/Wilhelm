@@ -24,10 +24,12 @@
   --ring: hsl(207, 90%, 54%);
   --radius: 0.5rem;
   
-  /* NHS Color Scheme */
+  /* NHS Blue Theme */
   --nhs-blue: hsl(207, 90%, 54%);
   --nhs-light-blue: hsl(198, 71%, 73%);
-  --nhs-green: hsl(174, 100%, 32%);
+  --nhs-dark-blue: hsl(207, 90%, 34%);
+  --nhs-accent-blue: hsl(210, 100%, 56%);
+  --nhs-pale-blue: hsl(210, 67%, 95%);
   --nhs-dark-grey: hsl(210, 29%, 24%);
   --nhs-red: hsl(10, 84%, 60%);
   --nhs-light-grey: hsl(210, 40%, 96%);
