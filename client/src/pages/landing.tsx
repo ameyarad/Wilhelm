@@ -76,7 +76,7 @@ export default function Landing() {
                   <div className="p-3 bg-gradient-to-r from-nhs-dark-blue to-nhs-blue rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <Brain className="w-6 h-6" />
                   </div>
-                  <span className="text-xl font-semibold">AI Reports</span>
+                  <span className="text-xl font-semibold text-center">AI Powered Reports</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
