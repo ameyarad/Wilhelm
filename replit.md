@@ -109,18 +109,27 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
-- July 07, 2025. Template management with folder organization
+- July 07, 2025. Advanced template management with full folder organization
   - Fixed .doc file upload issues by filtering out binary characters that cause UTF-8 database errors
-  - Added folder organization system with "folder" column in templates table
-  - Created FolderTemplateManager component with:
-    - Folder selection dropdown for organizing templates
-    - "New Folder" button to create custom folders
-    - Templates grouped and displayed by folder
-    - Folder creation with validation
-  - Fixed FormData upload mechanism using fetch directly instead of apiRequest
-  - Changed mammoth import to ES module syntax (await import) to fix require errors
-  - Database schema updated to include folder field with default "General"
-  - Templates now properly organized in folders with visual folder indicators
+  - Added comprehensive folder organization system with backend API endpoints:
+    - PATCH /api/templates/:id/folder - Move templates between folders
+    - GET /api/folders - Get folder counts
+    - DELETE /api/folders/:name - Delete folders (moves templates to General)
+  - Created AdvancedTemplateManager component with complete folder operations:
+    - Drag and drop templates between folders
+    - Cut/copy/paste functionality for templates
+    - Visual clipboard indicator showing cut/copied templates
+    - Folder deletion with template preservation (moves to General)
+    - Template context menus with copy/cut/delete options
+    - Real-time folder highlighting during drag operations
+    - Folder creation with keyboard shortcuts (Enter key)
+  - Enhanced UX with visual feedback:
+    - Drag over highlighting for target folders
+    - Template count badges on folders
+    - Paste buttons appear when clipboard has content
+    - Smooth animations and transitions
+  - Fixed FormData upload mechanism and ES module imports
+  - Database schema supports folder field with proper relationships
 - July 07, 2025. Complete NHS blue theme implementation & voice recording fixes
   - Removed all green colors, implemented NHS blue color palette
   - Sidebar collapsed by default with "More Features" button

@@ -287,6 +287,77 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update template folder
+  app.patch("/api/templates/:id/folder", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const id = parseInt(req.params.id);
+      const { folder } = req.body;
+      
+      if (!folder || typeof folder !== 'string') {
+        return res.status(400).json({ message: "Folder name is required" });
+      }
+
+      // Check if template belongs to user
+      const existingTemplate = await storage.getTemplate(id);
+      if (!existingTemplate || existingTemplate.userId !== userId) {
+        return res.status(404).json({ message: "Template not found" });
+      }
+
+      const updatedTemplate = await storage.updateTemplate(id, { folder });
+      res.json(updatedTemplate);
+    } catch (error) {
+      console.error("Error updating template folder:", error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Get folders with template counts
+  app.get("/api/folders", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const templates = await storage.getTemplates(userId);
+      
+      const folderCounts = templates.reduce((acc, template) => {
+        const folder = template.folder || "General";
+        acc[folder] = (acc[folder] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+
+      res.json(folderCounts);
+    } catch (error) {
+      console.error("Error getting folders:", error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Delete folder and move templates to General
+  app.delete("/api/folders/:name", isAuthenticated, async (req: any, res) => {
+    try {
+      const folderName = decodeURIComponent(req.params.name);
+      const userId = req.user.claims.sub;
+      
+      if (folderName === "General") {
+        return res.status(400).json({ message: "Cannot delete General folder" });
+      }
+
+      // Move all templates from this folder to General
+      const templates = await storage.getTemplates(userId);
+      const templatesInFolder = templates.filter(t => t.folder === folderName);
+      
+      await Promise.all(
+        templatesInFolder.map(template => 
+          storage.updateTemplate(template.id, { folder: "General" })
+        )
+      );
+
+      res.json({ message: "Folder deleted and templates moved to General" });
+    } catch (error) {
+      console.error("Error deleting folder:", error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Report routes
   app.get('/api/reports', isAuthenticated, async (req: any, res) => {
     try {
