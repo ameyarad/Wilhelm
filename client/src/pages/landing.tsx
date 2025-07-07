@@ -115,7 +115,7 @@ export default function Landing() {
                   <Shield className="w-10 h-10 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3">Secure</h3>
-                <p className="text-white/80">HIPAA-compliant with enterprise-grade security</p>
+                <p className="text-white/80">Enterprise-grade security and encryption</p>
               </div>
               <div className="text-center group">
                 <div className="w-20 h-20 bg-gradient-to-br from-nhs-dark-blue to-nhs-light-blue rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-2xl">
