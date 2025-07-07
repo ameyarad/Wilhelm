@@ -12,7 +12,7 @@ export default function Header() {
         />
         <div>
           <h1 className="text-xl font-semibold text-nhs-dark-grey">Wilhelm</h1>
-          <p className="text-xs text-nhs-dark-grey/70">AI-Powered Radiology Reporting Platform</p>
+          <p className="text-xs text-nhs-dark-grey/70">AI-Powered Medical Imaging Reporting</p>
         </div>
       </div>
       <div className="flex items-center space-x-4">
