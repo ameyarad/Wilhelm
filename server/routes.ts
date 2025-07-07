@@ -194,7 +194,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Handle different file types
       if (fileExtension === 'docx') {
         try {
-          const mammoth = require('mammoth');
+          const mammoth = await import('mammoth');
           const result = await mammoth.extractRawText({ buffer: req.file.buffer });
           content = result.value;
           console.log("Successfully extracted text from docx:", content.substring(0, 100) + "...");
