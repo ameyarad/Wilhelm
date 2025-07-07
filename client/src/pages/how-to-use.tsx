@@ -174,7 +174,6 @@ export default function HowToUse() {
                   <li>• Wilhelm works best on desktop/laptop computers</li>
                   <li>• For mobile use, select "Request Desktop Site" for optimal performance</li>
                   <li>• Include specific anatomical details in your findings for more accurate template selection</li>
-                  <li>• Review generated reports carefully as this is for educational use only</li>
                 </ul>
               </CardContent>
             </Card>
