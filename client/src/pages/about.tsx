@@ -122,11 +122,19 @@ export default function About() {
               <span>About Me</span>
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
               Wilhelm was created by Ameya Kawthalkar, a passionate developer focused on making AI accessible 
-              for healthcare education and research. The platform represents a commitment to open-source healthcare 
-              technology and the democratization of medical AI tools.
+              for healthcare education and research.
+            </p>
+            <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
+              The platform represents a commitment to open-source healthcare technology and the democratization 
+              of medical AI tools. Wilhelm aims to bridge the gap between advanced AI capabilities and 
+              practical healthcare applications.
+            </p>
+            <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
+              Follow me on X: <a href="https://x.com/ask_msk" target="_blank" rel="noopener noreferrer" 
+              className="text-nhs-blue hover:text-nhs-dark-blue underline font-medium">@ask_msk</a>
             </p>
           </CardContent>
         </Card>
