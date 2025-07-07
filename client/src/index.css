@@ -1,7 +1,5 @@
 @import 'quill/dist/quill.snow.css';
 
-@import url('https://fonts.googleapis.com/css2?family=Istok+Web:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -28,13 +26,11 @@
   --ring: hsl(207, 90%, 54%);
   --radius: 0.5rem;
   
-  /* NHS Blue Theme - Official Colors */
-  --nhs-blue: hsl(210, 100%, 36%); /* #005EB8 */
-  --nhs-light-blue: hsl(210, 100%, 56%); /* Lighter variation */
-  --nhs-dark-blue: hsl(221, 100%, 26%); /* #003087 */
-  --nhs-accent-blue: hsl(210, 100%, 46%); /* Medium variation */
-  --nhs-bright-blue: hsl(210, 100%, 66%); /* Bright variation */
-  --nhs-navy: hsl(221, 100%, 18%); /* Darker navy */
+  /* NHS Blue Theme */
+  --nhs-blue: hsl(207, 90%, 54%);
+  --nhs-light-blue: hsl(198, 71%, 73%);
+  --nhs-dark-blue: hsl(207, 90%, 34%);
+  --nhs-accent-blue: hsl(210, 100%, 56%);
   --nhs-pale-blue: hsl(210, 67%, 95%);
   --nhs-dark-grey: hsl(210, 29%, 24%);
   --nhs-red: hsl(10, 84%, 60%);
@@ -336,37 +332,21 @@
 
 /* Custom undo/redo buttons - removed since we're using external buttons now */
 
-/* Enhanced Mobile responsive styles for ReactQuill - Based on 2024 solutions */
+/* Mobile responsive styles for ReactQuill */
 .mobile-quill .ql-toolbar {
   border-top: 1px solid #ccc;
   border-left: 1px solid #ccc;
   border-right: 1px solid #ccc;
   border-bottom: none;
-  padding: 8px 4px;
+  padding: 4px 8px;
   font-size: 12px;
   flex-wrap: wrap;
   overflow-x: auto;
-  min-height: 44px;
+  min-height: 40px;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 10;
   background: white;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.mobile-quill .ql-toolbar::-webkit-scrollbar {
-  display: none;
-}
-
-/* Prevent toolbar jumping - fix from research */
-.mobile-quill .ql-toolbar button:focus {
-  outline: none;
-}
-
-.mobile-quill .ql-toolbar .ql-picker-label:before,
-.mobile-quill .ql-toolbar .ql-picker-item:before {
-  line-height: inherit;
 }
 
 .mobile-quill .ql-container {
@@ -393,25 +373,23 @@
 
 @media (max-width: 768px) {
   .mobile-quill .ql-toolbar {
-    padding: 8px 4px;
+    padding: 4px 6px;
     font-size: 12px;
     min-height: 48px;
     border-radius: 8px 8px 0 0;
   }
   
   .mobile-quill .ql-toolbar .ql-formats {
-    margin-right: 8px;
+    margin-right: 10px;
     margin-bottom: 4px;
   }
   
-  /* Enhanced touch targets - 44px minimum as per research */
   .mobile-quill .ql-toolbar button {
-    min-width: 44px;
-    min-height: 44px;
-    padding: 8px;
+    width: 32px;
+    height: 32px;
+    padding: 4px;
     border-radius: 4px;
-    margin: 2px;
-    position: relative;
+    margin: 1px;
   }
   
   .mobile-quill .ql-toolbar button:hover {
@@ -419,36 +397,33 @@
   }
   
   .mobile-quill .ql-toolbar button.ql-active {
-    background: hsl(var(--nhs-blue));
+    background: #3b82f6;
     color: white;
   }
   
   .mobile-quill .ql-toolbar button svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
   }
   
   .mobile-quill .ql-toolbar .ql-picker {
     font-size: 12px;
-    min-height: 44px;
   }
   
   .mobile-quill .ql-toolbar .ql-picker-label {
-    padding: 8px 12px;
+    padding: 4px 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    min-height: 44px;
+    min-height: 32px;
     display: flex;
     align-items: center;
   }
   
-  /* Prevent iOS zoom - 16px minimum font size */
   .mobile-quill .ql-editor {
     padding: 16px 12px;
-    font-size: 16px !important;
+    font-size: 16px;
     line-height: 1.6;
     min-height: 250px;
-    -webkit-text-size-adjust: 100%;
   }
   
   .mobile-quill .ql-container {
@@ -459,12 +434,11 @@
 
 @media (max-width: 480px) {
   .mobile-quill .ql-toolbar {
-    padding: 8px 6px;
-    min-height: 56px;
+    padding: 6px 8px;
+    min-height: 52px;
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    white-space: nowrap;
   }
   
   .mobile-quill .ql-toolbar::-webkit-scrollbar {
@@ -474,145 +448,86 @@
   .mobile-quill .ql-toolbar .ql-formats {
     display: inline-flex;
     white-space: nowrap;
-    margin-right: 12px;
+    margin-right: 8px;
     align-items: center;
-    gap: 4px;
-    flex-shrink: 0;
+    gap: 2px;
   }
   
-  /* Critical: Larger touch targets for small screens */
   .mobile-quill .ql-toolbar button {
-    min-width: 48px;
-    min-height: 48px;
+    width: 36px;
+    height: 36px;
     margin: 2px;
     flex-shrink: 0;
-    border-radius: 6px;
   }
   
   .mobile-quill .ql-toolbar button svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
   
   .mobile-quill .ql-toolbar .ql-picker-label {
-    min-height: 48px;
-    padding: 8px 12px;
+    min-height: 36px;
+    padding: 6px 10px;
     white-space: nowrap;
-    font-size: 14px;
   }
   
   .mobile-quill .ql-editor {
     padding: 20px 16px;
-    font-size: 16px !important;
+    font-size: 16px;
     line-height: 1.6;
     min-height: 300px;
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
   }
   
-  /* Critical: Prevent zoom on input focus */
+  /* Prevent zoom on input focus */
   .mobile-quill .ql-editor,
   .mobile-quill input,
-  .mobile-quill textarea,
-  .mobile-quill .ql-picker-label {
+  .mobile-quill textarea {
     font-size: 16px !important;
     transform-origin: left top;
     transform: scale(1);
   }
   
-  /* Improve touch targets for dropdowns */
+  /* Improve touch targets */
   .mobile-quill .ql-picker-options {
     max-height: 200px;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
   }
   
   .mobile-quill .ql-picker-item {
-    padding: 14px 18px;
+    padding: 12px 16px;
     font-size: 16px;
-    min-height: 48px;
-    display: flex;
-    align-items: center;
   }
 }
 
-/* Enhanced mobile dialog optimization - Based on research */
+/* Additional mobile optimizations for dialogs */
 @media (max-width: 768px) {
   [data-radix-dialog-content] {
     width: 95vw !important;
     max-width: 95vw !important;
     height: 90vh !important;
     max-height: 90vh !important;
-    margin: 5vh auto !important;
+    margin: 0 !important;
     border-radius: 12px !important;
-    transform: none !important;
   }
   
-  /* Critical: Proper mobile container setup */
+  /* Ensure proper mobile scrolling */
   .mobile-quill {
     height: 100% !important;
     display: flex !important;
     flex-direction: column !important;
-    overflow: hidden !important;
   }
   
   .mobile-quill .ql-container {
     flex: 1 !important;
     min-height: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
   }
   
   .mobile-quill .ql-editor {
-    flex: 1 !important;
-    height: auto !important;
+    height: 100% !important;
     max-height: none !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
-    min-height: 200px !important;
   }
-  
-  /* Prevent body scroll when editor is focused */
-  .mobile-quill .ql-editor:focus {
-    position: relative;
-    z-index: 1;
-  }
-}
-
-/* Safari Mobile Keyboard Fix - Based on research */
-@supports (-webkit-appearance: none) {
-  @media (max-width: 768px) {
-    .mobile-quill .ql-editor {
-      /* Fix for Safari mobile keyboard issues */
-      -webkit-user-select: text;
-      user-select: text;
-      -webkit-touch-callout: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    
-    /* Handle Safari viewport changes */
-    .mobile-quill {
-      height: 100dvh !important;
-      max-height: 100dvh !important;
-    }
-  }
-}
-
-/* Critical: Prevent toolbar button jumping - Based on research */
-.mobile-quill .ql-toolbar button {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-  touch-action: manipulation;
-}
-
-.mobile-quill .ql-toolbar .ql-picker-label {
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-  touch-action: manipulation;
 }
 
 /* Landing page animations */
@@ -646,63 +561,4 @@ html {
 
 .group:hover .group-hover\:animate-bounce {
   animation: bounce 1s infinite;
-}
-
-/* Frutiger font family implementation */
-.frutiger-font {
-  font-family: 'Istok Web', 'Segoe UI', 'Helvetica Neue', 'Roboto', 'Open Sans', 'Arial', sans-serif;
-}
-
-.frutiger-bold {
-  font-family: 'Istok Web', 'Segoe UI', 'Helvetica Neue', 'Roboto', 'Open Sans', 'Arial', sans-serif;
-  font-weight: 700;
-}
-
-.frutiger-heading {
-  font-family: 'Roboto', 'Segoe UI', 'Helvetica Neue', 'Istok Web', 'Arial', sans-serif;
-  font-weight: 500;
-}
-
-/* Additional NHS design system implementation */
-.nhs-blue-gradient {
-  background: linear-gradient(135deg, hsl(var(--nhs-blue)), hsl(var(--nhs-dark-blue)));
-}
-
-.nhs-text-primary {
-  color: hsl(var(--nhs-blue));
-}
-
-.nhs-bg-primary {
-  background-color: hsl(var(--nhs-blue));
-}
-
-.nhs-border-primary {
-  border-color: hsl(var(--nhs-blue));
-}
-
-/* Animate glow effect for NHS branding */
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.2);
-  }
-}
-
-.animate-glow {
-  animation: glow 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
 }
