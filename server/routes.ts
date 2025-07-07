@@ -312,21 +312,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get folders with template counts
+  // Get all folders for user
   app.get("/api/folders", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
-      const templates = await storage.getTemplates(userId);
-      
-      const folderCounts = templates.reduce((acc, template) => {
-        const folder = template.folder || "General";
-        acc[folder] = (acc[folder] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
-
-      res.json(folderCounts);
+      const folders = await storage.getFolders(userId);
+      res.json(folders);
     } catch (error) {
       console.error("Error getting folders:", error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Create new folder
+  app.post("/api/folders", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { name } = req.body;
+      
+      if (!name || typeof name !== 'string') {
+        return res.status(400).json({ message: "Folder name is required" });
+      }
+
+      const folder = await storage.createFolder({ userId, name });
+      res.json(folder);
+    } catch (error) {
+      console.error("Error creating folder:", error);
       res.status(500).json({ message: error.message });
     }
   });

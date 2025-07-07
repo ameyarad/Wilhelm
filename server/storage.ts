@@ -1,10 +1,13 @@
 import {
   users,
+  folders,
   templates,
   reports,
   chatMessages,
   type User,
   type UpsertUser,
+  type Folder,
+  type InsertFolder,
   type Template,
   type InsertTemplate,
   type Report,
@@ -19,6 +22,11 @@ export interface IStorage {
   // User operations (required for Replit Auth)
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  
+  // Folder operations
+  getFolders(userId: string): Promise<Folder[]>;
+  createFolder(folder: InsertFolder): Promise<Folder>;
+  deleteFolder(id: number): Promise<void>;
   
   // Template operations
   getTemplates(userId?: string): Promise<Template[]>;
@@ -59,7 +67,49 @@ export class DatabaseStorage implements IStorage {
         },
       })
       .returning();
+
+    // Ensure General folder exists for user
+    try {
+      const existingGeneral = await db
+        .select()
+        .from(folders)
+        .where(and(eq(folders.userId, user.id), eq(folders.name, "General")))
+        .limit(1);
+
+      if (existingGeneral.length === 0) {
+        await db
+          .insert(folders)
+          .values({
+            userId: user.id,
+            name: "General"
+          });
+      }
+    } catch (error) {
+      console.log("General folder creation skipped:", error);
+    }
+
     return user;
+  }
+
+  // Folder operations
+  async getFolders(userId: string): Promise<Folder[]> {
+    return await db
+      .select()
+      .from(folders)
+      .where(eq(folders.userId, userId))
+      .orderBy(folders.name);
+  }
+
+  async createFolder(folder: InsertFolder): Promise<Folder> {
+    const [newFolder] = await db
+      .insert(folders)
+      .values(folder)
+      .returning();
+    return newFolder;
+  }
+
+  async deleteFolder(id: number): Promise<void> {
+    await db.delete(folders).where(eq(folders.id, id));
   }
 
   // Template operations

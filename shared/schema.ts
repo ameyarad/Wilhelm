@@ -35,6 +35,14 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Folders table
+export const folders = pgTable("folders", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  name: varchar("name").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Templates table - simplified
 export const templates = pgTable("templates", {
   id: serial("id").primaryKey(),
@@ -71,9 +79,17 @@ export const chatMessages = pgTable("chat_messages", {
 
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
+  folders: many(folders),
   templates: many(templates),
   reports: many(reports),
   chatMessages: many(chatMessages),
+}));
+
+export const foldersRelations = relations(folders, ({ one }) => ({
+  user: one(users, {
+    fields: [folders.userId],
+    references: [users.id],
+  }),
 }));
 
 export const templatesRelations = relations(templates, ({ one, many }) => ({
@@ -96,6 +112,11 @@ export const insertUserSchema = createInsertSchema(users).omit({
   updatedAt: true,
 });
 
+export const insertFolderSchema = createInsertSchema(folders).omit({
+  id: true,
+  createdAt: true,
+});
+
 export const insertTemplateSchema = createInsertSchema(templates).omit({
   id: true,
   createdAt: true,
@@ -115,6 +136,8 @@ export const insertChatMessageSchema = createInsertSchema(chatMessages).omit({
 // Types
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
+export type InsertFolder = z.infer<typeof insertFolderSchema>;
+export type Folder = typeof folders.$inferSelect;
 export type InsertTemplate = z.infer<typeof insertTemplateSchema>;
 export type Template = typeof templates.$inferSelect;
 export type InsertReport = z.infer<typeof insertReportSchema>;

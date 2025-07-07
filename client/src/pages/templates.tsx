@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
-import AdvancedTemplateManager from "@/components/templates/AdvancedTemplateManager";
+import PersistentFolderManager from "@/components/templates/PersistentFolderManager";
 
 export default function Templates() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -52,7 +52,7 @@ export default function Templates() {
               </p>
             </div>
 
-            <AdvancedTemplateManager />
+            <PersistentFolderManager />
           </div>
         </main>
       </div>
