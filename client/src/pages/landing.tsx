@@ -138,7 +138,7 @@ export default function Landing() {
           <div className={`text-center mt-20 transition-all duration-1000 delay-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="bg-gradient-to-br from-nhs-blue/10 to-nhs-dark-blue/10 backdrop-blur-xl border border-nhs-light-blue/20 rounded-3xl p-16 shadow-2xl">
               <h2 className="text-5xl font-bold text-white mb-8 bg-gradient-to-r from-white to-nhs-light-blue/90 bg-clip-text text-transparent">Streamline Your Workflow | Reclaim Your Time</h2>
-              <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed">Built By A Radiologist For Radiologists And Other Doctors Doing Medical Imaging Around The World</p>
+              <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed">Built By A Radiologist For Radiologists And Other Doctors Practicing Medical Imaging Around The World</p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
                 <Button 
                   onClick={handleLogin}
