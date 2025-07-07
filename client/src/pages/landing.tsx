@@ -122,7 +122,7 @@ export default function Landing() {
                   <Brain className="w-10 h-10 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3">Multilingual</h3>
-                <p className="text-white/80">Advanced machine learning for clinical accuracy</p>
+                <p className="text-white/80">Generate reports in 8 languages: English, French, German, Hindi, Italian, Spanish, Portuguese and Thai</p>
               </div>
               <div className="text-center group">
                 <div className="w-20 h-20 bg-gradient-to-br from-nhs-light-blue to-nhs-accent-blue rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-2xl">
