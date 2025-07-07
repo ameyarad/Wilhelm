@@ -148,7 +148,7 @@ export default function About() {
               <div className="flex items-start space-x-3">
                 <Globe className="w-5 h-5 text-nhs-blue mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-nhs-dark-blue mb-1">
+                  <p className="text-sm font-medium text-nhs-dark-blue mb-1 text-center">
                     HIPAA/GDPR Compliant Version Coming Soon
                   </p>
                   <p className="text-xs text-nhs-dark-grey/80">
