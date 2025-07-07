@@ -11,6 +11,8 @@ import Chat from "@/pages/chat";
 import Templates from "@/pages/templates";
 import Reports from "@/pages/reports";
 import About from "@/pages/about";
+import HowToUse from "@/pages/how-to-use";
+import Contact from "@/pages/contact";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -26,6 +28,8 @@ function Router() {
           <Route path="/templates" component={Templates} />
           <Route path="/reports" component={Reports} />
           <Route path="/about" component={About} />
+          <Route path="/how-to-use" component={HowToUse} />
+          <Route path="/contact" component={Contact} />
         </>
       )}
       <Route component={NotFound} />

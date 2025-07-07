@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
+import Sidebar from "@/components/layout/Sidebar";
+import Header from "@/components/layout/Header";
 import { 
   Mic, 
   FileText, 
@@ -31,24 +33,28 @@ export default function About() {
   }
 
   return (
-    <div className="min-h-screen bg-nhs-light-grey">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-nhs-dark-blue mb-2 text-center">About Wilhelm</h1>
-          <p className="text-nhs-dark-grey/70 text-lg text-center">Free And Open Source Medical Imaging Reporting AI Agent</p>
-        </div>
+    <div className="flex h-screen bg-nhs-light-grey">
+      <Sidebar />
+      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300">
+        <Header />
+        <main className="flex-1 p-4 md:p-6 overflow-y-auto">
+          <div className="container mx-auto max-w-4xl">
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-nhs-dark-blue mb-2 text-center">About Wilhelm</h1>
+              <p className="text-nhs-dark-grey/70 text-lg text-center">Free And Open Source Medical Imaging Reporting AI Agent</p>
+            </div>
 
-        {/* Core Workflow */}
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Brain className="w-6 h-6 text-nhs-blue" />
-              <span>Core Workflow</span>
-            </CardTitle>
-            <p className="text-sm text-nhs-dark-grey/70">
-              Wilhelm's workflow is designed for speed and simplicity, centered around a single API call:
-            </p>
-          </CardHeader>
+            {/* Core Workflow */}
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Brain className="w-6 h-6 text-nhs-blue" />
+                  <span>Core Workflow</span>
+                </CardTitle>
+                <p className="text-sm text-nhs-dark-grey/70">
+                  Wilhelm's workflow is designed for speed and simplicity, centered around a single API call:
+                </p>
+              </CardHeader>
           <CardContent className="space-y-6">
             <div className="flex items-start space-x-4">
               <div className="flex-shrink-0 w-8 h-8 bg-nhs-blue text-white rounded-full flex items-center justify-center font-bold">
@@ -183,10 +189,13 @@ export default function About() {
           </CardContent>
         </Card>
 
+          </div>
+        </main>
+        
         {/* Footer */}
-        <footer className="mt-8 pt-4 border-t border-gray-200 text-center">
+        <footer className="bg-white border-t border-gray-200 p-2 text-center">
           <div className="text-xs text-nhs-dark-grey/70">
-            <p className="font-normal">© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
+            <p className="font-bold">© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
           </div>
         </footer>
       </div>
