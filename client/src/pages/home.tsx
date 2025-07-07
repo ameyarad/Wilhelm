@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
+import GeneratedReportViewer from "@/components/reports/GeneratedReportViewer";
 import { useVoiceRecording } from "@/hooks/useVoiceRecording";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -20,7 +21,8 @@ import {
   Loader2,
   FileText,
   Brain,
-  Copy
+  Copy,
+  Eye
 } from "lucide-react";
 
 export default function Home() {
@@ -30,6 +32,7 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [generatedReport, setGeneratedReport] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isReportViewerOpen, setIsReportViewerOpen] = useState(false);
   
   const {
     isRecording,
@@ -48,6 +51,7 @@ export default function Home() {
     onSuccess: (result) => {
       setGeneratedReport(result.report);
       setIsProcessing(false);
+      setIsReportViewerOpen(true);
       toast({
         title: "Report Generated",
         description: `Using template: ${result.templateUsed}`,
@@ -237,22 +241,32 @@ export default function Home() {
                       <FileText className="w-5 h-5 text-nhs-green" />
                       <span>Generated Report</span>
                     </CardTitle>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleCopyReport}
-                      className="text-nhs-green"
-                    >
-                      <Copy className="w-3 h-3 mr-1" />
-                      Copy
-                    </Button>
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleCopyReport}
+                        className="text-nhs-green"
+                      >
+                        <Copy className="w-3 h-3 mr-1" />
+                        Copy
+                      </Button>
+                      <Button
+                        onClick={() => setIsReportViewerOpen(true)}
+                        className="bg-nhs-blue hover:bg-nhs-blue/90 text-white"
+                        size="sm"
+                      >
+                        <Eye className="w-3 h-3 mr-1" />
+                        View & Edit
+                      </Button>
+                    </div>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="bg-gray-50 rounded-lg p-4 border">
-                    <pre className="whitespace-pre-wrap text-sm text-nhs-dark-grey">
-                      {generatedReport}
-                    </pre>
+                    <div className="text-sm text-nhs-dark-grey">
+                      Report generated successfully. Click "View & Edit" to see the full report in the rich text editor.
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -268,6 +282,13 @@ export default function Home() {
             <p>© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
           </div>
         </footer>
+
+        {/* Generated Report Viewer */}
+        <GeneratedReportViewer
+          report={generatedReport}
+          isOpen={isReportViewerOpen}
+          onClose={() => setIsReportViewerOpen(false)}
+        />
       </div>
     </div>
   );

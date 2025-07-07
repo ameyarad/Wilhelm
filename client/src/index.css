@@ -37,6 +37,161 @@
   --nhs-light-grey: hsl(210, 40%, 96%);
 }
 
+/* Custom Quill Editor Styles */
+.ql-container {
+  border: 1px solid hsl(214, 32%, 91%);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.ql-toolbar {
+  border: 1px solid hsl(214, 32%, 91%);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  background: hsl(0, 0%, 100%);
+  padding: 8px;
+}
+
+.ql-toolbar .ql-formats {
+  margin-right: 16px;
+}
+
+.ql-toolbar .ql-formats:last-child {
+  margin-right: 0;
+}
+
+.ql-editor {
+  padding: 16px;
+  min-height: 300px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  color: hsl(210, 29%, 24%);
+}
+
+.ql-editor p {
+  margin-bottom: 12px;
+}
+
+.ql-editor p:last-child {
+  margin-bottom: 0;
+}
+
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6 {
+  margin-top: 24px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: hsl(207, 90%, 54%);
+}
+
+.ql-editor h1:first-child,
+.ql-editor h2:first-child,
+.ql-editor h3:first-child,
+.ql-editor h4:first-child,
+.ql-editor h5:first-child,
+.ql-editor h6:first-child {
+  margin-top: 0;
+}
+
+.ql-editor ul,
+.ql-editor ol {
+  margin-bottom: 12px;
+}
+
+.ql-editor li {
+  margin-bottom: 4px;
+}
+
+.ql-editor strong {
+  font-weight: 600;
+}
+
+.ql-editor em {
+  font-style: italic;
+}
+
+.ql-editor u {
+  text-decoration: underline;
+}
+
+.ql-editor s {
+  text-decoration: line-through;
+}
+
+.ql-snow .ql-tooltip {
+  background: hsl(0, 0%, 100%);
+  border: 1px solid hsl(214, 32%, 91%);
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ql-snow .ql-tooltip::before {
+  border-bottom: 1px solid hsl(214, 32%, 91%);
+}
+
+.ql-snow .ql-picker-options {
+  background: hsl(0, 0%, 100%);
+  border: 1px solid hsl(214, 32%, 91%);
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ql-snow .ql-picker-item:hover {
+  background: hsl(210, 40%, 96%);
+}
+
+.ql-snow .ql-picker-item.ql-selected {
+  background: hsl(207, 90%, 54%);
+  color: white;
+}
+
+.ql-snow .ql-stroke {
+  stroke: hsl(215, 13%, 65%);
+}
+
+.ql-snow .ql-stroke:hover {
+  stroke: hsl(207, 90%, 54%);
+}
+
+.ql-snow .ql-fill {
+  fill: hsl(215, 13%, 65%);
+}
+
+.ql-snow .ql-fill:hover {
+  fill: hsl(207, 90%, 54%);
+}
+
+.ql-snow .ql-active .ql-stroke {
+  stroke: hsl(207, 90%, 54%);
+}
+
+.ql-snow .ql-active .ql-fill {
+  fill: hsl(207, 90%, 54%);
+}
+
+.ql-editor:focus {
+  outline: 2px solid hsl(207, 90%, 54%);
+  outline-offset: -2px;
+}
+
+/* Custom separator in toolbar */
+.ql-toolbar .ql-separator {
+  width: 1px;
+  height: 24px;
+  background: hsl(214, 32%, 91%);
+  margin: 0 8px;
+}
+
 .dark {
   --background: hsl(222, 84%, 4%);
   --foreground: hsl(210, 40%, 98%);
