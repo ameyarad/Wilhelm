@@ -7,7 +7,10 @@ export default function Header() {
         <div className="w-8 h-8 bg-nhs-blue rounded-lg flex items-center justify-center">
           <Activity className="w-4 h-4 text-white" />
         </div>
-        <h1 className="text-xl font-semibold text-nhs-dark-grey">Wilhelm</h1>
+        <div>
+          <h1 className="text-xl font-semibold text-nhs-dark-grey">Wilhelm</h1>
+          <p className="text-xs text-nhs-dark-grey/70">Free And Open Source Medical Imaging Reporting AI Agent</p>
+        </div>
       </div>
       <div className="flex items-center space-x-4">
         {/* Space for future header actions */}

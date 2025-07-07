@@ -135,9 +135,7 @@ export default function Sidebar() {
                     : user?.email
                   }
                 </div>
-                <div className="text-xs text-white/70">
-                  Radiology Department
-                </div>
+
               </div>
               <Button
                 variant="ghost"

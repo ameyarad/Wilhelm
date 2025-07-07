@@ -83,12 +83,15 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
       return;
     }
 
+    const now = new Date();
     const reportData = {
-      title: "Generated Report",
+      title: `Generated Report - ${now.toLocaleDateString()}`,
       content: content,
+      status: "draft" as const,
       metadata: {
-        generatedAt: new Date().toISOString(),
-        source: "AI Generated"
+        generatedAt: now.toISOString(),
+        source: "AI Generated",
+        type: "Generated Report"
       }
     };
 
@@ -132,23 +135,17 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
 
   // Rich text editor configuration
   const modules = {
-    toolbar: {
-      container: [
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-        [{ 'script': 'sub'}, { 'script': 'super' }],
-        [{ 'indent': '-1'}, { 'indent': '+1' }],
-        [{ 'align': [] }],
-        ['link', 'image'],
-        ['clean']
-      ],
-      handlers: {
-        'undo': handleUndo,
-        'redo': handleRedo
-      }
-    },
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'align': [] }],
+      ['link', 'image'],
+      ['clean']
+    ],
     history: {
       delay: 1000,
       maxStack: 100,
@@ -171,12 +168,15 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
+      <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden" aria-describedby="report-viewer-description">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <FileText className="w-5 h-5 text-nhs-blue" />
             <span>Generated Report</span>
           </DialogTitle>
+          <div id="report-viewer-description" className="text-sm text-muted-foreground">
+            Edit and format your generated report using the rich text editor below
+          </div>
         </DialogHeader>
         
         <div className="flex-1 overflow-hidden">
@@ -226,7 +226,7 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="p-0">
+            <CardContent className="p-4">
               <div className="border border-gray-200 rounded-lg overflow-hidden">
                 <ReactQuill
                   ref={quillRef}
@@ -236,9 +236,7 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
                   formats={formats}
                   theme="snow"
                   style={{
-                    height: '400px',
-                    fontSize: '14px',
-                    fontFamily: 'inherit'
+                    height: '450px'
                   }}
                   placeholder="Generated report content will appear here..."
                 />

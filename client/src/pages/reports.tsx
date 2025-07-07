@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Eye, Edit, Trash2, Copy } from "lucide-react";
 import { Report } from "@shared/schema";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, format, isToday, isYesterday, parseISO } from "date-fns";
 
 export default function Reports() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -64,6 +64,42 @@ export default function Reports() {
     }
   };
 
+  // Group reports by date
+  const groupReportsByDate = (reports: Report[]) => {
+    const groups: { [key: string]: Report[] } = {};
+    
+    reports.forEach((report) => {
+      const date = parseISO(report.createdAt);
+      let key: string;
+      
+      if (isToday(date)) {
+        key = 'Today';
+      } else if (isYesterday(date)) {
+        key = 'Yesterday';
+      } else {
+        key = format(date, 'MMMM d, yyyy');
+      }
+      
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+      groups[key].push(report);
+    });
+    
+    // Sort groups by date (most recent first)
+    const sortedGroups = Object.entries(groups).sort(([a], [b]) => {
+      if (a === 'Today') return -1;
+      if (b === 'Today') return 1;
+      if (a === 'Yesterday') return -1;
+      if (b === 'Yesterday') return 1;
+      return new Date(b).getTime() - new Date(a).getTime();
+    });
+    
+    return sortedGroups;
+  };
+
+  const groupedReports = groupReportsByDate(reportsData);
+
   const handleCopyReport = async (report: Report) => {
     try {
       await navigator.clipboard.writeText(report.content);
@@ -98,72 +134,84 @@ export default function Reports() {
             </div>
 
             {/* Reports List */}
-            <div className="bg-white rounded-lg shadow-sm">
+            <div className="space-y-6">
               {reportsData.length === 0 ? (
-                <div className="p-8 text-center">
+                <div className="bg-white rounded-lg shadow-sm p-8 text-center">
                   <FileText className="h-12 w-12 text-nhs-dark-grey/30 mx-auto mb-4" />
                   <p className="text-nhs-dark-grey/70">
                     No reports yet. Create your first report in the chat interface.
                   </p>
                 </div>
               ) : (
-                <div className="divide-y divide-gray-200">
-                  {reportsData.map((report) => (
-                    <Card key={report.id} className="border-0 shadow-none">
-                      <CardHeader className="pb-3">
-                        <div className="flex items-center justify-between">
-                          <CardTitle className="text-lg font-medium flex items-center space-x-2">
-                            <FileText className="h-5 w-5 text-nhs-blue" />
-                            <span>{report.title}</span>
-                          </CardTitle>
-                          <Badge className={getStatusColor(report.status)}>
-                            {report.status}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center space-x-4 text-sm text-nhs-dark-grey/70">
-                          <span>
-                            {formatDistanceToNow(new Date(report.createdAt), { addSuffix: true })}
-                          </span>
-                          {report.updatedAt !== report.createdAt && (
-                            <span>
-                              • Updated {formatDistanceToNow(new Date(report.updatedAt), { addSuffix: true })}
-                            </span>
-                          )}
-                        </div>
-                      </CardHeader>
-                      <CardContent className="pt-0">
-                        <div className="mb-4">
-                          <p className="text-sm text-nhs-dark-grey/70 line-clamp-3">
-                            {report.content.substring(0, 200)}...
-                          </p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Button size="sm" variant="outline" className="text-nhs-blue">
-                            <Eye className="h-3 w-3 mr-1" />
-                            View
-                          </Button>
-                          <Button size="sm" variant="outline" className="text-nhs-green">
-                            <Edit className="h-3 w-3 mr-1" />
-                            Edit
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            variant="outline" 
-                            className="text-nhs-light-blue"
-                            onClick={() => handleCopyReport(report)}
-                          >
-                            <Copy className="h-3 w-3 mr-1" />
-                            Copy
-                          </Button>
-                          <Button size="sm" variant="outline" className="text-nhs-red hover:text-nhs-red">
-                            <Trash2 className="h-3 w-3 mr-1" />
-                            Delete
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                groupedReports.map(([dateGroup, reports]) => (
+                  <div key={dateGroup} className="bg-white rounded-lg shadow-sm">
+                    <div className="px-6 py-4 border-b border-gray-200">
+                      <h2 className="text-lg font-semibold text-nhs-dark-grey">
+                        {dateGroup}
+                      </h2>
+                      <p className="text-sm text-nhs-dark-grey/70">
+                        {reports.length} report{reports.length > 1 ? 's' : ''}
+                      </p>
+                    </div>
+                    <div className="divide-y divide-gray-200">
+                      {reports.map((report) => (
+                        <Card key={report.id} className="border-0 shadow-none">
+                          <CardHeader className="pb-3">
+                            <div className="flex items-center justify-between">
+                              <CardTitle className="text-lg font-medium flex items-center space-x-2">
+                                <FileText className="h-5 w-5 text-nhs-blue" />
+                                <span>{report.title}</span>
+                              </CardTitle>
+                              <Badge className={getStatusColor(report.status)}>
+                                {report.status}
+                              </Badge>
+                            </div>
+                            <div className="flex items-center space-x-4 text-sm text-nhs-dark-grey/70">
+                              <span>
+                                {format(parseISO(report.createdAt), 'h:mm a')}
+                              </span>
+                              {report.updatedAt !== report.createdAt && (
+                                <span>
+                                  • Updated {formatDistanceToNow(new Date(report.updatedAt), { addSuffix: true })}
+                                </span>
+                              )}
+                            </div>
+                          </CardHeader>
+                          <CardContent className="pt-0">
+                            <div className="mb-4">
+                              <p className="text-sm text-nhs-dark-grey/70 line-clamp-3">
+                                {report.content.substring(0, 200)}...
+                              </p>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Button size="sm" variant="outline" className="text-nhs-blue">
+                                <Eye className="h-3 w-3 mr-1" />
+                                View
+                              </Button>
+                              <Button size="sm" variant="outline" className="text-nhs-green">
+                                <Edit className="h-3 w-3 mr-1" />
+                                Edit
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                className="text-nhs-light-blue"
+                                onClick={() => handleCopyReport(report)}
+                              >
+                                <Copy className="h-3 w-3 mr-1" />
+                                Copy
+                              </Button>
+                              <Button size="sm" variant="outline" className="text-nhs-red hover:text-nhs-red">
+                                <Trash2 className="h-3 w-3 mr-1" />
+                                Delete
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                ))
               )}
             </div>
           </div>
