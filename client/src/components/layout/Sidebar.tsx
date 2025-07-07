@@ -50,12 +50,7 @@ export default function Sidebar() {
     )}>
       {/* More Features Button */}
       <div className="p-4 border-b border-nhs-light-blue/20">
-        {!isCollapsed && (
-          <div className="mb-4">
-            <h2 className="text-lg font-semibold text-white">Wilhelm</h2>
-            <p className="text-xs text-white/70">AI Radiology Platform</p>
-          </div>
-        )}
+        
         <Button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className={cn(
