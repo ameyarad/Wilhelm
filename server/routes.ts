@@ -205,43 +205,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
           throw new Error("Failed to process docx file: " + mammothError.message);
         }
       } else if (fileExtension === 'doc') {
-        // For .doc files, use multiple extraction methods to handle binary format
-        let extractedText = '';
-        
+        // For .doc files, use word-extractor library for proper parsing
         try {
-          // Method 1: Try to extract text using latin1 encoding
-          const latin1Text = req.file.buffer.toString('latin1');
-          const textMatches = latin1Text.match(/[A-Za-z0-9\s\.\,\:\;\!\?\-\(\)\[\]]{4,}/g);
-          if (textMatches) {
-            extractedText = textMatches.join(' ').replace(/\s+/g, ' ').trim();
-          }
-          
-          // Method 2: If no good text found, try UTF-8 with aggressive cleaning
-          if (!extractedText || extractedText.length < 50) {
-            const utf8Text = req.file.buffer.toString('utf-8');
-            extractedText = utf8Text
-              .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/g, ' ') // Remove control chars
-              .replace(/[^\w\s\.\,\:\;\!\?\-\(\)\[\]\/\\"']/g, ' ') // Keep only readable chars
-              .replace(/\s+/g, ' ') // Normalize whitespace
-              .trim();
-          }
-          
-          // Method 3: If still no good text, try binary extraction
-          if (!extractedText || extractedText.length < 30) {
-            const binaryText = req.file.buffer.toString('binary');
-            const readableChars = binaryText.replace(/[^\x20-\x7E]/g, '');
-            extractedText = readableChars.replace(/\s+/g, ' ').trim();
-          }
-          
-          content = extractedText;
-          console.log("Processed .doc file, content length:", content.length);
+          const WordExtractor = await import('word-extractor');
+          const extractor = new WordExtractor.default();
+          const extracted = await extractor.extract(req.file.buffer);
+          content = extracted.getBody();
+          console.log("Successfully extracted text from .doc file, content length:", content.length);
         } catch (docError) {
-          console.error("Error processing .doc file:", docError);
-          // Fallback to basic text extraction
-          content = req.file.buffer.toString('utf-8')
-            .replace(/[\x00-\x1F\x7F-\x9F]/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim();
+          console.error("Error extracting from .doc file:", docError);
+          // Fallback: manual text extraction using improved regex
+          const utf8Text = req.file.buffer.toString('utf-8');
+          const textMatches = utf8Text.match(/[\w\s\.\,\:\;\!\?\-\(\)\[\]]{8,}/g);
+          if (textMatches && textMatches.length > 0) {
+            content = textMatches
+              .filter(match => match.trim().length > 5) // Filter out short fragments
+              .join(' ')
+              .replace(/\s+/g, ' ')
+              .trim();
+          } else {
+            content = "Error: Could not extract readable text from this .doc file. Please try uploading as .docx or .txt format.";
+          }
+          console.log("Fallback .doc processing, content length:", content.length);
         }
       } else {
         // For .txt files

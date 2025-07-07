@@ -32,8 +32,24 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
     if (isOpen) {
       if (template) {
         setName(template.name || "");
-        // Handle both HTML and plain text content
-        const cleanContent = template.content ? template.content : "";
+        // Handle both HTML and plain text content, clean any binary artifacts
+        let cleanContent = template.content || "";
+        
+        // If content contains binary artifacts (from .doc files), clean it
+        if (cleanContent.includes('��') || cleanContent.includes('\x00') || cleanContent.match(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/)) {
+          // Extract readable text from corrupted content
+          const textMatches = cleanContent.match(/[A-Za-z0-9\s\.\,\:\;\!\?\-\(\)\[\]]{8,}/g);
+          if (textMatches && textMatches.length > 0) {
+            cleanContent = textMatches
+              .filter(match => match.trim().length > 5)
+              .join(' ')
+              .replace(/\s+/g, ' ')
+              .trim();
+          } else {
+            cleanContent = "Please re-upload this template file for better text extraction.";
+          }
+        }
+        
         setContent(cleanContent);
         setFolder(template.folder || "General");
       } else {
