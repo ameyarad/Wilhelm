@@ -149,9 +149,6 @@ export default function HowToUse() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-nhs-dark-grey/80 leading-relaxed mb-4">
-                  Save your finalized report for future reference.
-                </p>
                 <ul className="text-sm text-nhs-dark-grey/80 space-y-2 ml-4">
                   <li>• Click "Save Report" in the editor</li>
                   <li>• Reports are automatically organized by date</li>
