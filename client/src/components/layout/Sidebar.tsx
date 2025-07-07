@@ -38,7 +38,6 @@ export default function Sidebar() {
 
   const bottomLinks = [
     { name: "How To Use", href: "/how-to-use", icon: HelpCircle },
-    { name: "How It Was Built", href: "/how-it-was-built", icon: Code },
     { name: "About", href: "/about", icon: Info },
     { name: "Contact", href: "/contact", icon: Mail },
   ];

@@ -10,6 +10,7 @@ import Home from "@/pages/home";
 import Chat from "@/pages/chat";
 import Templates from "@/pages/templates";
 import Reports from "@/pages/reports";
+import About from "@/pages/about";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -24,6 +25,7 @@ function Router() {
           <Route path="/chat" component={Chat} />
           <Route path="/templates" component={Templates} />
           <Route path="/reports" component={Reports} />
+          <Route path="/about" component={About} />
         </>
       )}
       <Route component={NotFound} />

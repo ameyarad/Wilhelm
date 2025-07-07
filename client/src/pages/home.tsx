@@ -270,6 +270,18 @@ export default function Home() {
               </Card>
             )}
 
+            {/* Instructional Text */}
+            <Card className="mt-4">
+              <CardContent className="p-4">
+                <div className="text-sm text-nhs-dark-grey/80 leading-relaxed">
+                  <p className="font-medium">
+                    Please ensure you have the appropriate report template uploaded before starting dictation. 
+                    Please name your templates as per their modality and scan type. Wilhelm selects your 
+                    report template based on the template's name, like a real transcriptionist!
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
           </div>
         </main>

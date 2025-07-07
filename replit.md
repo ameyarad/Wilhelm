@@ -109,6 +109,13 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
+- July 07, 2025. UI streamlining, About page enhancement, and workflow documentation
+  - Removed "How It Was Built" page from sidebar navigation for cleaner interface
+  - Added instructional text to main page below chat box explaining template naming conventions
+  - Created comprehensive About page with detailed Core Workflow section (4-step process documentation)
+  - Added About Me section and Educational/Research Use disclaimer with HIPAA/GDPR compliance notice
+  - Enhanced About page with visual step-by-step workflow using numbered badges and icons
+  - Documented Wilhelm's sub-3-second report generation process with technical details
 - July 07, 2025. Wilhelm logo integration, SEO optimization, and modern landing page redesign
   - Integrated Wilhelm logo across all pages: landing page, header, sidebar, and navigation
   - Removed animation from Wilhelm logo for cleaner, more professional appearance
