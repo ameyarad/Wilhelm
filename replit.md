@@ -109,6 +109,13 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
+- July 07, 2025. Enhanced document processing and rich text editor
+  - Fixed .doc file text extraction with multiple encoding methods (latin1, utf-8, binary)
+  - Enhanced .docx file processing to preserve HTML formatting for rich text editor
+  - Updated rich text editor with expanded toolbar (colors, alignment, blockquotes, code blocks)
+  - Removed category field completely from templates and all AI prompts
+  - Improved template content display in rich text editor with proper HTML support
+  - Added comprehensive formatting preservation from original documents
 - July 07, 2025. Advanced template management with full folder organization
   - Fixed .doc file upload issues by filtering out binary characters that cause UTF-8 database errors
   - Added comprehensive folder organization system with backend API endpoints:

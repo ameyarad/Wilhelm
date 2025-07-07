@@ -32,9 +32,8 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
     if (isOpen) {
       if (template) {
         setName(template.name || "");
-        // Clean and decode the content to handle special characters
-        const cleanContent = template.content ? 
-          template.content.replace(/[\x00-\x1F\x7F-\x9F]/g, '') : "";
+        // Handle both HTML and plain text content
+        const cleanContent = template.content ? template.content : "";
         setContent(cleanContent);
         setFolder(template.folder || "General");
       } else {
@@ -110,14 +109,18 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
       ['bold', 'italic', 'underline', 'strike'],
       [{ 'list': 'ordered'}, { 'list': 'bullet' }],
       [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'align': [] }],
       ['link'],
+      ['blockquote', 'code-block'],
       ['clean']
     ],
   };
 
   const formats = [
     'header', 'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet', 'indent', 'link'
+    'list', 'bullet', 'indent', 'link', 'color', 'background',
+    'align', 'blockquote', 'code-block'
   ];
 
   return (
