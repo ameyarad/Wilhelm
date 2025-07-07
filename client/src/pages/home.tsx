@@ -277,7 +277,7 @@ export default function Home() {
         {/* Footer */}
         <footer className="bg-white border-t border-gray-200 p-2 text-center">
           <div className="text-xs text-nhs-dark-grey/70">
-            <p>© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
+            <p className="font-bold">© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
           </div>
         </footer>
 

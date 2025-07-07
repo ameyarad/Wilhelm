@@ -66,7 +66,7 @@ export default function Landing() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-white/90 text-base leading-relaxed">Advanced voice recognition for accurate medical transcription and real-time processing</p>
+                <p className="text-white/90 text-base leading-relaxed font-bold">Advanced voice recognition for accurate medical transcription and real-time processing</p>
               </CardContent>
             </Card>
 
@@ -80,7 +80,7 @@ export default function Landing() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-white/90 text-base leading-relaxed">Instant report generation using artificial intelligence with automatic template selection and report formatting</p>
+                <p className="text-white/90 text-base leading-relaxed font-bold">Instant report generation using artificial intelligence with automatic template selection and report formatting</p>
               </CardContent>
             </Card>
 
@@ -94,7 +94,7 @@ export default function Landing() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-white/90 text-base leading-relaxed text-center">Upload, edit, save and copy your own templates</p>
+                <p className="text-white/90 text-base leading-relaxed text-center font-bold">Upload, edit, save and copy your own templates</p>
               </CardContent>
             </Card>
           </div>
@@ -108,28 +108,28 @@ export default function Landing() {
                   <Zap className="w-10 h-10 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3">Lightning Fast</h3>
-                <p className="text-white/80">Real-time processing and instant report generation</p>
+                <p className="text-white/80 font-bold">Real-time processing and instant report generation</p>
               </div>
               <div className="text-center group">
                 <div className="w-20 h-20 bg-gradient-to-br from-nhs-blue to-nhs-dark-blue rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-2xl">
                   <Shield className="w-10 h-10 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3">Secure</h3>
-                <p className="text-white/80">Enterprise-grade security and encryption</p>
+                <p className="text-white/80 font-bold">Enterprise-grade security and encryption</p>
               </div>
               <div className="text-center group">
                 <div className="w-20 h-20 bg-gradient-to-br from-nhs-dark-blue to-nhs-light-blue rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-2xl">
                   <Brain className="w-10 h-10 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3">Multilingual</h3>
-                <p className="text-white/80">Generate reports in 8 languages: English, French, German, Hindi, Italian, Spanish, Portuguese and Thai</p>
+                <p className="text-white/80 font-bold">Generate reports in 8 languages: English, French, German, Hindi, Italian, Spanish, Portuguese and Thai</p>
               </div>
               <div className="text-center group">
                 <div className="w-20 h-20 bg-gradient-to-br from-nhs-light-blue to-nhs-accent-blue rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-2xl">
                   <Activity className="w-10 h-10 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3">Free and Open Source</h3>
-                <p className="text-white/80">Customize Wilhelm as per your needs with code. Connect your own AI models for reporting as per your preference.</p>
+                <p className="text-white/80 font-bold">Customize Wilhelm as per your needs with code. Connect your own AI models for reporting as per your preference.</p>
               </div>
             </div>
           </div>
@@ -138,7 +138,7 @@ export default function Landing() {
           <div className={`text-center mt-20 transition-all duration-1000 delay-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="bg-gradient-to-br from-nhs-blue/10 to-nhs-dark-blue/10 backdrop-blur-xl border border-nhs-light-blue/20 rounded-3xl p-16 shadow-2xl">
               <h2 className="text-5xl font-bold text-white mb-8 bg-gradient-to-r from-white to-nhs-light-blue/90 bg-clip-text text-transparent">Streamline Your Workflow | Reclaim Your Time</h2>
-              <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed">Built By A Radiologist For Radiologists And Other Doctors Practicing Medical Imaging Around The World</p>
+              <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto leading-relaxed font-bold">Built By A Radiologist For Radiologists And Other Doctors Practicing Medical Imaging Around The World</p>
               <div className="flex flex-col sm:flex-row gap-6 justify-center">
                 <Button 
                   onClick={handleLogin}
@@ -156,7 +156,7 @@ export default function Landing() {
           {/* Footer */}
           <footer className="text-center text-white/60 mt-16 pt-8 border-t border-white/10">
             <div className="text-sm">
-              <p>© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
+              <p className="font-bold">© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
               
             </div>
           </footer>

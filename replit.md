@@ -122,6 +122,8 @@ Changelog:
   - Changed Wilhelm heading to pure white text for better readability
   - Updated button text: "Get Started" → "Start Reporting", "Start Your Journey" → "Start Reporting"
   - Systematically cleaned up UI by removing secondary "Learn More" button for streamlined interface
+  - Made all subheadings, card text, and feature descriptions bold on landing page for stronger visual impact
+  - Applied bold font weight to footer text across all pages (home, chat, reports, landing) for consistency
   - Added comprehensive SEO meta tags optimized for medical imaging keywords
   - Created sitemap.xml for search engine crawling with medical imaging focus
   - Implemented robots.txt with AI crawler guidelines for better LLM discovery
