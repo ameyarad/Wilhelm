@@ -157,9 +157,7 @@ export default function Landing() {
           <footer className="text-center text-white/60 mt-16 pt-8 border-t border-white/10">
             <div className="text-sm">
               <p>© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
-              <p className="mt-2 text-xs">
-                Built with React, TypeScript, and powered by Groq AI • Hosted on Replit
-              </p>
+              
             </div>
           </footer>
         </div>
