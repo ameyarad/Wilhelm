@@ -66,9 +66,7 @@ export default function Landing() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-white/90 text-base leading-relaxed">
-                  Advanced voice recognition with Whisper Turbo for accurate medical transcription and real-time processing
-                </p>
+                <p className="text-white/90 text-base leading-relaxed">Advanced voice recognition for accurate medical transcription and real-time processing</p>
               </CardContent>
             </Card>
 
