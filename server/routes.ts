@@ -11,8 +11,7 @@ import { ZodError } from "zod";
 const upload = multer({ storage: multer.memoryStorage() });
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Initialize default templates
-  await templateService.initializeDefaultTemplates();
+  // No default templates - users will upload their own
 
   // Auth middleware
   await setupAuth(app);
@@ -131,16 +130,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/templates', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
-      const defaultTemplates = await storage.getTemplates();
-      const userTemplates = await storage.getTemplates(userId);
-      
-      res.json({
-        default: defaultTemplates,
-        user: userTemplates,
-      });
+      const templates = await storage.getTemplates(userId);
+      res.json(templates);
     } catch (error) {
       console.error("Error fetching templates:", error);
       res.status(500).json({ message: "Failed to fetch templates" });
+    }
+  });
+
+  app.get('/api/templates/folders', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const templates = await templateService.getTemplatesByFolder(userId);
+      res.json(templates);
+    } catch (error) {
+      console.error("Error fetching templates by folder:", error);
+      res.status(500).json({ message: "Failed to fetch templates by folder" });
     }
   });
 
@@ -167,18 +172,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/templates/upload', isAuthenticated, upload.single('template'), async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
-      const { category } = req.body;
+      const { category, folder } = req.body;
       
       if (!req.file) {
         return res.status(400).json({ message: "No template file provided" });
       }
 
-      const content = req.file.buffer.toString('utf-8');
+      let content = '';
+      const fileName = req.file.originalname;
+      const fileExtension = fileName.split('.').pop()?.toLowerCase();
+
+      // Handle different file types
+      if (fileExtension === 'docx') {
+        const mammoth = require('mammoth');
+        const result = await mammoth.extractRawText({ buffer: req.file.buffer });
+        content = result.value;
+      } else if (fileExtension === 'doc') {
+        // For .doc files, try to extract text (basic support)
+        content = req.file.buffer.toString('utf-8');
+      } else {
+        // For .txt files
+        content = req.file.buffer.toString('utf-8');
+      }
+
       const template = await templateService.processUploadedTemplate(
         userId,
-        req.file.originalname,
+        fileName,
         content,
-        category || "Custom"
+        category || "Custom",
+        folder
       );
 
       res.json(template);
@@ -206,8 +228,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put('/api/templates/:id', isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
       const id = parseInt(req.params.id);
       const templateData = insertTemplateSchema.partial().parse(req.body);
+      
+      // Check if template belongs to user
+      const existingTemplate = await storage.getTemplate(id);
+      if (!existingTemplate || existingTemplate.userId !== userId) {
+        return res.status(404).json({ message: "Template not found" });
+      }
       
       const template = await storage.updateTemplate(id, templateData);
       res.json(template);
@@ -223,7 +252,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/templates/:id', isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
       const id = parseInt(req.params.id);
+      
+      // Check if template belongs to user
+      const existingTemplate = await storage.getTemplate(id);
+      if (!existingTemplate || existingTemplate.userId !== userId) {
+        return res.status(404).json({ message: "Template not found" });
+      }
+      
       await storage.deleteTemplate(id);
       res.json({ message: "Template deleted successfully" });
     } catch (error) {

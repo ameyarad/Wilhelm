@@ -38,12 +38,13 @@ export const users = pgTable("users", {
 // Templates table
 export const templates = pgTable("templates", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").references(() => users.id),
+  userId: varchar("user_id").references(() => users.id).notNull(),
   name: varchar("name").notNull(),
   description: varchar("description"),
   content: text("content").notNull(),
   category: varchar("category").notNull(),
-  isDefault: boolean("is_default").default(false),
+  folder: varchar("folder").default("General"), // New folder field
+  fileType: varchar("file_type").notNull().default("txt"), // doc, docx, txt
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

@@ -2,104 +2,17 @@ import { storage } from "../storage";
 import { InsertTemplate, Template } from "@shared/schema";
 
 export class TemplateService {
-  private defaultTemplates: Array<Omit<InsertTemplate, "userId">> = [
-    {
-      name: "Chest X-ray",
-      description: "Standard chest radiograph template",
-      content: `CHEST X-RAY REPORT
-
-CLINICAL HISTORY: {clinical_history}
-
-TECHNIQUE: Single frontal chest radiograph
-
-FINDINGS: {findings}
-
-IMPRESSION: {impression}
-
-RECOMMENDATIONS: {recommendations}`,
-      category: "Chest Imaging",
-      isDefault: true,
-    },
-    {
-      name: "CT Abdomen",
-      description: "Abdominal CT scan template",
-      content: `CT ABDOMEN AND PELVIS REPORT
-
-CLINICAL HISTORY: {clinical_history}
-
-TECHNIQUE: Axial CT images of the abdomen and pelvis with IV contrast
-
-FINDINGS: {findings}
-
-IMPRESSION: {impression}
-
-RECOMMENDATIONS: {recommendations}`,
-      category: "CT Imaging",
-      isDefault: true,
-    },
-    {
-      name: "MRI Brain",
-      description: "Brain MRI examination template",
-      content: `MRI BRAIN REPORT
-
-CLINICAL HISTORY: {clinical_history}
-
-TECHNIQUE: Multiplanar MRI of the brain including T1, T2, and FLAIR sequences
-
-FINDINGS: {findings}
-
-IMPRESSION: {impression}
-
-RECOMMENDATIONS: {recommendations}`,
-      category: "MRI Imaging",
-      isDefault: true,
-    },
-    {
-      name: "Ultrasound",
-      description: "General ultrasound template",
-      content: `ULTRASOUND REPORT
-
-CLINICAL HISTORY: {clinical_history}
-
-TECHNIQUE: Real-time ultrasound examination
-
-FINDINGS: {findings}
-
-IMPRESSION: {impression}
-
-RECOMMENDATIONS: {recommendations}`,
-      category: "Ultrasound",
-      isDefault: true,
-    },
-  ];
-
-  async initializeDefaultTemplates(): Promise<void> {
-    try {
-      // Check if default templates already exist
-      const existingDefaults = await storage.getTemplates();
-      
-      if (existingDefaults.length === 0) {
-        // Create default templates
-        for (const template of this.defaultTemplates) {
-          await storage.createTemplate({
-            ...template,
-            userId: null, // Default templates don't belong to specific users
-          });
-        }
-        console.log("Default templates initialized");
-      }
-    } catch (error) {
-      console.error("Error initializing default templates:", error);
-    }
-  }
+  // No default templates - users will upload their own
 
   async processUploadedTemplate(
     userId: string,
     fileName: string,
     content: string,
-    category: string
+    category: string,
+    folder?: string
   ): Promise<Template> {
     const name = fileName.replace(/\.[^/.]+$/, ""); // Remove file extension
+    const fileExtension = fileName.split('.').pop()?.toLowerCase();
     
     const template: InsertTemplate = {
       userId,
@@ -107,13 +20,29 @@ RECOMMENDATIONS: {recommendations}`,
       description: `Uploaded template: ${fileName}`,
       content,
       category,
-      isDefault: false,
+      folder: folder || "General",
+      fileType: fileExtension === 'doc' || fileExtension === 'docx' ? fileExtension : 'txt',
     };
 
     return await storage.createTemplate(template);
   }
 
-  async getTemplatesByCategory(userId?: string): Promise<Record<string, Template[]>> {
+  async getTemplatesByFolder(userId: string): Promise<Record<string, Template[]>> {
+    const templates = await storage.getTemplates(userId);
+    const templatesByFolder: Record<string, Template[]> = {};
+
+    templates.forEach(template => {
+      const folder = template.folder || "General";
+      if (!templatesByFolder[folder]) {
+        templatesByFolder[folder] = [];
+      }
+      templatesByFolder[folder].push(template);
+    });
+
+    return templatesByFolder;
+  }
+
+  async getTemplatesByCategory(userId: string): Promise<Record<string, Template[]>> {
     const templates = await storage.getTemplates(userId);
     const templatesByCategory: Record<string, Template[]> = {};
 
@@ -128,6 +57,10 @@ RECOMMENDATIONS: {recommendations}`,
   }
 
   async findBestTemplate(findings: string, availableTemplates: Template[]): Promise<Template | null> {
+    if (availableTemplates.length === 0) {
+      return null;
+    }
+
     // Simple keyword matching for template selection
     const keywords = findings.toLowerCase();
     

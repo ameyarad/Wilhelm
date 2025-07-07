@@ -13,18 +13,20 @@ import { cn } from "@/lib/utils";
 
 interface TemplateUploadProps {
   compact?: boolean;
+  defaultFolder?: string;
 }
 
-export default function TemplateUpload({ compact = false }: TemplateUploadProps) {
+export default function TemplateUpload({ compact = false, defaultFolder }: TemplateUploadProps) {
   const [file, setFile] = useState<File | null>(null);
-  const [category, setCategory] = useState<string>("");
+  const [category, setCategory] = useState("Custom");
+  const [folder, setFolder] = useState(defaultFolder || "General");
   const [dragOver, setDragOver] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const uploadMutation = useMutation({
-    mutationFn: async (formData: FormData) => {
-      const response = await apiRequest("POST", "/api/templates/upload", formData);
+    mutationFn: async (data: { formData: FormData; folder?: string }) => {
+      const response = await apiRequest("POST", "/api/templates/upload", data.formData);
       return response.json();
     },
     onSuccess: () => {
@@ -115,8 +117,9 @@ export default function TemplateUpload({ compact = false }: TemplateUploadProps)
     const formData = new FormData();
     formData.append('template', file);
     formData.append('category', category);
+    formData.append('folder', folder);
     
-    uploadMutation.mutate(formData);
+    uploadMutation.mutate({ formData, folder });
   };
 
   if (compact) {
