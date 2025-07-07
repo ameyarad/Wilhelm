@@ -12,10 +12,17 @@ export function useVoiceRecording() {
   const startRecording = useCallback(async () => {
     try {
       setError(null);
+      setTranscript(""); // Clear any previous transcript
       
       // Check if browser supports MediaRecorder
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         throw new Error("Media recording not supported in this browser");
+      }
+
+      // Stop any existing recording and clean up
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+        mediaRecorderRef.current = null;
       }
 
       const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -26,12 +33,13 @@ export function useVoiceRecording() {
         } 
       });
 
+      // Create fresh MediaRecorder instance for complete isolation
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'audio/webm;codecs=opus'
       });
 
       mediaRecorderRef.current = mediaRecorder;
-      chunksRef.current = [];
+      chunksRef.current = []; // Reset chunks array
 
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
@@ -44,18 +52,17 @@ export function useVoiceRecording() {
           type: 'audio/webm;codecs=opus' 
         });
         
-        // Convert to WAV format for better compatibility
-        const arrayBuffer = await audioBlob.arrayBuffer();
-        const audioBuffer = await new AudioContext().decodeAudioData(arrayBuffer);
-        
-        // Send to transcription service
+        // Send to transcription service immediately without audio processing
         await transcribeAudio(audioBlob);
         
-        // Clean up
+        // Clean up stream
         stream.getTracks().forEach(track => track.stop());
+        
+        // Clear the recorder reference
+        mediaRecorderRef.current = null;
       };
 
-      mediaRecorder.start(1000); // Collect data every second
+      mediaRecorder.start(); // Record continuously without chunking
       setIsRecording(true);
       
       toast({
@@ -88,12 +95,20 @@ export function useVoiceRecording() {
   const transcribeAudio = useCallback(async (audioBlob: Blob) => {
     try {
       const formData = new FormData();
-      formData.append('audio', audioBlob, 'recording.webm');
+      // Generate unique filename to prevent any caching or context issues
+      const timestamp = Date.now();
+      const randomId = Math.random().toString(36).substring(7);
+      formData.append('audio', audioBlob, `recording_${timestamp}_${randomId}.webm`);
 
       const response = await fetch('/api/ai/transcribe', {
         method: 'POST',
         body: formData,
         credentials: 'include',
+        // Add cache-busting headers to ensure fresh requests
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+        },
       });
 
       if (!response.ok) {
@@ -101,7 +116,7 @@ export function useVoiceRecording() {
       }
 
       const result = await response.json();
-      setTranscript(result.text);
+      setTranscript(result.text.trim()); // Trim whitespace
       
       toast({
         title: "Transcription Complete",

@@ -109,7 +109,7 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
-- July 07, 2025. Complete NHS blue theme implementation
+- July 07, 2025. Complete NHS blue theme implementation & voice recording fixes
   - Removed all green colors, implemented NHS blue color palette
   - Sidebar collapsed by default with "More Features" button
   - Wilhelm logo moved to top navigation bar
@@ -119,6 +119,12 @@ Changelog:
   - Compact footer design across all pages
   - Security audit completed - authentication and database properly implemented
   - GROQ_API_KEY configured for AI transcription and report generation
+  - Fixed voice recording context bleeding issues:
+    - Clear transcript state between recordings
+    - Generate unique filenames for each audio file
+    - Remove language parameter from Whisper API calls
+    - Add cache-busting headers to prevent context carryover
+    - Create fresh MediaRecorder instances for complete isolation
 - July 06, 2025. Initial setup
 ```
 

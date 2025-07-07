@@ -18,16 +18,22 @@ export interface ReportGenerationResult {
 export class GroqService {
   async transcribeAudio(audioBuffer: Buffer): Promise<TranscriptionResult> {
     try {
+      // Generate unique filename to ensure complete isolation between calls
+      const timestamp = Date.now();
+      const filename = `audio_${timestamp}_${Math.random().toString(36).substring(7)}.webm`;
+      
       const transcription = await groq.audio.transcriptions.create({
-        file: new File([audioBuffer], "audio.wav", { type: "audio/wav" }),
+        file: new File([audioBuffer], filename, { type: "audio/webm" }),
         model: "whisper-large-v3-turbo",
         response_format: "json",
-        language: "en",
+        // Remove language parameter to prevent any context carryover
+        // Remove any prompt parameter to ensure complete isolation
+        temperature: 0.0, // Deterministic output
       });
 
       return {
-        text: transcription.text,
-        confidence: 0.95, // Whisper doesn't provide confidence, using default
+        text: transcription.text.trim(), // Trim any whitespace
+        confidence: 0.95,
       };
     } catch (error) {
       console.error("Transcription error:", error);
