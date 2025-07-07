@@ -118,6 +118,10 @@ Changelog:
   - Updated call-to-action sections with larger buttons and improved spacing
   - Created sophisticated background with multiple gradient orbs using NHS color palette
   - Improved button styling with enhanced gradients and smooth transitions
+  - Enhanced Wilhelm logo size (w-28 h-28 md:w-32 md:h-32) and heading size (text-7xl md:text-8xl)
+  - Changed Wilhelm heading to pure white text for better readability
+  - Updated button text: "Get Started" → "Start Reporting", "Start Your Journey" → "Start Reporting"
+  - Systematically cleaned up UI by removing secondary "Learn More" button for streamlined interface
   - Added comprehensive SEO meta tags optimized for medical imaging keywords
   - Created sitemap.xml for search engine crawling with medical imaging focus
   - Implemented robots.txt with AI crawler guidelines for better LLM discovery

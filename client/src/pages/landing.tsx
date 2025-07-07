@@ -32,11 +32,11 @@ export default function Landing() {
               <img 
                 src="/wilhelm-logo.png" 
                 alt="Wilhelm - AI Radiology Reporting Platform" 
-                className="w-20 h-20 md:w-24 md:h-24 filter drop-shadow-2xl"
+                className="w-28 h-28 md:w-32 md:h-32 filter drop-shadow-2xl"
                 loading="eager"
               />
               
-              <h1 className="text-6xl font-bold bg-gradient-to-r from-white to-nhs-light-blue/80 bg-clip-text text-transparent">
+              <h1 className="text-7xl md:text-8xl font-bold text-white">
                 Wilhelm
               </h1>
             </div>
@@ -49,7 +49,7 @@ export default function Landing() {
                 className="bg-gradient-to-r from-white to-gray-100 hover:from-gray-100 hover:to-white text-nhs-blue px-16 py-8 text-xl font-semibold shadow-2xl transform transition-all duration-500 hover:scale-105 hover:shadow-3xl group border-0"
               >
                 <Sparkles className="w-6 h-6 mr-3 group-hover:animate-spin" />
-                Get Started
+                Start Reporting
               </Button>
             </div>
           </div>
@@ -146,7 +146,7 @@ export default function Landing() {
                   className="bg-gradient-to-r from-nhs-accent-blue to-nhs-blue hover:from-nhs-blue hover:to-nhs-dark-blue text-white px-16 py-8 text-xl font-semibold shadow-2xl transform transition-all duration-500 hover:scale-105 hover:shadow-3xl group border-0"
                 >
                   <Sparkles className="w-6 h-6 mr-3 group-hover:animate-spin" />
-                  Start Your Journey
+                  Start Reporting
                 </Button>
               </div>
               
