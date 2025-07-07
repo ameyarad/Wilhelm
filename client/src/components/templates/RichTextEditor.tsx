@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,13 +20,30 @@ interface RichTextEditorProps {
 }
 
 export default function RichTextEditor({ template, isOpen, onClose }: RichTextEditorProps) {
-  const [name, setName] = useState(template?.name || "");
-  const [content, setContent] = useState(template?.content || "");
-  const [category, setCategory] = useState(template?.category || "");
-  const [folder, setFolder] = useState(template?.folder || "General");
+  const [name, setName] = useState("");
+  const [content, setContent] = useState("");
+  const [category, setCategory] = useState("");
+  const [folder, setFolder] = useState("General");
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const quillRef = useRef<ReactQuill>(null);
+
+  // Update form state when template changes
+  useEffect(() => {
+    if (isOpen) {
+      if (template) {
+        setName(template.name || "");
+        setContent(template.content || "");
+        setCategory(template.category || "");
+        setFolder(template.folder || "General");
+      } else {
+        setName("");
+        setContent("");
+        setCategory("");
+        setFolder("General");
+      }
+    }
+  }, [template, isOpen]);
 
   const saveMutation = useMutation({
     mutationFn: async (templateData: any) => {
