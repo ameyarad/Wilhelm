@@ -129,7 +129,7 @@ export default function Landing() {
                   <Activity className="w-10 h-10 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-3">Free and Open Source</h3>
-                <p className="text-white/80">User-friendly interface designed for healthcare professionals</p>
+                <p className="text-white/80">Customize Wilhelm as per your needs with code. Connect your own AI models for reporting as per your preference.</p>
               </div>
             </div>
           </div>
