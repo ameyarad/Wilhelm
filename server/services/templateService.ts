@@ -7,7 +7,8 @@ export class TemplateService {
   async processUploadedTemplate(
     userId: string,
     fileName: string,
-    content: string
+    content: string,
+    folder = "General"
   ): Promise<Template> {
     const name = fileName.replace(/\.[^/.]+$/, ""); // Remove file extension
     
@@ -22,6 +23,7 @@ export class TemplateService {
       userId,
       name,
       content: content.trim(),
+      folder,
     };
 
     return await storage.createTemplate(template);

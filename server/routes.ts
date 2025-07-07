@@ -203,8 +203,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
           throw new Error("Failed to process docx file: " + mammothError.message);
         }
       } else if (fileExtension === 'doc') {
-        // For .doc files, try to extract text (basic support)
-        content = req.file.buffer.toString('utf-8');
+        // For .doc files, extract readable text and filter out binary data
+        const rawContent = req.file.buffer.toString('utf-8');
+        // Remove null bytes and other binary characters that cause DB issues
+        content = rawContent.replace(/\0/g, '').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/g, '');
+        console.log("Processed .doc file, content length:", content.length);
       } else {
         // For .txt files
         content = req.file.buffer.toString('utf-8');
@@ -213,7 +216,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const template = await templateService.processUploadedTemplate(
         userId,
         fileName,
-        content
+        content,
+        req.body.folder || "General"
       );
 
       res.json(template);

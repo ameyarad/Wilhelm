@@ -41,6 +41,7 @@ export const templates = pgTable("templates", {
   userId: varchar("user_id").references(() => users.id).notNull(),
   name: varchar("name").notNull(),
   content: text("content").notNull(),
+  folder: varchar("folder").default("General"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

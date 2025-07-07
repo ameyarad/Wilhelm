@@ -109,6 +109,18 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
+- July 07, 2025. Template management with folder organization
+  - Fixed .doc file upload issues by filtering out binary characters that cause UTF-8 database errors
+  - Added folder organization system with "folder" column in templates table
+  - Created FolderTemplateManager component with:
+    - Folder selection dropdown for organizing templates
+    - "New Folder" button to create custom folders
+    - Templates grouped and displayed by folder
+    - Folder creation with validation
+  - Fixed FormData upload mechanism using fetch directly instead of apiRequest
+  - Changed mammoth import to ES module syntax (await import) to fix require errors
+  - Database schema updated to include folder field with default "General"
+  - Templates now properly organized in folders with visual folder indicators
 - July 07, 2025. Complete NHS blue theme implementation & voice recording fixes
   - Removed all green colors, implemented NHS blue color palette
   - Sidebar collapsed by default with "More Features" button
