@@ -43,7 +43,7 @@ export class GroqService {
 
   async selectTemplate(
     findings: string,
-    availableTemplates: Array<{ name: string; content: string; category: string }>
+    availableTemplates: Array<{ name: string; content: string }>
   ): Promise<string> {
     try {
       const templateExamples = [
@@ -53,7 +53,7 @@ export class GroqService {
       ];
 
       const templateList = availableTemplates
-        .map(t => `${t.name}: ${t.category}`)
+        .map(t => t.name)
         .join(", ");
 
       const messages = [
@@ -96,7 +96,7 @@ export class GroqService {
 
   async generateReport(
     findings: string,
-    availableTemplates: Array<{ name: string; content: string; category: string }>
+    availableTemplates: Array<{ name: string; content: string }>
   ): Promise<ReportGenerationResult> {
     try {
       // Step 1: Select the most appropriate template
@@ -123,7 +123,7 @@ export class GroqService {
 
   async mergeWithTemplate(
     findings: string,
-    template: { name: string; content: string; category: string }
+    template: { name: string; content: string }
   ): Promise<string> {
     try {
       const messages = [
@@ -142,7 +142,7 @@ Guidelines:
         },
         {
           role: "user",
-          content: `Template: ${template.name} (${template.category})
+          content: `Template: ${template.name}
 
 Template Structure:
 ${template.content}

@@ -49,10 +49,11 @@ export class TemplateService {
     const templatesByCategory: Record<string, Template[]> = {};
 
     templates.forEach(template => {
-      if (!templatesByCategory[template.category]) {
-        templatesByCategory[template.category] = [];
+      const folder = template.folder || "General";
+      if (!templatesByCategory[folder]) {
+        templatesByCategory[folder] = [];
       }
-      templatesByCategory[template.category].push(template);
+      templatesByCategory[folder].push(template);
     });
 
     return templatesByCategory;
@@ -69,11 +70,11 @@ export class TemplateService {
     const scores = availableTemplates.map(template => {
       let score = 0;
       const templateName = template.name.toLowerCase();
-      const templateCategory = template.category.toLowerCase();
+      const templateFolder = (template.folder || "General").toLowerCase();
       
       // Check for direct matches
       if (keywords.includes(templateName)) score += 10;
-      if (keywords.includes(templateCategory)) score += 5;
+      if (keywords.includes(templateFolder)) score += 5;
       
       // Check for specific imaging keywords
       if (keywords.includes("chest") && templateName.includes("chest")) score += 8;

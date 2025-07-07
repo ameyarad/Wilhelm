@@ -22,7 +22,6 @@ interface RichTextEditorProps {
 export default function RichTextEditor({ template, isOpen, onClose }: RichTextEditorProps) {
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
-  const [category, setCategory] = useState("");
   const [folder, setFolder] = useState("General");
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -33,13 +32,14 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
     if (isOpen) {
       if (template) {
         setName(template.name || "");
-        setContent(template.content || "");
-        setCategory(template.category || "");
+        // Clean and decode the content to handle special characters
+        const cleanContent = template.content ? 
+          template.content.replace(/[\x00-\x1F\x7F-\x9F]/g, '') : "";
+        setContent(cleanContent);
         setFolder(template.folder || "General");
       } else {
         setName("");
         setContent("");
-        setCategory("");
         setFolder("General");
       }
     }
@@ -88,19 +88,11 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
       return;
     }
 
-    if (!category.trim()) {
-      toast({
-        title: "Validation Error",
-        description: "Template category is required",
-        variant: "destructive",
-      });
-      return;
-    }
+
 
     saveMutation.mutate({
       name: name.trim(),
       content: content.trim(),
-      category: category.trim(),
       folder: folder.trim(),
     });
   };
@@ -108,7 +100,6 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
   const handleClose = () => {
     setName(template?.name || "");
     setContent(template?.content || "");
-    setCategory(template?.category || "");
     setFolder(template?.folder || "General");
     onClose();
   };
@@ -153,36 +144,18 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Chest Imaging">Chest Imaging</SelectItem>
-                  <SelectItem value="CT Imaging">CT Imaging</SelectItem>
-                  <SelectItem value="MRI Imaging">MRI Imaging</SelectItem>
-                  <SelectItem value="Ultrasound">Ultrasound</SelectItem>
-                  <SelectItem value="X-ray">X-ray</SelectItem>
-                  <SelectItem value="Mammography">Mammography</SelectItem>
-                  <SelectItem value="Nuclear Medicine">Nuclear Medicine</SelectItem>
-                  <SelectItem value="Interventional">Interventional</SelectItem>
-                  <SelectItem value="Custom">Custom</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="folder">Folder</Label>
+              <Input
+                id="folder"
+                value={folder}
+                onChange={(e) => setFolder(e.target.value)}
+                placeholder="Enter folder name"
+                className="w-full"
+              />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="folder">Folder</Label>
-            <Input
-              id="folder"
-              value={folder}
-              onChange={(e) => setFolder(e.target.value)}
-              placeholder="Enter folder name"
-              className="w-full"
-            />
-          </div>
+
           
           <div className="space-y-2 flex-1 min-h-0">
             <Label>Template Content</Label>
