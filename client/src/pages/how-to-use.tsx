@@ -173,7 +173,7 @@ export default function HowToUse() {
                   <li>• Speak clearly with microphone when using voice recording for better transcription accuracy</li>
                   <li>• Wilhelm works best on desktop/laptop computers</li>
                   <li>• For mobile use, select "Request Desktop Site" for optimal performance</li>
-                  <li>• Include specific anatomical details in your findings for more accurate template selection</li>
+                  
                 </ul>
               </CardContent>
             </Card>
