@@ -110,8 +110,6 @@ export default function HowToUse() {
                   <li>• Click "Generate Report" after entering your findings</li>
                   <li>• Wilhelm's AI analyzes your text and selects the best template</li>
                   <li>• The system merges your findings with the chosen template</li>
-                  <li>• Complete process takes under 3 seconds</li>
-                  <li>• AI uses Llama 3.1 8B model hosted on Groq for fast processing</li>
                 </ul>
               </CardContent>
             </Card>
