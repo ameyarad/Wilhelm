@@ -174,9 +174,7 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
             <FileText className="w-5 h-5 text-nhs-blue" />
             <span>Generated Report</span>
           </DialogTitle>
-          <div id="report-viewer-description" className="text-sm text-muted-foreground">
-            Edit and format your generated report using the rich text editor below
-          </div>
+          <div id="report-viewer-description" className="text-sm text-muted-foreground">Edit, Copy And Save Reports</div>
         </DialogHeader>
         
         <div className="flex-1 overflow-hidden">
