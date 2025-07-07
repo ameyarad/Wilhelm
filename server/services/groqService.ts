@@ -72,6 +72,7 @@ export class GroqService {
         messages,
         model: "llama-3.1-8b-instant",
         temperature: 0.1,
+        top_p: 0.6,
         max_tokens: 100,
       });
 
@@ -157,7 +158,8 @@ Please generate a complete radiology report by merging the clinical findings int
       const completion = await groq.chat.completions.create({
         messages,
         model: "llama-3.1-8b-instant",
-        temperature: 0.3,
+        temperature: 0.1,
+        top_p: 0.7,
         max_tokens: 1000,
       });
 
@@ -198,7 +200,8 @@ Please provide enhanced findings that are:
           },
         ],
         model: "llama-3.1-8b-instant",
-        temperature: 0.2,
+        temperature: 0.1,
+        top_p: 0.7,
         max_tokens: 500,
       });
 
@@ -206,6 +209,40 @@ Please provide enhanced findings that are:
     } catch (error) {
       console.error("Findings enhancement error:", error);
       return findings; // Return original if enhancement fails
+    }
+  }
+
+  async moderateContent(content: string): Promise<{ isSafe: boolean; violations: string[] }> {
+    try {
+      const response = await groq.chat.completions.create({
+        model: "llama-guard-3-8b",
+        messages: [
+          {
+            role: "user",
+            content: content
+          }
+        ],
+        max_tokens: 100,
+        temperature: 0.0
+      });
+
+      const result = response.choices[0]?.message?.content?.trim();
+      
+      if (!result) {
+        return { isSafe: false, violations: ["Error in moderation"] };
+      }
+
+      if (result.toLowerCase() === "safe") {
+        return { isSafe: true, violations: [] };
+      } else if (result.toLowerCase().startsWith("unsafe")) {
+        const violations = result.includes('\n') ? result.split('\n').slice(1) : ["Policy violation"];
+        return { isSafe: false, violations };
+      }
+
+      return { isSafe: false, violations: ["Unknown"] };
+    } catch (error) {
+      console.error("Content moderation error:", error);
+      return { isSafe: false, violations: ["Moderation service error"] };
     }
   }
 }

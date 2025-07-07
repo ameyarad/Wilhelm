@@ -129,7 +129,6 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
       [{ 'color': [] }, { 'background': [] }],
       [{ 'align': [] }],
       ['link'],
-      ['blockquote'],
       ['clean']
     ],
     history: {
@@ -142,7 +141,7 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
   const formats = [
     'header', 'bold', 'italic', 'underline', 'strike', 'script',
     'list', 'bullet', 'indent', 'link', 'color', 'background',
-    'align', 'blockquote'
+    'align'
   ];
 
   return (

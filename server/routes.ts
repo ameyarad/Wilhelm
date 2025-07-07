@@ -95,15 +95,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Findings are required" });
       }
 
+      // Moderate content before processing
+      const moderation = await groqService.moderateContent(findings);
+      if (!moderation.isSafe) {
+        return res.status(400).json({ 
+          message: 'Content moderation failed', 
+          violations: moderation.violations 
+        });
+      }
+
       // Get available templates for this user
       const templates = await storage.getTemplates(userId);
       const templatesForAI = templates.map(t => ({
         name: t.name,
         content: t.content,
-        category: t.category,
       }));
 
       const result = await groqService.generateReport(findings, templatesForAI);
+      
+      // Moderate the generated report as well
+      const reportModeration = await groqService.moderateContent(result.report);
+      if (!reportModeration.isSafe) {
+        return res.status(500).json({ 
+          message: 'Generated report failed moderation', 
+          violations: reportModeration.violations 
+        });
+      }
+      
       res.json(result);
     } catch (error) {
       console.error("Error generating report:", error);
@@ -119,7 +137,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Findings are required" });
       }
 
+      // Moderate input content
+      const moderation = await groqService.moderateContent(findings);
+      if (!moderation.isSafe) {
+        return res.status(400).json({ 
+          message: 'Content moderation failed', 
+          violations: moderation.violations 
+        });
+      }
+
       const enhancedFindings = await groqService.enhanceFindings(findings);
+      
+      // Moderate enhanced findings
+      const enhancedModeration = await groqService.moderateContent(enhancedFindings);
+      if (!enhancedModeration.isSafe) {
+        return res.status(500).json({ 
+          message: 'Enhanced findings failed moderation', 
+          violations: enhancedModeration.violations 
+        });
+      }
+      
       res.json({ enhancedFindings });
     } catch (error) {
       console.error("Error enhancing findings:", error);
