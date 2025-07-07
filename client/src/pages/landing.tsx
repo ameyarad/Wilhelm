@@ -24,7 +24,6 @@ export default function Landing() {
         <div className="absolute top-1/3 left-1/3 w-72 h-72 bg-gradient-to-r from-nhs-accent-blue/20 to-nhs-dark-blue/30 rounded-full blur-3xl animate-pulse delay-500"></div>
         <div className="absolute bottom-1/3 right-1/3 w-64 h-64 bg-gradient-to-r from-nhs-light-blue/25 to-nhs-blue/20 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
-      
       <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
         <div className="max-w-6xl w-full space-y-12">
           {/* Header */}
@@ -41,9 +40,7 @@ export default function Landing() {
                 Wilhelm
               </h1>
             </div>
-            <p className="text-2xl text-white/90 max-w-3xl mx-auto mb-12 leading-relaxed">
-              AI-powered radiology reporting platform with advanced voice transcription for CT, MRI, X-ray, ultrasound, and nuclear medicine studies
-            </p>
+            <p className="text-2xl text-white/90 max-w-3xl mx-auto mb-12 leading-relaxed">Free and Open Source Medical Imaging Reporting AI Agent | Reclaim Your Time: Transcription To Final Formatted Report In A Second | Upload, Edit and Save Your Report Templates</p>
             
             <div className="mb-16 flex justify-center">
               <Button 
