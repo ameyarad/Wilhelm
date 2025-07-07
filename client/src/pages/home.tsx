@@ -264,9 +264,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                   <div className="bg-gray-50 rounded-lg p-4 border">
-                    <div className="text-sm text-nhs-dark-grey">
-                      Report generated successfully. Click "View & Edit" to see the full report in the rich text editor.
-                    </div>
+                    <div className="text-sm text-nhs-dark-grey">Report generated successfully. Click "View & Edit" to see the full report.</div>
                   </div>
                 </CardContent>
               </Card>
