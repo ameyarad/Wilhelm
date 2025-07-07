@@ -172,7 +172,7 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <FileText className="w-5 h-5 text-nhs-blue" />
-            <span>Generated Report</span>
+            <span>Your Report</span>
           </DialogTitle>
           <div id="report-viewer-description" className="text-sm text-muted-foreground">Edit, Copy And Save Reports</div>
         </DialogHeader>
