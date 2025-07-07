@@ -109,6 +109,16 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
+- July 07, 2025. Complete NHS blue theme implementation
+  - Removed all green colors, implemented NHS blue color palette
+  - Sidebar collapsed by default with "More Features" button
+  - Wilhelm logo moved to top navigation bar
+  - Removed system status panel and cleaned up interface text
+  - Added "Get Started" button to landing page
+  - Updated sidebar labels: "Templates" → "My Templates", "Report History" → "Saved Reports"
+  - Compact footer design across all pages
+  - Security audit completed - authentication and database properly implemented
+  - GROQ_API_KEY configured for AI transcription and report generation
 - July 06, 2025. Initial setup
 ```
 

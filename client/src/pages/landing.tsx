@@ -18,9 +18,19 @@ export default function Landing() {
             </div>
             <h1 className="text-4xl font-bold">Wilhelm</h1>
           </div>
-          <p className="text-xl text-nhs-light-blue/80 max-w-2xl mx-auto">
+          <p className="text-xl text-nhs-light-blue/80 max-w-2xl mx-auto mb-8">
             AI-powered radiology reporting platform with advanced transcription and template management
           </p>
+          
+          <div className="mb-8">
+            <Button 
+              onClick={handleLogin}
+              size="lg" 
+              className="bg-white hover:bg-gray-100 text-nhs-blue px-8 py-4 text-lg font-semibold shadow-lg"
+            >
+              Get Started
+            </Button>
+          </div>
         </div>
 
         {/* Features */}

@@ -28,8 +28,8 @@ export default function Sidebar() {
 
   const navigation = [
     { name: "Home", href: "/", icon: Home },
-    { name: "Templates", href: "/templates", icon: FileText },
-    { name: "Report History", href: "/reports", icon: History },
+    { name: "My Templates", href: "/templates", icon: FileText },
+    { name: "Saved Reports", href: "/reports", icon: History },
     { name: "Settings", href: "/settings", icon: Settings },
   ];
 
