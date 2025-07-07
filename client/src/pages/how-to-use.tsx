@@ -86,7 +86,7 @@ export default function HowToUse() {
                   <li>• Click the microphone icon to start voice recording</li>
                   <li>• Speak clearly about your radiological findings</li>
                   <li>• Alternatively, type directly into the text area</li>
-                  <li>• The system transcribes speech in real-time using Groq's Whisper AI</li>
+                  
                 </ul>
               </CardContent>
             </Card>
