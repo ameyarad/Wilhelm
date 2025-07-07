@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Stethoscope, MessageSquare, FileText, Brain } from "lucide-react";
+import { Activity, MessageSquare, FileText, Brain } from "lucide-react";
 
 export default function Landing() {
   const handleLogin = () => {
@@ -14,7 +14,7 @@ export default function Landing() {
         <div className="text-center text-white">
           <div className="flex items-center justify-center space-x-3 mb-6">
             <div className="w-12 h-12 bg-nhs-accent-blue rounded-xl flex items-center justify-center">
-              <Stethoscope className="w-6 h-6 text-white" />
+              <Activity className="w-6 h-6 text-white" />
             </div>
             <h1 className="text-4xl font-bold">Wilhelm</h1>
           </div>

@@ -14,11 +14,18 @@ export class TemplateService {
     const name = fileName.replace(/\.[^/.]+$/, ""); // Remove file extension
     const fileExtension = fileName.split('.').pop()?.toLowerCase();
     
+    // Validate content
+    if (!content || content.trim().length === 0) {
+      throw new Error("Template content is empty or could not be extracted");
+    }
+    
+    console.log(`Processing template: ${fileName}, Content length: ${content.length}`);
+    
     const template: InsertTemplate = {
       userId,
       name,
       description: `Uploaded template: ${fileName}`,
-      content,
+      content: content.trim(),
       category,
       folder: folder || "General",
       fileType: fileExtension === 'doc' || fileExtension === 'docx' ? fileExtension : 'txt',

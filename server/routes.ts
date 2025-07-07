@@ -178,15 +178,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "No template file provided" });
       }
 
+      console.log("Received file:", {
+        originalname: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+        buffer: req.file.buffer ? "Buffer present" : "No buffer"
+      });
+
       let content = '';
       const fileName = req.file.originalname;
       const fileExtension = fileName.split('.').pop()?.toLowerCase();
 
       // Handle different file types
       if (fileExtension === 'docx') {
-        const mammoth = require('mammoth');
-        const result = await mammoth.extractRawText({ buffer: req.file.buffer });
-        content = result.value;
+        try {
+          const mammoth = require('mammoth');
+          const result = await mammoth.extractRawText({ buffer: req.file.buffer });
+          content = result.value;
+          console.log("Successfully extracted text from docx:", content.substring(0, 100) + "...");
+        } catch (mammothError) {
+          console.error("Error extracting text from docx:", mammothError);
+          throw new Error("Failed to process docx file: " + mammothError.message);
+        }
       } else if (fileExtension === 'doc') {
         // For .doc files, try to extract text (basic support)
         content = req.file.buffer.toString('utf-8');
@@ -206,7 +219,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(template);
     } catch (error) {
       console.error("Error uploading template:", error);
-      res.status(500).json({ message: "Failed to upload template" });
+      const errorMessage = error instanceof Error ? error.message : "Failed to upload template";
+      res.status(500).json({ message: errorMessage });
     }
   });
 
