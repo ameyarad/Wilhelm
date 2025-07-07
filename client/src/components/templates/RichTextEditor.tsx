@@ -179,7 +179,7 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="w-[95vw] max-w-4xl h-[90vh] md:h-[85vh] flex flex-col">
+      <DialogContent className="w-[95vw] max-w-4xl h-[90vh] md:h-[85vh] flex flex-col mobile-dialog">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center gap-2 text-sm md:text-base">
             <FileText className="h-4 w-4 md:h-5 md:w-5 text-nhs-blue" />
@@ -250,7 +250,6 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
                 style={{ height: '100%' }}
                 modules={modules}
                 formats={formats}
-                style={{ height: '400px' }}
                 onKeyDown={(e) => {
                   // Handle keyboard shortcuts
                   if (e.ctrlKey || e.metaKey) {

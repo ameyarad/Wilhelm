@@ -212,7 +212,7 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-[95vw] max-w-6xl h-[90vh] md:h-[85vh] flex flex-col overflow-hidden" aria-describedby="report-viewer-description">
+      <DialogContent className="w-[95vw] max-w-6xl h-[90vh] md:h-[85vh] flex flex-col overflow-hidden mobile-dialog" aria-describedby="report-viewer-description">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center space-x-2">
             <FileText className="w-5 h-5 text-nhs-blue" />

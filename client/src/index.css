@@ -343,6 +343,10 @@
   flex-wrap: wrap;
   overflow-x: auto;
   min-height: 40px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
 }
 
 .mobile-quill .ql-container {
@@ -353,93 +357,208 @@
   font-size: 14px;
   line-height: 1.5;
   height: auto !important;
+  flex: 1;
 }
 
 .mobile-quill .ql-editor {
-  padding: 8px 12px;
-  min-height: 150px;
-  font-size: 14px;
+  padding: 12px 16px;
+  min-height: 200px;
+  font-size: 16px;
   line-height: 1.6;
   height: auto !important;
+  max-height: none !important;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 @media (max-width: 768px) {
   .mobile-quill .ql-toolbar {
-    padding: 2px 4px;
-    font-size: 11px;
-    min-height: 35px;
+    padding: 4px 6px;
+    font-size: 12px;
+    min-height: 48px;
+    border-radius: 8px 8px 0 0;
   }
   
   .mobile-quill .ql-toolbar .ql-formats {
-    margin-right: 8px;
-    margin-bottom: 2px;
+    margin-right: 10px;
+    margin-bottom: 4px;
   }
   
   .mobile-quill .ql-toolbar button {
-    width: 24px;
-    height: 24px;
-    padding: 2px;
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+    border-radius: 4px;
+    margin: 1px;
+  }
+  
+  .mobile-quill .ql-toolbar button:hover {
+    background: #f3f4f6;
+  }
+  
+  .mobile-quill .ql-toolbar button.ql-active {
+    background: #3b82f6;
+    color: white;
   }
   
   .mobile-quill .ql-toolbar button svg {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
   }
   
   .mobile-quill .ql-toolbar .ql-picker {
-    font-size: 11px;
+    font-size: 12px;
   }
   
   .mobile-quill .ql-toolbar .ql-picker-label {
-    padding: 2px 4px;
+    padding: 4px 8px;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 4px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
   }
   
   .mobile-quill .ql-editor {
-    padding: 6px 8px;
-    font-size: 13px;
-    line-height: 1.5;
+    padding: 16px 12px;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 250px;
   }
   
   .mobile-quill .ql-container {
-    font-size: 13px;
+    font-size: 16px;
+    border-radius: 0 0 8px 8px;
   }
 }
 
 @media (max-width: 480px) {
   .mobile-quill .ql-toolbar {
-    padding: 1px 2px;
-    min-height: 32px;
+    padding: 6px 8px;
+    min-height: 52px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .mobile-quill .ql-toolbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .mobile-quill .ql-toolbar .ql-formats {
+    display: inline-flex;
+    white-space: nowrap;
+    margin-right: 8px;
+    align-items: center;
+    gap: 2px;
   }
   
   .mobile-quill .ql-toolbar button {
-    width: 22px;
-    height: 22px;
-    margin: 1px;
+    width: 36px;
+    height: 36px;
+    margin: 2px;
+    flex-shrink: 0;
   }
   
   .mobile-quill .ql-toolbar button svg {
-    width: 12px;
-    height: 12px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .mobile-quill .ql-toolbar .ql-picker-label {
+    min-height: 36px;
+    padding: 6px 10px;
+    white-space: nowrap;
   }
   
   .mobile-quill .ql-editor {
-    padding: 4px 6px;
-    font-size: 12px;
+    padding: 20px 16px;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 300px;
   }
   
-  /* General mobile responsiveness improvements */
-  .ql-snow .ql-toolbar {
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-    padding: 2px;
+  /* Prevent zoom on input focus */
+  .mobile-quill .ql-editor,
+  .mobile-quill input,
+  .mobile-quill textarea {
+    font-size: 16px !important;
+    transform-origin: left top;
+    transform: scale(1);
   }
   
-  .ql-snow .ql-toolbar .ql-formats {
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 4px;
+  /* Improve touch targets */
+  .mobile-quill .ql-picker-options {
+    max-height: 200px;
+    overflow-y: auto;
   }
+  
+  .mobile-quill .ql-picker-item {
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+}
+
+/* Additional mobile optimizations for dialogs */
+@media (max-width: 768px) {
+  [data-radix-dialog-content] {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    height: 90vh !important;
+    max-height: 90vh !important;
+    margin: 0 !important;
+    border-radius: 12px !important;
+  }
+  
+  /* Ensure proper mobile scrolling */
+  .mobile-quill {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .mobile-quill .ql-container {
+    flex: 1 !important;
+    min-height: 0 !important;
+  }
+  
+  .mobile-quill .ql-editor {
+    height: 100% !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* Landing page animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.2); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced hover effects */
+.group:hover .group-hover\:animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.group:hover .group-hover\:animate-bounce {
+  animation: bounce 1s infinite;
 }

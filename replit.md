@@ -109,7 +109,7 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
-- July 07, 2025. Complete rich text editor implementation and mobile responsive UI
+- July 07, 2025. Complete mobile responsive UI and landing page redesign
   - Fixed database schema: made templateId nullable to allow generated reports without template association
   - Enhanced GeneratedReportViewer with full rich text editor functionality and formatting preservation
   - Added undo/redo buttons with keyboard shortcuts (Ctrl+Z, Ctrl+Y, Ctrl+Shift+Z)
@@ -123,12 +123,21 @@ Changelog:
   - Improved main page UI responsiveness when sidebar expands
   - Added delete functionality with proper confirmation and error handling
   - Enhanced copy functionality to strip HTML tags for plain text copying
-  - Implemented comprehensive mobile responsive UI for all rich text editors:
-    - Mobile-optimized ReactQuill toolbar with compact buttons and responsive layout
-    - Responsive dialog sizing (95vw on mobile, proper max-width on desktop)
-    - Mobile-friendly button sizes and text scaling
-    - Improved touch interaction for mobile devices
-    - Flexible layout adjustments for different screen sizes
+  - Completely overhauled mobile responsive design for rich text editors:
+    - Enhanced ReactQuill with mobile-optimized toolbar (larger touch targets, horizontal scrolling)
+    - Improved font sizes (16px minimum) to prevent mobile zoom-in behavior
+    - Sticky toolbar positioning for better mobile navigation
+    - Optimized dialog sizing with proper viewport handling
+    - Enhanced touch scrolling with -webkit-overflow-scrolling: touch
+    - Flexible button layouts that adapt to screen size
+  - Redesigned landing page with modern animations and sleek design:
+    - Added animated background elements with floating orbs and gradients
+    - Implemented smooth fade-in animations with staggered timing
+    - Enhanced feature cards with hover effects and gradient icons
+    - Added "Why Choose Wilhelm?" section with animated feature highlights
+    - Created comprehensive final CTA section with gradient buttons
+    - Improved mobile responsiveness across all landing page elements
+    - Added custom CSS animations (float, glow, pulse effects)
 - July 07, 2025. Enhanced document processing and rich text editor
   - Fixed .doc file text extraction with multiple encoding methods (latin1, utf-8, binary)
   - Enhanced .docx file processing to preserve HTML formatting for rich text editor
