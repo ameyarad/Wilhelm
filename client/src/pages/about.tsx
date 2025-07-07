@@ -164,7 +164,7 @@ export default function About() {
         {/* Footer */}
         <footer className="mt-8 pt-4 border-t border-gray-200 text-center">
           <div className="text-xs text-nhs-dark-grey/70">
-            <p className="font-bold">© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
+            <p className="font-normal">© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
           </div>
         </footer>
       </div>
