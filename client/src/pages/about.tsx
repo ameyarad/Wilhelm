@@ -124,8 +124,9 @@ export default function About() {
           </CardHeader>
           <CardContent className="space-y-4 py-6">
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
-              Wilhelm was created by Ameya Kawthalkar, a passionate developer focused on making AI accessible 
-              for healthcare education and research.
+              Wilhelm was created by Ameya Kawthalkar, a musculoskeletal radiologist at Mersey and West Lancashire NHS Teaching Hospitals. 
+              I live in Liverpool with my wife and two young children, and I am grateful for my wife's unwavering support 
+              in my journey to make AI accessible for healthcare education and research.
             </p>
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
               I have worked as a radiologist in 8 hospitals across different healthcare systems, gaining extensive 
