@@ -35,52 +35,124 @@ export class GroqService {
     }
   }
 
+  async selectTemplate(
+    findings: string,
+    availableTemplates: Array<{ name: string; content: string; category: string }>
+  ): Promise<string> {
+    try {
+      const templateExamples = [
+        { role: "user", content: "Example 1\nModality: MRI\nBodyPart: Knee\nProtocol: 1.5 T proton-density fat-sat sagittal/coronal/axial\n→ {\"template\":\"KNEE_MRI\"}" },
+        { role: "user", content: "Example 2\nModality: CT\nBodyPart: Chest / Abdomen / Pelvis with portal venous contrast\n→ {\"template\":\"CT_CAP_CE\"}" },
+        { role: "user", content: "Example 3\nModality: X-ray\nBodyPart: Chest\nProtocol: PA and lateral views\n→ {\"template\":\"CHEST_XRAY\"}" }
+      ];
+
+      const templateList = availableTemplates
+        .map(t => `${t.name}: ${t.category}`)
+        .join(", ");
+
+      const messages = [
+        {
+          role: "system",
+          content: `You are a radiology template-selection assistant. Output ONLY valid JSON matching this schema: {\"template\": <string>}. Available templates: ${templateList}`
+        },
+        ...templateExamples,
+        {
+          role: "user",
+          content: `Now classify:\n${findings}`
+        }
+      ];
+
+      const completion = await groq.chat.completions.create({
+        messages,
+        model: "llama-3.1-8b-instant",
+        temperature: 0.1,
+        max_tokens: 100,
+      });
+
+      const response = completion.choices[0]?.message?.content;
+      if (!response) {
+        throw new Error("No response from AI");
+      }
+
+      try {
+        const parsed = JSON.parse(response);
+        return parsed.template || availableTemplates[0]?.name || "DEFAULT";
+      } catch {
+        // Fallback to first available template if JSON parsing fails
+        return availableTemplates[0]?.name || "DEFAULT";
+      }
+    } catch (error) {
+      console.error("Template selection error:", error);
+      // Return first available template as fallback
+      return availableTemplates[0]?.name || "DEFAULT";
+    }
+  }
+
   async generateReport(
     findings: string,
     availableTemplates: Array<{ name: string; content: string; category: string }>
   ): Promise<ReportGenerationResult> {
     try {
-      const templateList = availableTemplates
-        .map(t => `- ${t.name} (${t.category}): ${t.content.substring(0, 100)}...`)
-        .join("\n");
+      // Step 1: Select the most appropriate template
+      const selectedTemplateName = await this.selectTemplate(findings, availableTemplates);
+      const selectedTemplate = availableTemplates.find(t => t.name === selectedTemplateName) || availableTemplates[0];
 
-      const prompt = `You are a professional radiologist AI assistant. Based on the following clinical findings, select the most appropriate template and generate a comprehensive radiology report.
+      if (!selectedTemplate) {
+        throw new Error("No templates available");
+      }
+
+      // Step 2: Generate the report using the selected template
+      const reportContent = await this.mergeWithTemplate(findings, selectedTemplate);
+
+      return {
+        report: reportContent,
+        templateUsed: selectedTemplate.name,
+        confidence: 0.9,
+      };
+    } catch (error) {
+      console.error("Report generation error:", error);
+      throw new Error("Failed to generate report");
+    }
+  }
+
+  async mergeWithTemplate(
+    findings: string,
+    template: { name: string; content: string; category: string }
+  ): Promise<string> {
+    try {
+      const messages = [
+        {
+          role: "system",
+          content: `You are a professional radiologist AI assistant. Your task is to merge clinical findings into a radiology report template and generate a complete, well-formatted report.
+
+Guidelines:
+- Use the provided template structure as your foundation
+- Fill in all relevant sections with information from the clinical findings
+- Maintain professional medical language and format
+- Include appropriate medical terminology
+- If findings don't specify certain details, use appropriate medical language like "No acute abnormalities detected" or "Within normal limits"
+- Ensure the report flows logically and reads naturally
+- Output only the final formatted report, no additional text or explanations`
+        },
+        {
+          role: "user",
+          content: `Template: ${template.name} (${template.category})
+
+Template Structure:
+${template.content}
 
 Clinical Findings:
 ${findings}
 
-Available Templates:
-${templateList}
-
-Instructions:
-1. Analyze the clinical findings
-2. Select the most appropriate template from the list
-3. Generate a professional radiology report using the selected template
-4. Fill in the template with the provided findings
-5. Ensure the report follows standard radiology format
-
-Please respond in JSON format with:
-{
-  "selectedTemplate": "template_name",
-  "report": "generated_report_content",
-  "reasoning": "brief_explanation_of_template_selection"
-}`;
+Please generate a complete radiology report by merging the clinical findings into the template structure.`
+        }
+      ];
 
       const completion = await groq.chat.completions.create({
-        messages: [
-          {
-            role: "system",
-            content: "You are a professional radiologist AI assistant specializing in medical report generation. Always respond in valid JSON format.",
-          },
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
+        messages,
         model: "llama-3.1-8b-instant",
         temperature: 0.3,
         max_tokens: 1000,
-        response_format: { type: "json_object" },
       });
 
       const response = completion.choices[0]?.message?.content;
@@ -88,13 +160,7 @@ Please respond in JSON format with:
         throw new Error("No response from Groq API");
       }
 
-      const parsedResponse = JSON.parse(response);
-      
-      return {
-        report: parsedResponse.report,
-        templateUsed: parsedResponse.selectedTemplate,
-        confidence: 0.85,
-      };
+      return response.trim();
     } catch (error) {
       console.error("Report generation error:", error);
       throw new Error("Failed to generate report");
