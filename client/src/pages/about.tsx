@@ -122,10 +122,25 @@ export default function About() {
               <span>About Me</span>
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 py-6">
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
               Wilhelm was created by Ameya Kawthalkar, a passionate developer focused on making AI accessible 
               for healthcare education and research.
+            </p>
+            <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
+              I have worked as a radiologist in 8 hospitals across different healthcare systems, gaining extensive 
+              experience in diagnostic imaging and understanding the daily challenges faced by radiologists in 
+              clinical practice.
+            </p>
+            <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
+              After radiology residency, I transitioned into healthcare technology and AI development, combining 
+              my clinical expertise with software engineering skills to create solutions that address real-world 
+              medical challenges.
+            </p>
+            <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
+              My recent interests include advancing AI applications in medical imaging, developing open-source 
+              healthcare tools, and making sophisticated AI technologies accessible to healthcare professionals 
+              worldwide.
             </p>
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
               The platform represents a commitment to open-source healthcare technology and the democratization 
