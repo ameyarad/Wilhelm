@@ -125,9 +125,7 @@ export default function Reports() {
           <div className="max-w-6xl mx-auto space-y-6">
             {/* Header */}
             <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h1 className="text-2xl font-semibold text-nhs-dark-grey mb-2">
-                Report History
-              </h1>
+              <h1 className="text-2xl font-semibold text-nhs-dark-grey mb-2">Saved Reports</h1>
               <p className="text-nhs-dark-grey/70">View and manage your saved reports</p>
             </div>
 
