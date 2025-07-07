@@ -121,24 +121,45 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
     onClose();
   };
 
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'script': 'sub'}, { 'script': 'super' }],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'align': [] }],
-      ['link'],
-      ['clean']
-    ],
-    history: {
+  // Mobile-optimized modules based on research
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  
+  const modules = useMemo(() => {
+    const baseHistory = {
       delay: 1000,
       maxStack: 100,
       userOnly: true
+    };
+
+    if (isMobile) {
+      return {
+        toolbar: [
+          ['bold', 'italic', 'underline'],
+          [{ 'header': [1, 2, false] }],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          [{ 'color': [] }],
+          ['link'],
+          ['clean']
+        ],
+        history: baseHistory
+      };
     }
-  };
+    
+    return {
+      toolbar: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'script': 'sub'}, { 'script': 'super' }],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'indent': '-1'}, { 'indent': '+1' }],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'align': [] }],
+        ['link'],
+        ['clean']
+      ],
+      history: baseHistory
+    };
+  }, [isMobile]);
 
   const handleUndo = () => {
     if (quillRef.current) {
