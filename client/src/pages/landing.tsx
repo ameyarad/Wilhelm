@@ -40,7 +40,7 @@ export default function Landing() {
                 Wilhelm
               </h1>
             </div>
-            <p className="text-2xl text-white/90 max-w-3xl mx-auto mb-12 leading-relaxed">Free and Open Source Medical Imaging Reporting AI Agent | Reclaim Your Time: Transcription To Final Formatted Report In A Second | Upload, Edit and Save Your Report Templates</p>
+            <p className="text-2xl text-white/90 max-w-3xl mx-auto mb-12 leading-relaxed">Free and Open Source Medical Imaging Reporting AI Agent | Transcription To Final Formatted Report In A Second | Upload, Edit and Save Your Report Templates</p>
             
             <div className="mb-16 flex justify-center">
               <Button 
