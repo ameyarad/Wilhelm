@@ -124,29 +124,17 @@ export default function About() {
           </CardHeader>
           <CardContent className="space-y-4 py-6">
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
-              Wilhelm was created by Ameya Kawthalkar, a musculoskeletal radiologist at Mersey and West Lancashire NHS Teaching Hospitals. 
-              I live in Liverpool with my wife and two young children, and I am grateful for my wife's unwavering support 
-              in my journey to make AI accessible for healthcare education and research.
-            </p>
-            <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
-              I have worked as a radiologist in 8 hospitals across different healthcare systems, gaining extensive 
-              experience in diagnostic imaging and understanding the daily challenges faced by radiologists in 
-              clinical practice.
-            </p>
-            <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
-              After radiology residency, I transitioned into healthcare technology and AI development, combining 
-              my clinical expertise with software engineering skills to create solutions that address real-world 
-              medical challenges.
-            </p>
-            <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
-              My recent interests include advancing AI applications in medical imaging, developing open-source 
-              healthcare tools, and making sophisticated AI technologies accessible to healthcare professionals 
-              worldwide.
+              I am a musculoskeletal radiologist currently working at Mersey and West Lancashire NHS Teaching Hospitals 
+              and living in Liverpool, England with my cardiologist wife and three-year old twin girls. Building Wilhelm 
+              would not have been possible without my wife's support and infinite patience while I pursue my crazy projects.
             </p>
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
               The platform represents a commitment to open-source healthcare technology and the democratization 
               of medical AI tools. Wilhelm aims to bridge the gap between advanced AI capabilities and 
               practical healthcare applications.
+            </p>
+            <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
+              -Ameya Kawthalkar
             </p>
             <p className="text-sm text-nhs-dark-grey/80 leading-relaxed">
               Follow me on X: <a href="https://x.com/ask_msk" target="_blank" rel="noopener noreferrer" 
