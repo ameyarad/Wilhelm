@@ -23,14 +23,33 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
   const queryClient = useQueryClient();
   const quillRef = useRef<ReactQuill>(null);
 
-  // Update content when report changes
+  // Update content when report changes and preserve formatting
   useEffect(() => {
     if (isOpen && report) {
-      setContent(report);
+      // Preserve HTML formatting if present, otherwise convert plain text to HTML
+      let formattedContent = report;
+      
+      // If content doesn't contain HTML tags, convert line breaks to HTML
+      if (!report.includes('<') && !report.includes('>')) {
+        formattedContent = report
+          .replace(/\n\n/g, '</p><p>')
+          .replace(/\n/g, '<br>')
+          .replace(/^/, '<p>')
+          .replace(/$/, '</p>')
+          .replace(/<p><\/p>/g, ''); // Remove empty paragraphs
+        
+        // Handle common formatting patterns
+        formattedContent = formattedContent
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+          .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italic
+          .replace(/__(.*?)__/g, '<u>$1</u>'); // Underline
+      }
+      
+      setContent(formattedContent);
     }
   }, [report, isOpen]);
 
-  // Check undo/redo state
+  // Check undo/redo state and add keyboard shortcuts
   useEffect(() => {
     if (quillRef.current) {
       const editor = quillRef.current.getEditor();
@@ -43,10 +62,27 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
         }
       };
 
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.ctrlKey || event.metaKey) {
+          if (event.key === 'z' && !event.shiftKey) {
+            event.preventDefault();
+            handleUndo();
+          } else if ((event.key === 'y') || (event.key === 'z' && event.shiftKey)) {
+            event.preventDefault();
+            handleRedo();
+          }
+        }
+      };
+
       editor.on('text-change', handleHistoryChange);
+      document.addEventListener('keydown', handleKeyDown);
+      
+      // Initial check
+      handleHistoryChange();
       
       return () => {
         editor.off('text-change', handleHistoryChange);
+        document.removeEventListener('keydown', handleKeyDown);
       };
     }
   }, [isOpen]);
@@ -88,6 +124,7 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
       title: `Generated Report - ${now.toLocaleDateString()}`,
       content: content,
       status: "draft" as const,
+      templateId: null, // No template association for generated reports
       metadata: {
         generatedAt: now.toISOString(),
         source: "AI Generated",
@@ -187,7 +224,8 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
                     size="sm"
                     onClick={handleUndo}
                     disabled={!canUndo}
-                    className="p-2 h-8"
+                    className="p-2 h-8 hover:bg-nhs-light-blue/20"
+                    title="Undo (Ctrl+Z)"
                   >
                     <Undo className="w-4 h-4" />
                   </Button>
@@ -196,11 +234,12 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
                     size="sm"
                     onClick={handleRedo}
                     disabled={!canRedo}
-                    className="p-2 h-8"
+                    className="p-2 h-8 hover:bg-nhs-light-blue/20"
+                    title="Redo (Ctrl+Y)"
                   >
                     <Redo className="w-4 h-4" />
                   </Button>
-                  <div className="w-px h-6 bg-gray-300" />
+                  <div className="w-px h-6 bg-gray-300 mx-2" />
                 </div>
                 <div className="flex items-center space-x-2">
                   <Button

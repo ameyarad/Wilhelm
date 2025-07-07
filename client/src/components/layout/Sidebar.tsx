@@ -30,7 +30,7 @@ export default function Sidebar() {
   };
 
   const navigation = [
-    { name: "Home", href: "/", icon: Home },
+    { name: "Report", href: "/", icon: Home },
     { name: "My Templates", href: "/templates", icon: FileText },
     { name: "Saved Reports", href: "/reports", icon: History },
   ];
@@ -52,7 +52,7 @@ export default function Sidebar() {
         <Button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className={cn(
-            "w-full bg-nhs-accent-blue hover:bg-nhs-dark-blue text-white transition-all",
+            "w-full bg-nhs-accent-blue hover:bg-nhs-dark-blue text-white transition-all flex items-center justify-center",
             isCollapsed ? "px-2" : "px-4"
           )}
           size={isCollapsed ? "sm" : "default"}

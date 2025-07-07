@@ -7,6 +7,7 @@ import {
   index,
   serial,
   boolean,
+  integer,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -57,7 +58,7 @@ export const templates = pgTable("templates", {
 export const reports = pgTable("reports", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").references(() => users.id).notNull(),
-  templateId: serial("template_id").references(() => templates.id),
+  templateId: integer("template_id").references(() => templates.id),
   title: varchar("title").notNull(),
   content: text("content").notNull(),
   originalFindings: text("original_findings"),
