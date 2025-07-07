@@ -58,8 +58,7 @@ export default function FolderTemplateManager() {
       });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
       setFile(null);
-      setShowNewFolder(false);
-      setNewFolderName("");
+      // Don't reset folder selection after upload
     },
     onError: (error) => {
       console.error('Upload error:', error);
@@ -110,7 +109,9 @@ export default function FolderTemplateManager() {
     return acc;
   }, {} as Record<string, Template[]>);
 
-  const folders = Object.keys(templatesByFolder).sort();
+  const folders = Object.keys(templatesByFolder).length > 0 
+    ? Object.keys(templatesByFolder).sort() 
+    : ["General"];
 
   const handleFileSelect = (selectedFile: File) => {
     const allowedTypes = [
@@ -173,6 +174,7 @@ export default function FolderTemplateManager() {
     if (newFolderName.trim()) {
       setSelectedFolder(newFolderName.trim());
       setShowNewFolder(false);
+      setNewFolderName("");
     }
   };
 
@@ -214,9 +216,13 @@ export default function FolderTemplateManager() {
                       <SelectValue placeholder="Select folder" />
                     </SelectTrigger>
                     <SelectContent>
-                      {folders.map(folder => (
-                        <SelectItem key={folder} value={folder}>{folder}</SelectItem>
-                      ))}
+                      {folders.length > 0 ? (
+                        folders.map(folder => (
+                          <SelectItem key={folder} value={folder}>{folder}</SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="General">General</SelectItem>
+                      )}
                     </SelectContent>
                   </Select>
                   <Button
@@ -246,7 +252,10 @@ export default function FolderTemplateManager() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setShowNewFolder(false)}
+                    onClick={() => {
+                      setShowNewFolder(false);
+                      setNewFolderName("");
+                    }}
                   >
                     Cancel
                   </Button>
