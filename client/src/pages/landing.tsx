@@ -35,9 +35,7 @@ export default function Landing() {
                 className="w-20 h-20 md:w-24 md:h-24 animate-float filter drop-shadow-2xl"
                 loading="eager"
               />
-              <div className="w-16 h-16 bg-gradient-to-r from-nhs-accent-blue to-nhs-light-blue rounded-2xl flex items-center justify-center shadow-2xl transform transition-all duration-500 hover:scale-110 hover:rotate-3">
-                <Activity className="w-8 h-8 text-white animate-pulse" />
-              </div>
+              
               <h1 className="text-6xl font-bold bg-gradient-to-r from-white to-nhs-light-blue/80 bg-clip-text text-transparent">
                 Wilhelm
               </h1>
