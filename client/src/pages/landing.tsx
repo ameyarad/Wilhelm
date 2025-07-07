@@ -62,7 +62,7 @@ export default function Landing() {
                   <div className="p-3 bg-gradient-to-r from-nhs-accent-blue to-nhs-light-blue rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <MessageSquare className="w-6 h-6" />
                   </div>
-                  <span className="text-xl font-semibold">Smart Dictation</span>
+                  <span className="text-xl font-semibold text-center">Real-Time Dictation</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
