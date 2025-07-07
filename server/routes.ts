@@ -174,16 +174,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const { category, folder } = req.body;
       
+      console.log("Upload request received:", {
+        userId,
+        category,
+        folder,
+        file: req.file ? {
+          originalname: req.file.originalname,
+          mimetype: req.file.mimetype,
+          size: req.file.size
+        } : null
+      });
+      
       if (!req.file) {
         return res.status(400).json({ message: "No template file provided" });
       }
-
-      console.log("Received file:", {
-        originalname: req.file.originalname,
-        mimetype: req.file.mimetype,
-        size: req.file.size,
-        buffer: req.file.buffer ? "Buffer present" : "No buffer"
-      });
 
       let content = '';
       const fileName = req.file.originalname;

@@ -64,18 +64,13 @@ export class DatabaseStorage implements IStorage {
 
   // Template operations
   async getTemplates(userId?: string): Promise<Template[]> {
-    const query = db.select().from(templates);
-    
     if (userId) {
-      return await query.where(
-        and(
-          eq(templates.userId, userId),
-          eq(templates.isDefault, false)
-        )
-      ).orderBy(desc(templates.createdAt));
+      return await db.select().from(templates)
+        .where(eq(templates.userId, userId))
+        .orderBy(desc(templates.createdAt));
     }
     
-    return await query.where(eq(templates.isDefault, true)).orderBy(templates.name);
+    return [];
   }
 
   async getTemplate(id: number): Promise<Template | undefined> {

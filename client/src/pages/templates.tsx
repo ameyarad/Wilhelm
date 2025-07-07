@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
-import TemplateManager from "@/components/templates/TemplateManager";
+import SimpleTemplateManager from "@/components/templates/SimpleTemplateManager";
 
 export default function Templates() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -44,25 +44,16 @@ export default function Templates() {
       <div className="flex">
         <Sidebar />
         <main className="flex-1 ml-16 lg:ml-64 p-6">
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-nhs-blue mb-2">My Templates</h1>
               <p className="text-gray-600">
-                Upload and manage your radiology report templates with folder organization
+                Upload and manage your radiology report templates
               </p>
             </div>
 
-            <TemplateManager />
+            <SimpleTemplateManager />
           </div>
-
-          {/* Footer */}
-          <footer className="mt-16 py-6 border-t border-gray-200">
-            <div className="max-w-7xl mx-auto text-center">
-              <p className="text-sm text-gray-500">
-                Educational and research purposes only. Not for clinical use.
-              </p>
-            </div>
-          </footer>
         </main>
       </div>
     </div>
