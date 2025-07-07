@@ -94,9 +94,7 @@ export default function Landing() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-white/90 text-base leading-relaxed">
-                  Comprehensive template management with custom uploads, folder organization, and rich text editing capabilities
-                </p>
+                <p className="text-white/90 text-base leading-relaxed text-center">Upload, edit, save and copy your own templates</p>
               </CardContent>
             </Card>
           </div>
