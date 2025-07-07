@@ -89,13 +89,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/ai/generate-report', isAuthenticated, async (req: any, res) => {
     try {
       const { findings } = req.body;
+      const userId = req.user.claims.sub;
       
       if (!findings) {
         return res.status(400).json({ message: "Findings are required" });
       }
 
-      // Get available templates
-      const templates = await storage.getTemplates();
+      // Get available templates for this user
+      const templates = await storage.getTemplates(userId);
       const templatesForAI = templates.map(t => ({
         name: t.name,
         content: t.content,

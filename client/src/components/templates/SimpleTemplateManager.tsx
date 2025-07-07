@@ -5,12 +5,13 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-// Removed unused imports
-import { CloudUpload, FileText, Upload, Loader2, Trash2 } from "lucide-react";
+import { CloudUpload, FileText, Upload, Loader2, Trash2, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { Template } from "@shared/schema";
+import TemplateViewer from "./TemplateViewer";
+import RichTextEditor from "./RichTextEditor";
 
 export default function SimpleTemplateManager() {
   const { user } = useAuth();
@@ -20,6 +21,10 @@ export default function SimpleTemplateManager() {
   // Upload state
   const [file, setFile] = useState<File | null>(null);
   const [dragOver, setDragOver] = useState(false);
+  
+  // Rich text editor state
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [editingTemplate, setEditingTemplate] = useState<Template | null>(null);
 
   // Get templates
   const { data: templates = [], isLoading } = useQuery({
@@ -135,6 +140,21 @@ export default function SimpleTemplateManager() {
     }
   };
 
+  const handleEdit = (template: Template) => {
+    setEditingTemplate(template);
+    setIsEditorOpen(true);
+  };
+
+  const handleCreateNew = () => {
+    setEditingTemplate(null);
+    setIsEditorOpen(true);
+  };
+
+  const handleCloseEditor = () => {
+    setIsEditorOpen(false);
+    setEditingTemplate(null);
+  };
+
   // Display templates directly (no folder grouping)
   const sortedTemplates = templates.sort((a: Template, b: Template) => 
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -197,7 +217,17 @@ export default function SimpleTemplateManager() {
       {/* Templates Display */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg text-nhs-blue">My Templates</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg text-nhs-blue">My Templates</CardTitle>
+            <Button
+              onClick={handleCreateNew}
+              size="sm"
+              className="bg-nhs-blue hover:bg-nhs-blue/90 text-white"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Create New
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -221,26 +251,39 @@ export default function SimpleTemplateManager() {
                     <FileText className="w-4 h-4 text-nhs-blue" />
                     <div>
                       <p className="font-medium text-sm">{template.name}</p>
-                      <p className="text-xs text-gray-500">
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <Badge variant="outline" className="text-xs">
+                          {template.category}
+                        </Badge>
                         {template.createdAt ? new Date(template.createdAt).toLocaleDateString() : ''}
-                      </p>
+                      </div>
                     </div>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleDelete(template.id)}
-                    disabled={deleteMutation.isPending}
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                  <div className="flex items-center gap-1">
+                    <TemplateViewer template={template} onEdit={handleEdit} />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDelete(template.id)}
+                      disabled={deleteMutation.isPending}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8 p-0"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* Rich Text Editor Modal */}
+      <RichTextEditor
+        template={editingTemplate}
+        isOpen={isEditorOpen}
+        onClose={handleCloseEditor}
+      />
     </div>
   );
 }
