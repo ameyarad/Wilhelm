@@ -123,20 +123,26 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
     toolbar: [
       [{ 'header': [1, 2, 3, false] }],
       ['bold', 'italic', 'underline', 'strike'],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
       [{ 'list': 'ordered'}, { 'list': 'bullet' }],
       [{ 'indent': '-1'}, { 'indent': '+1' }],
       [{ 'color': [] }, { 'background': [] }],
       [{ 'align': [] }],
       ['link'],
-      ['blockquote', 'code-block'],
+      ['blockquote'],
       ['clean']
     ],
+    history: {
+      delay: 1000,
+      maxStack: 100,
+      userOnly: true
+    }
   };
 
   const formats = [
-    'header', 'bold', 'italic', 'underline', 'strike',
+    'header', 'bold', 'italic', 'underline', 'strike', 'script',
     'list', 'bullet', 'indent', 'link', 'color', 'background',
-    'align', 'blockquote', 'code-block'
+    'align', 'blockquote'
   ];
 
   return (
@@ -178,7 +184,7 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
           
           <div className="space-y-2 flex-1 min-h-0">
             <Label>Template Content</Label>
-            <div className="border rounded-lg overflow-hidden flex-1 min-h-0">
+            <div className="border rounded-lg overflow-hidden" style={{ height: '450px' }}>
               <ReactQuill
                 ref={quillRef}
                 theme="snow"
@@ -186,8 +192,20 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
                 onChange={setContent}
                 modules={modules}
                 formats={formats}
-                className="h-full"
-                style={{ height: '300px' }}
+                style={{ height: '400px' }}
+                onKeyDown={(e) => {
+                  // Handle keyboard shortcuts
+                  if (e.ctrlKey || e.metaKey) {
+                    const key = e.key.toLowerCase();
+                    if (key === 'z' && !e.shiftKey) {
+                      e.preventDefault();
+                      // Undo handled by Quill's history module
+                    } else if ((key === 'z' && e.shiftKey) || key === 'y') {
+                      e.preventDefault();
+                      // Redo handled by Quill's history module
+                    }
+                  }
+                }}
               />
             </div>
           </div>

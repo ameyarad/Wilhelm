@@ -116,6 +116,11 @@ Changelog:
   - Removed category field completely from templates and all AI prompts
   - Improved template content display in rich text editor with proper HTML support
   - Added comprehensive formatting preservation from original documents
+  - Fixed rich text editor height issue - now shows full content without cut-off
+  - Added superscript/subscript formatting buttons
+  - Removed code block button and added undo/redo functionality
+  - Enhanced keyboard shortcuts support (Ctrl+Z, Ctrl+Y, Ctrl+Shift+Z)
+  - Improved CSS styling for better editor visibility and scrolling
 - July 07, 2025. Advanced template management with full folder organization
   - Fixed .doc file upload issues by filtering out binary characters that cause UTF-8 database errors
   - Added comprehensive folder organization system with backend API endpoints:

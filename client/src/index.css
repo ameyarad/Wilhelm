@@ -144,3 +144,27 @@
     background-color: hsl(174, 100%, 32%, 0.9);
   }
 }
+
+/* ReactQuill Editor Improvements */
+.ql-container {
+  height: 350px !important;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.ql-editor {
+  height: 300px !important;
+  overflow-y: auto;
+  padding-bottom: 20px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ql-toolbar {
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
