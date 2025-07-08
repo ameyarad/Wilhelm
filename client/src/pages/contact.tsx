@@ -56,7 +56,7 @@ export default function Contact() {
                     Share your experience, report bugs, or suggest improvements. Your feedback helps make Wilhelm better.
                   </p>
                   <form 
-                    action="https://formspree.io/ameya005@gmail.com" 
+                    action="https://formspree.io/f/movwojpk" 
                     method="POST" 
                     className="space-y-4"
                   >

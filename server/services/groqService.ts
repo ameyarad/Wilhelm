@@ -46,11 +46,7 @@ export class GroqService {
     availableTemplates: Array<{ name: string; content: string }>
   ): Promise<string> {
     try {
-      const templateExamples = [
-        { role: "user", content: "Example 1\nModality: MRI\nBodyPart: Knee\nProtocol: 1.5 T proton-density fat-sat sagittal/coronal/axial\n→ {\"template\":\"KNEE_MRI\"}" },
-        { role: "user", content: "Example 2\nModality: CT\nBodyPart: Chest / Abdomen / Pelvis with portal venous contrast\n→ {\"template\":\"CT_CAP_CE\"}" },
-        { role: "user", content: "Example 3\nModality: X-ray\nBodyPart: Chest\nProtocol: PA and lateral views\n→ {\"template\":\"CHEST_XRAY\"}" }
-      ];
+
 
       const templateList = availableTemplates
         .map(t => t.name)
@@ -61,10 +57,9 @@ export class GroqService {
           role: "system",
           content: `You are a radiology template-selection assistant. Output ONLY valid JSON matching this schema: {\"template\": <string>}. Available templates: ${templateList}`
         },
-        ...templateExamples,
         {
           role: "user",
-          content: `Now classify:\n${findings}`
+          content: `Classify the following findings and select the most appropriate template:\n${findings}`
         }
       ];
 
