@@ -293,16 +293,15 @@ export default function Home() {
               </Card>
             )}
 
-            {/* Instructional Text */}
-            <Card className="mt-4">
+            {/* Important Warning Text */}
+            <Card className="mt-4 border-red-500 bg-red-50">
               <CardContent className="p-3 md:p-6">
-                <div className="text-xs md:text-sm text-nhs-dark-grey/80 leading-relaxed space-y-2 md:space-y-3">
+                <div className="text-red-700 space-y-2 md:space-y-3">
                   <p className="font-medium text-center">
-                    Ensure templates are uploaded and named by modality/scan type. 
-                    Wilhelm selects templates based on their names.
-                  </p>
-                  <p className="font-medium text-center text-[10px] md:text-xs">
-                    For best mobile experience, use "Request Desktop Site" option.
+                    <strong>Important:</strong> Wilhelm will not work without appropriate report templates. 
+                    Please upload report templates related to your dictation or create new templates in the 
+                    My Templates section first! Ensure templates are named by modality and scan type 
+                    (eg MRI Knee)
                   </p>
                 </div>
               </CardContent>

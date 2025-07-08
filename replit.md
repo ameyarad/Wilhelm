@@ -109,6 +109,15 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
+- July 08, 2025. Mobile responsive UI improvements and terminology updates
+  - Fixed mobile responsive UI issues with rich text editor buttons overlapping
+  - Made save/cancel buttons stack vertically on mobile devices with proper spacing
+  - Replaced all instances of "radiology" with "medical imaging" throughout the application
+  - Updated How to Use page subheading and My Templates subheading with new terminology
+  - Enhanced mobile touch targets and button layouts for better mobile experience
+  - Updated meta tags, manifest.json, and documentation with "medical imaging" terminology
+  - Added red warning text box on main page emphasizing template upload requirements
+  - Improved mobile CSS with better dialog sizing and overflow handling
 - July 08, 2025. Enhanced social media sharing and custom domain optimization
   - Updated all social media descriptions to "Free and Open Source AI Agent For Medical Imaging Reporting"
   - Fixed custom domain functionality by updating CORS configuration to include wilhelmai.net and www.wilhelmai.net
