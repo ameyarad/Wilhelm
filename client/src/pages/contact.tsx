@@ -71,7 +71,7 @@ export default function Contact() {
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <MessageSquare className="w-6 h-6 text-nhs-blue" />
-                    <span>Send Feedback</span>
+                    <span className="text-center">Contact And Send Feedback</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
