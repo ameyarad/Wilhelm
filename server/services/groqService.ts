@@ -149,6 +149,58 @@ Guidelines:
 - Output only the final formatted report, no additional text or explanations
 - Session ID: ${sessionId || 'unknown'}`,
         },
+        // Few-shot example (user)
+        {
+          role: "user",
+          name: "example_user",
+          content: `
+### REPORT TEMPLATE
+Patient: Tom Evans
+DOB: 1995-08-12
+Study: MRI LEFT KNEE (3 T) — 08 Jul 2025
+Referrer: Dr Smith, Orthopaedics
+
+**CLINICAL DETAILS:** Pain and instability after football injury.
+
+**TECHNIQUE:** Standard internal-rotation knee protocol.
+
+**FINDINGS:**
+{{findings_placeholder}}
+
+**IMPRESSION:**
+{{impression_placeholder}}
+
+### DICTATION
+- complete tear ACL mid-substance, fibres wavy
+- bone bruise lateral femoral condyle + posterior tibial plateau
+- intact PCL, MCL, LCL
+- small joint effusion
+- no meniscal tear
+          `.trim()
+        },
+        // Few-shot example (assistant)
+        {
+          role: "assistant",
+          name: "example_assistant",
+          content: `
+### REPORT TEMPLATE
+Patient: Tom Evans
+DOB: 1995-08-12
+Study: MRI LEFT KNEE (3 T) — 08 Jul 2025
+Referrer: Dr Smith, Orthopaedics
+
+**CLINICAL DETAILS:** Pain and instability after football injury.
+
+**TECHNIQUE:** Standard internal-rotation knee protocol.
+
+**FINDINGS:**
+There is a full-thickness mid-substance rupture of the anterior cruciate ligament with wavy, discontinuous fibres and retraction. Associated bone-marrow oedema involves the lateral femoral condyle and posterior aspect of the lateral tibial plateau, in keeping with contusions. The posterior cruciate, medial collateral and lateral collateral ligaments are intact. The menisci are normal. Articular cartilage and the extensor mechanism are preserved. A small physiological joint effusion is present. No popliteal cyst.
+
+**IMPRESSION:**
+Complete ACL rupture with secondary bone contusions; otherwise unremarkable internal derangement.
+          `.trim()
+        },
+        // Actual user request
         {
           role: "user",
           content: `Template: ${template.name}
