@@ -7,9 +7,7 @@ import {
   Mail, 
   MessageSquare, 
   Github,
-  Globe,
-  Heart,
-  Coffee
+  Globe
 } from "lucide-react";
 
 export default function Contact() {
@@ -68,25 +66,70 @@ export default function Contact() {
                 </CardContent>
               </Card>
 
-              {/* X (Twitter) */}
+              {/* Feedback Form */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <MessageSquare className="w-6 h-6 text-nhs-blue" />
-                    <span>X (Twitter)</span>
+                    <span>Send Feedback</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-nhs-dark-grey/80 leading-relaxed mb-4">
-                    Follow for updates, tips, and discussions about AI in radiology.
+                    Share your experience, report bugs, or suggest improvements.
                   </p>
-                  <Button 
-                    className="w-full bg-nhs-blue hover:bg-nhs-dark-blue text-white"
-                    onClick={() => window.open('https://x.com/ask_msk', '_blank')}
+                  <form 
+                    action="https://formspree.io/f/xanydqpw" 
+                    method="POST" 
+                    className="space-y-4"
                   >
-                    <MessageSquare className="w-4 h-4 mr-2" />
-                    Follow @ask_msk
-                  </Button>
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium text-nhs-dark-grey mb-1">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-nhs-blue focus:border-transparent"
+                        placeholder="Your name"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-nhs-dark-grey mb-1">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-nhs-blue focus:border-transparent"
+                        placeholder="your@email.com"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="message" className="block text-sm font-medium text-nhs-dark-grey mb-1">
+                        Message
+                      </label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        rows={4}
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-nhs-blue focus:border-transparent resize-none"
+                        placeholder="Your feedback, bug report, or feature request..."
+                      ></textarea>
+                    </div>
+                    <Button 
+                      type="submit"
+                      className="w-full bg-nhs-blue hover:bg-nhs-dark-blue text-white"
+                    >
+                      <MessageSquare className="w-4 h-4 mr-2" />
+                      Send Feedback
+                    </Button>
+                  </form>
                 </CardContent>
               </Card>
             </div>
@@ -112,42 +155,7 @@ export default function Contact() {
               </CardContent>
             </Card>
 
-            {/* Support the Project */}
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Heart className="w-6 h-6 text-nhs-blue" />
-                  <span>Support the Project</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-nhs-dark-grey/80 leading-relaxed mb-4">
-                  Wilhelm is developed and maintained in my spare time. If you find it useful, 
-                  there are several ways to show your support:
-                </p>
-                <ul className="text-sm text-nhs-dark-grey/80 space-y-2 ml-4 mb-4">
-                  <li>• Share Wilhelm with colleagues who might benefit from it</li>
-                  <li>• Provide feedback and suggestions for improvement</li>
-                  <li>• Report bugs or issues you encounter</li>
-                  <li>• Follow the project updates on X</li>
-                  <li>• Consider contributing to the codebase once it's open source</li>
-                </ul>
-                <div className="bg-nhs-light-blue/10 border border-nhs-light-blue/20 rounded-lg p-4">
-                  <div className="flex items-start space-x-3">
-                    <Coffee className="w-5 h-5 text-nhs-blue mt-0.5" />
-                    <div>
-                      <p className="text-sm font-medium text-nhs-dark-blue mb-1">
-                        Buy Me a Coffee
-                      </p>
-                      <p className="text-xs text-nhs-dark-grey/80">
-                        A small donation helps keep the development going and covers hosting costs. 
-                        Link will be available soon!
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+
 
             {/* Disclaimer */}
             <Card>
