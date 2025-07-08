@@ -140,43 +140,31 @@ Guidelines:
         },
         {
           role: "user",
-          content: `Template: EXAMINATION: Chest X-Ray
-INDICATION: [indication]
-TECHNIQUE: [technique]  
-FINDINGS: [findings]
-IMPRESSION: [impression]
+          content: `Template: Both lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable.
 
-Dictated Findings: PA and lateral chest x-ray shows clear lungs, normal heart size, no pneumothorax
+Dictated Findings: Chest X-ray. Consolidation in right lung middle zone.
 
 Expected Output:
-EXAMINATION: Chest X-Ray
-INDICATION: Clinical evaluation
-TECHNIQUE: PA and lateral chest radiographs
-FINDINGS: The lungs are clear bilaterally without consolidation, effusion, or pneumothorax. Cardiac silhouette is normal in size and configuration.
-IMPRESSION: Normal chest radiograph.`
+Consolidation in right lung middle zone. Rest of the lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable.`,
         },
         {
           role: "assistant",
-          content: "I understand the format. I will generate a complete radiology report by filling in the template structure with the dictated findings, using professional medical terminology."
+          content:
+            "I understand the format. I will generate a complete radiology report by filling in the template structure with the dictated findings, using professional medical terminology.",
         },
         {
           role: "user",
-          content: `Template: EXAMINATION: CT Head without contrast
-CLINICAL HISTORY: [history]
-FINDINGS: [findings] 
-IMPRESSION: [impression]
+          content: `Findings: Cerebral hemispheres are normal. Cerebellum appears normal. Ventricles are normal size. No acute intracranial hemorrhage, mass effect, or midline shift. Impression: No significant abnormality.
 
-Dictated Findings: CT head shows no acute abnormality, ventricles normal size
+Dictated Findings: CT head normal template
 
 Expected Output:
-EXAMINATION: CT Head without contrast
-CLINICAL HISTORY: Clinical evaluation
-FINDINGS: No acute intracranial hemorrhage, mass effect, or midline shift. The ventricular system is normal in size and configuration.
-IMPRESSION: No acute intracranial abnormality.`
+Findings: Cerebral hemispheres are normal. Cerebellum appears normal. Ventricles are normal size. No acute intracranial hemorrhage, mass effect, or midline shift. Impression: No significant abnormality.`,
         },
         {
-          role: "assistant", 
-          content: "I will merge the dictated findings into the template structure with appropriate medical terminology and formatting."
+          role: "assistant",
+          content:
+            "I will merge the dictated findings into the template structure with appropriate medical terminology and formatting.",
         },
         {
           role: "user",
@@ -211,8 +199,6 @@ Please generate a complete radiology report by merging the dictated findings int
       throw new Error("Failed to generate report");
     }
   }
-
-  
 
   async moderateContent(
     content: string,
