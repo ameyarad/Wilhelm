@@ -19,9 +19,6 @@ if (process.env.NODE_ENV === "production") {
   app.use(securityHeaders);
   app.use(generalRateLimit);
   app.use(...additionalSecurity);
-} else {
-  // In development, only use basic security headers without HTTPS enforcement
-  app.use(securityHeaders);
 }
 app.use(corsOptions);
 app.use(sanitizeRequest);
