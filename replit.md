@@ -109,6 +109,21 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
+- January 09, 2025. Comprehensive security hardening to address Google Safe Browsing warnings
+  - Implemented multi-layer HTTPS enforcement with httpsRedirectMiddleware for all proxy configurations
+  - Enhanced security headers with 2-year HSTS (63072000 seconds) for preload list eligibility
+  - Added comprehensive Content Security Policy with upgrade-insecure-requests directive
+  - Implemented Cross-Origin policies (CORP, COEP, COOP) for enhanced isolation
+  - Added Expect-CT header for Certificate Transparency enforcement
+  - Enhanced cookie security with forced Secure, HttpOnly, and SameSite=Strict attributes
+  - Created security diagnostic endpoints (/.well-known/security-test) for Google Safe Browsing validation
+  - Added security.txt file in .well-known directory for security disclosure
+  - Removed all server identification headers (X-Powered-By, Server) to prevent fingerprinting
+  - Implemented validateHTTPS middleware to block non-HTTPS requests in production
+  - Enhanced Permissions-Policy and Feature-Policy for restrictive browser permissions
+  - Added X-Permitted-Cross-Domain-Policies, X-Download-Options, X-DNS-Prefetch-Control headers
+  - Configured Cache-Control headers to prevent sensitive data caching
+  - All security middleware now executes in correct order: redirect → validate → headers → session
 - July 08, 2025. Fixed SSL/HTTPS security and enhanced document formatting
   - Fixed production deployment SSL/HTTPS security issues for secure browser connections
   - Enhanced HTTPS enforcement with multiple proxy header detection (x-forwarded-proto, x-forwarded-ssl, etc.)

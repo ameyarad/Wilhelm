@@ -28,12 +28,22 @@ export function enhancedSSLMiddleware(req: Request, res: Response, next: NextFun
   const isHTTPS = detectHTTPS(req);
 
   if (isProduction) {
-    // Add security headers for all responses
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+    // Add comprehensive security headers for all responses
+    res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('X-XSS-Protection', '1; mode=block');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(self), camera=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()');
+    res.setHeader('X-Permitted-Cross-Domain-Policies', 'none');
+    res.setHeader('X-Download-Options', 'noopen');
+    res.setHeader('X-DNS-Prefetch-Control', 'off');
+    res.setHeader('Expect-CT', 'max-age=86400, enforce');
+    res.setHeader('Feature-Policy', "geolocation 'none'; microphone 'self'; camera 'none'");
+    
+    // Remove server header for security
+    res.removeHeader('X-Powered-By');
+    res.removeHeader('Server');
 
     // Redirect to HTTPS if not already secure
     if (!isHTTPS) {

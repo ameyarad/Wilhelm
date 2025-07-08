@@ -10,7 +10,9 @@ import {
   sanitizeRequest,
   securityErrorHandler
 } from "./middleware/security";
-import { enhancedSSLMiddleware } from "./middleware/ssl";
+import { enhancedSSLMiddleware, secureSessionMiddleware } from "./middleware/ssl";
+import { applySecurityHeaders, validateHTTPS } from "./middleware/securityConfig";
+import { httpsRedirectMiddleware } from "./middleware/httpsRedirect";
 
 const app = express();
 
@@ -21,6 +23,10 @@ if (process.env.NODE_ENV === "production") {
 
 // Security middleware - minimal for development, full for production
 if (process.env.NODE_ENV === "production") {
+  app.use(httpsRedirectMiddleware); // HTTPS redirect first
+  app.use(validateHTTPS); // Validate HTTPS
+  app.use(applySecurityHeaders); // Apply comprehensive security headers
+  app.use(secureSessionMiddleware); // Secure session cookies
   app.use(enhancedSSLMiddleware); // Enhanced SSL handling for Replit deployment
   app.use(securityHeaders);
   app.use(generalRateLimit);

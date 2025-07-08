@@ -1,0 +1,7 @@
+Contact: mailto:security@wilhelmai.net
+Expires: 2026-01-01T00:00:00.000Z
+Acknowledgments: https://wilhelmai.net/security-acknowledgments
+Preferred-Languages: en
+Canonical: https://wilhelmai.net/.well-known/security.txt
+Policy: https://wilhelmai.net/security-policy
+Encryption: https://wilhelmai.net/pgp-key.txt
