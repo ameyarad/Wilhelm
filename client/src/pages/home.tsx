@@ -222,7 +222,7 @@ export default function Home() {
                     <Textarea
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Type or dictate your findings here"
+                      placeholder="Type or dictate your findings here. Ignore spelling errors in dictation, Wilhelm will correct them in the final report."
                       className="min-h-[120px] pr-12 md:pr-16"
                       disabled={isProcessing}
                     />
