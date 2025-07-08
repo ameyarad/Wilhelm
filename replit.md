@@ -109,6 +109,17 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
+- July 08, 2025. Fixed deployment build errors and security middleware optimization
+  - Resolved tsx dependency corruption by creating wrapper using @esbuild-kit/esm-loader
+  - Fixed missing @jridgewell/set-array dependency preventing builds
+  - Fixed missing globals package for babel traverse compatibility
+  - Relaxed security middleware for better AI API compatibility:
+    - Increased rate limits (general: 5000, API: 500, AI: 50 requests)
+    - Disabled rate limiting in development mode
+    - Removed content escaping from validation to preserve AI-generated content
+    - Added console.groq.com to CSP for full Groq API support
+  - Created workaround for babel traverse issues with replit-cartographer
+  - Application successfully running and ready for deployment
 - July 08, 2025. Production readiness assessment and final optimization
   - Removed ALL console.log statements from client-side code for production
   - Removed development banner script from index.html

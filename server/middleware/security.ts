@@ -157,14 +157,14 @@ export const validateTextInput = [
   body('content')
     .trim()
     .isLength({ min: 1, max: 50000 })
-    .escape()
+    // Removed .escape() to allow AI-generated content with special characters
     .withMessage('Content must be between 1 and 50000 characters'),
   
   body('title')
     .optional()
     .trim()
     .isLength({ min: 1, max: 200 })
-    .escape()
+    // Removed .escape() to allow special characters in titles
     .withMessage('Title must be between 1 and 200 characters'),
 ];
 
@@ -172,7 +172,7 @@ export const validateReportInput = [
   body('findings')
     .trim()
     .isLength({ min: 1, max: 10000 })
-    .escape()
+    // Removed .escape() to allow medical terminology and AI-generated content
     .withMessage('Findings must be between 1 and 10000 characters'),
 ];
 
