@@ -134,19 +134,45 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
 
   const handleCopy = async () => {
     try {
-      // Safely extract plain text from HTML content without XSS risk
-      const tempElement = document.createElement('div');
+      // Convert HTML to properly formatted plain text for Word documents
+      let plainText = content;
       
-      // Sanitize HTML by removing script tags and other dangerous elements
-      const sanitizedContent = content
+      // Security: Remove dangerous HTML elements while preserving structure
+      plainText = plainText
         .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
         .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
         .replace(/on\w+="[^"]*"/gi, '')
         .replace(/on\w+='[^']*'/gi, '')
         .replace(/javascript:/gi, '');
       
-      tempElement.innerHTML = sanitizedContent;
-      const plainText = tempElement.textContent || tempElement.innerText || content;
+      // Convert HTML formatting to plain text equivalents
+      plainText = plainText
+        .replace(/<h[1-6][^>]*>/gi, '\n')
+        .replace(/<\/h[1-6]>/gi, '\n')
+        .replace(/<p[^>]*>/gi, '\n')
+        .replace(/<\/p>/gi, '\n')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<div[^>]*>/gi, '\n')
+        .replace(/<\/div>/gi, '\n')
+        .replace(/<strong[^>]*>/gi, '')
+        .replace(/<\/strong>/gi, '')
+        .replace(/<b[^>]*>/gi, '')
+        .replace(/<\/b>/gi, '')
+        .replace(/<em[^>]*>/gi, '')
+        .replace(/<\/em>/gi, '')
+        .replace(/<i[^>]*>/gi, '')
+        .replace(/<\/i>/gi, '')
+        .replace(/<u[^>]*>/gi, '')
+        .replace(/<\/u>/gi, '')
+        .replace(/<[^>]*>/g, '') // Remove any remaining HTML tags
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/\n\s*\n/g, '\n\n') // Clean up multiple newlines
+        .trim();
       
       await navigator.clipboard.writeText(plainText);
       setError("");

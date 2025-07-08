@@ -140,12 +140,12 @@ Guidelines:
         },
         {
           role: "user",
-          content: `Template: Both lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable.
+          content: `Template: Findings: Both lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable. Impression: No significant abnormality.
 
 Dictated Findings: Chest X-ray. Consolidation in right lung middle zone.
 
 Expected Output:
-Consolidation in right lung middle zone. Rest of the lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable.`,
+Findings: Consolidation in right lung middle zone. Rest of the lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable. Impression: Consolidation in right lung middle zone`,
         },
         {
           role: "assistant",
