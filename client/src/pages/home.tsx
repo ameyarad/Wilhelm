@@ -20,7 +20,6 @@ import {
   Loader2,
   FileText,
   Brain,
-  Copy,
   Eye
 } from "lucide-react";
 
@@ -106,17 +105,6 @@ export default function Home() {
       stopRecording();
     } else {
       startRecording();
-    }
-  };
-
-  const handleCopyReport = async () => {
-    try {
-      await navigator.clipboard.writeText(generatedReport);
-      setError("");
-      console.log("Report copied to clipboard");
-    } catch (error) {
-      setError("Failed to copy report");
-      console.error("Copy failed:", error);
     }
   };
 
@@ -233,25 +221,14 @@ export default function Home() {
                       <FileText className="w-5 h-5 text-nhs-green" />
                       <span>Your Report</span>
                     </CardTitle>
-                    <div className="flex items-center space-x-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleCopyReport}
-                        className="text-nhs-green"
-                      >
-                        <Copy className="w-3 h-3 mr-1" />
-                        Copy
-                      </Button>
-                      <Button
-                        onClick={() => setIsReportViewerOpen(true)}
-                        className="bg-nhs-blue hover:bg-nhs-blue/90 text-white"
-                        size="sm"
-                      >
-                        <Eye className="w-3 h-3 mr-1" />
-                        View & Edit
-                      </Button>
-                    </div>
+                    <Button
+                      onClick={() => setIsReportViewerOpen(true)}
+                      className="bg-nhs-blue hover:bg-nhs-blue/90 text-white"
+                      size="sm"
+                    >
+                      <Eye className="w-3 h-3 mr-1" />
+                      View & Edit
+                    </Button>
                   </div>
                 </CardHeader>
                 <CardContent>
