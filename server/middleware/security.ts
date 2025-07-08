@@ -29,7 +29,7 @@ export const securityHeaders = helmet({
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:", "https:", "blob:"],
-      connectSrc: ["'self'", "https://api.groq.com", "https://apis.replit.com", "wss://*.replit.app", "wss://*.replit.dev"],
+      connectSrc: ["'self'", "https://api.groq.com", "https://console.groq.com", "https://apis.replit.com", "wss://*.replit.app", "wss://*.replit.dev", "https://*.replit.app", "https://*.replit.dev"],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
@@ -94,7 +94,7 @@ export const corsOptions = cors({
 // Rate Limiting
 export const generalRateLimit = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000, // Limit each IP to 1000 requests per windowMs
+  max: 5000, // Increased limit for general requests
   message: {
     error: "Too many requests from this IP, please try again later.",
     retryAfter: "15 minutes"
@@ -102,42 +102,54 @@ export const generalRateLimit = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skip: (req) => {
-    // Skip rate limiting for health checks and static files
-    return req.path === '/health' || req.path.startsWith('/assets/');
+    // Skip rate limiting for health checks, static files, and in development
+    return req.path === '/health' || req.path.startsWith('/assets/') || process.env.NODE_ENV === "development";
   }
 });
 
 export const apiRateLimit = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 API requests per windowMs
+  max: 500, // Increased limit for API requests
   message: {
     error: "Too many API requests from this IP, please try again later.",
     retryAfter: "15 minutes"
   },
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
+  skip: (req) => {
+    // Skip rate limiting in development
+    return process.env.NODE_ENV === "development";
+  }
 });
 
 export const aiRateLimit = rateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: 10, // Limit each IP to 10 AI requests per minute
+  max: 50, // Increased limit for AI requests - more generous for development
   message: {
     error: "Too many AI requests from this IP, please slow down.",
     retryAfter: "1 minute"
   },
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
+  skip: (req) => {
+    // Skip rate limiting in development
+    return process.env.NODE_ENV === "development";
+  }
 });
 
 export const uploadRateLimit = rateLimit({
   windowMs: 60 * 1000, // 1 minute
-  max: 5, // Limit each IP to 5 uploads per minute
+  max: 20, // Increased limit for uploads - more generous for development
   message: {
     error: "Too many upload requests from this IP, please slow down.",
     retryAfter: "1 minute"
   },
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
+  skip: (req) => {
+    // Skip rate limiting in development
+    return process.env.NODE_ENV === "development";
+  }
 });
 
 // Input Validation Middleware
