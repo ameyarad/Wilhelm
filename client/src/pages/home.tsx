@@ -307,6 +307,18 @@ export default function Home() {
               </CardContent>
             </Card>
 
+            {/* Desktop Optimization Notice */}
+            <Card className="mt-3 border-nhs-dark-blue bg-nhs-pale-blue">
+              <CardContent className="p-3 md:p-4">
+                <div className="text-nhs-dark-blue space-y-1 md:space-y-2">
+                  <p className="font-medium text-center text-xs md:text-sm">
+                    Wilhelm is optimized for use on desktops, Macs, laptops, Macbooks and does not function on mobile devices. 
+                    If using on a smartphone please click on your browser's menu and select "Desktop site".
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
           </div>
         </main>
         
