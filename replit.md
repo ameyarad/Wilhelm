@@ -204,6 +204,12 @@ Changelog:
   - Cleaned up HTTP references in documentation files
   - Added production SSL certificate validation and monitoring capabilities
   - Improved security headers configuration for better SSL certificate compatibility
+- July 08, 2025. Simplified cookie consent banner for better user experience
+  - Reduced banner size from large modal to compact bottom bar
+  - Simplified text to: "Wilhelm uses cookies to help personalize content and provide a better, faster experience. By clicking accept, you agree to this."
+  - Removed privacy policy and cookie policy references from banner
+  - Streamlined to two buttons: "Accept" and "Reject"
+  - Maintained GDPR compliance with clear consent options
 - July 08, 2025. Added MIT License and comprehensive README documentation
   - Created MIT License file with copyright to Ameya Kawthalkar (2025)
   - Generated comprehensive README.md with full project documentation:
