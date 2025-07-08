@@ -80,7 +80,7 @@ export default function Contact() {
                       <input
                         type="email"
                         id="email"
-                        name="_replyto"
+                        name="email"
                         required
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-nhs-blue focus:border-transparent"
                         placeholder="your@email.com"
@@ -93,7 +93,7 @@ export default function Contact() {
                       <input
                         type="text"
                         id="subject"
-                        name="_subject"
+                        name="subject"
                         required
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-nhs-blue focus:border-transparent"
                         placeholder="Wilhelm Feedback"
@@ -113,6 +113,7 @@ export default function Contact() {
                       ></textarea>
                     </div>
                     <input type="hidden" name="_next" value="https://wilhelm-ai.replit.app/contact" />
+                    <input type="hidden" name="_subject" value="Wilhelm Feedback Form" />
                     <Button 
                       type="submit"
                       className="w-full bg-nhs-blue hover:bg-nhs-dark-blue text-white"
