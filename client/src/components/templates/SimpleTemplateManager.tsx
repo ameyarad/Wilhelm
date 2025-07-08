@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,11 +14,10 @@ import RichTextEditor from "./RichTextEditor";
 
 export default function SimpleTemplateManager() {
   const { user } = useAuth();
-  const { toast } = useToast();
   const queryClient = useQueryClient();
   
   // Upload state
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [dragOver, setDragOver] = useState(false);
   
   // Rich text editor state
@@ -50,30 +48,17 @@ export default function SimpleTemplateManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Template uploaded successfully",
-      });
-      setFile(null);
+      setFiles([]);
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "Please log in again",
-          variant: "destructive",
-        });
         setTimeout(() => {
           window.location.href = "/api/login";
         }, 500);
         return;
       }
-      toast({
-        title: "Upload Failed",
-        description: error.message || "Failed to upload template",
-        variant: "destructive",
-      });
+      // No toast message - silently handle errors
     },
   });
 
@@ -83,34 +68,26 @@ export default function SimpleTemplateManager() {
       await apiRequest("DELETE", `/api/templates/${id}`);
     },
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Template deleted successfully",
-      });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
     },
     onError: (error) => {
-      toast({
-        title: "Delete Failed",
-        description: "Failed to delete template",
-        variant: "destructive",
-      });
+      // No toast message - silently handle errors
     },
   });
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile);
+    const selectedFiles = Array.from(event.target.files || []);
+    if (selectedFiles.length > 0) {
+      setFiles(prev => [...prev, ...selectedFiles]);
     }
   };
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setDragOver(false);
-    const droppedFile = event.dataTransfer.files[0];
-    if (droppedFile) {
-      setFile(droppedFile);
+    const droppedFiles = Array.from(event.dataTransfer.files);
+    if (droppedFiles.length > 0) {
+      setFiles(prev => [...prev, ...droppedFiles]);
     }
   };
 
@@ -124,14 +101,20 @@ export default function SimpleTemplateManager() {
   };
 
   const handleUpload = () => {
-    if (!file) return;
+    if (files.length === 0) return;
 
     const formData = new FormData();
-    formData.append('template', file);
+    files.forEach(file => {
+      formData.append('templates', file);
+    });
     
-    console.log('Uploading file:', file.name, file.size, file.type);
+    console.log('Uploading files:', files.map(f => f.name));
     console.log('FormData entries:', Array.from(formData.entries()));
     uploadMutation.mutate(formData);
+  };
+
+  const removeFile = (index: number) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleDelete = (id: number) => {
@@ -182,10 +165,10 @@ export default function SimpleTemplateManager() {
           >
             <CloudUpload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
             <p className="text-sm text-gray-600 mb-1">
-              {file ? file.name : "Drop files here or click to browse"}
+              {files.length > 0 ? `${files.length} file${files.length > 1 ? 's' : ''} selected` : "Drop files here or click to browse"}
             </p>
             <p className="text-xs text-gray-400">
-              Supports .docx, .doc, .txt files
+              Supports .docx, .doc, .txt files (multiple files allowed)
             </p>
           </div>
           
@@ -195,13 +178,34 @@ export default function SimpleTemplateManager() {
             accept=".docx,.doc,.txt"
             onChange={handleFileChange}
             className="hidden"
+            multiple
           />
           
 
           
+          {/* Selected files list */}
+          {files.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-gray-700">Selected files:</p>
+              {files.map((file, index) => (
+                <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                  <span className="text-sm text-gray-600">{file.name}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => removeFile(index)}
+                    className="h-6 w-6 p-0 text-red-500 hover:text-red-700"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+
           <Button 
             onClick={handleUpload} 
-            disabled={!file || uploadMutation.isPending}
+            disabled={files.length === 0 || uploadMutation.isPending}
             className="w-full bg-nhs-blue hover:bg-nhs-blue/90 text-white"
           >
             {uploadMutation.isPending ? (
@@ -209,7 +213,7 @@ export default function SimpleTemplateManager() {
             ) : (
               <Upload className="w-4 h-4 mr-2" />
             )}
-            Upload Template
+            Upload {files.length > 0 ? `${files.length} Template${files.length > 1 ? 's' : ''}` : 'Templates'}
           </Button>
         </CardContent>
       </Card>

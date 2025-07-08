@@ -174,80 +174,103 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/templates/upload', isAuthenticated, upload.single('template'), async (req: any, res) => {
+  app.post('/api/templates/upload', isAuthenticated, upload.array('templates', 10), async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       
       console.log("Upload request received:", {
         userId,
-        hasFile: !!req.file,
+        hasFiles: !!req.files,
+        fileCount: req.files ? req.files.length : 0,
         body: req.body,
         headers: req.headers['content-type']
       });
       
-      if (!req.file) {
-        console.log("No file in request");
-        return res.status(400).json({ message: "No template file provided" });
+      if (!req.files || req.files.length === 0) {
+        console.log("No files in request");
+        return res.status(400).json({ message: "No template files provided" });
       }
 
-      let content = '';
-      const fileName = req.file.originalname;
-      const fileExtension = fileName.split('.').pop()?.toLowerCase();
+      const processedTemplates = [];
+      const errors = [];
 
-      console.log(`Processing file: ${fileName}, type: ${fileExtension}, size: ${req.file.size}`);
+      for (const file of req.files) {
+        try {
+          let content = '';
+          const fileName = file.originalname;
+          const fileExtension = fileName.split('.').pop()?.toLowerCase();
 
-      // Handle different file types
-      if (fileExtension === 'docx') {
-        try {
-          const mammoth = await import('mammoth');
-          // Use convertToHtml to preserve formatting for rich text editor
-          const result = await mammoth.convertToHtml({ buffer: req.file.buffer });
-          content = result.value;
-          console.log("Successfully extracted HTML from docx:", content.substring(0, 100) + "...");
-        } catch (mammothError) {
-          console.error("Error extracting text from docx:", mammothError);
-          throw new Error("Failed to process docx file: " + mammothError.message);
-        }
-      } else if (fileExtension === 'doc') {
-        // For .doc files, use word-extractor library for proper parsing
-        try {
-          const WordExtractor = await import('word-extractor');
-          const extractor = new WordExtractor.default();
-          const extracted = await extractor.extract(req.file.buffer);
-          content = extracted.getBody();
-          console.log("Successfully extracted text from .doc file, content length:", content.length);
-        } catch (docError) {
-          console.error("Error extracting from .doc file:", docError);
-          // Fallback: manual text extraction using improved regex
-          const utf8Text = req.file.buffer.toString('utf-8');
-          const textMatches = utf8Text.match(/[\w\s\.\,\:\;\!\?\-\(\)\[\]]{8,}/g);
-          if (textMatches && textMatches.length > 0) {
-            content = textMatches
-              .filter(match => match.trim().length > 5) // Filter out short fragments
-              .join(' ')
-              .replace(/\s+/g, ' ')
-              .trim();
+          console.log(`Processing file: ${fileName}, type: ${fileExtension}, size: ${file.size}`);
+
+          // Handle different file types
+          if (fileExtension === 'docx') {
+            try {
+              const mammoth = await import('mammoth');
+              // Use convertToHtml to preserve formatting for rich text editor
+              const result = await mammoth.convertToHtml({ buffer: file.buffer });
+              content = result.value;
+              console.log("Successfully extracted HTML from docx:", content.substring(0, 100) + "...");
+            } catch (mammothError) {
+              console.error("Error extracting text from docx:", mammothError);
+              throw new Error("Failed to process docx file: " + mammothError.message);
+            }
+          } else if (fileExtension === 'doc') {
+            // For .doc files, use word-extractor library for proper parsing
+            try {
+              const WordExtractor = await import('word-extractor');
+              const extractor = new WordExtractor.default();
+              const extracted = await extractor.extract(file.buffer);
+              content = extracted.getBody();
+              console.log("Successfully extracted text from .doc file, content length:", content.length);
+            } catch (docError) {
+              console.error("Error extracting from .doc file:", docError);
+              // Fallback: manual text extraction using improved regex
+              const utf8Text = file.buffer.toString('utf-8');
+              const textMatches = utf8Text.match(/[\w\s\.\,\:\;\!\?\-\(\)\[\]]{8,}/g);
+              if (textMatches && textMatches.length > 0) {
+                content = textMatches
+                  .filter(match => match.trim().length > 5) // Filter out short fragments
+                  .join(' ')
+                  .replace(/\s+/g, ' ')
+                  .trim();
+              } else {
+                content = "Error: Could not extract readable text from this .doc file. Please try uploading as .docx or .txt format.";
+              }
+              console.log("Fallback .doc processing, content length:", content.length);
+            }
           } else {
-            content = "Error: Could not extract readable text from this .doc file. Please try uploading as .docx or .txt format.";
+            // For .txt files
+            content = file.buffer.toString('utf-8');
           }
-          console.log("Fallback .doc processing, content length:", content.length);
+
+          const template = await templateService.processUploadedTemplate(
+            userId,
+            fileName,
+            content,
+            req.body.folder || "General"
+          );
+
+          processedTemplates.push(template);
+        } catch (fileError) {
+          console.error(`Error processing file ${file.originalname}:`, fileError);
+          errors.push({
+            fileName: file.originalname,
+            error: fileError instanceof Error ? fileError.message : "Failed to process file"
+          });
         }
-      } else {
-        // For .txt files
-        content = req.file.buffer.toString('utf-8');
       }
 
-      const template = await templateService.processUploadedTemplate(
-        userId,
-        fileName,
-        content,
-        req.body.folder || "General"
-      );
-
-      res.json(template);
+      // Return success even if some files failed
+      res.json({
+        success: processedTemplates.length > 0,
+        processedCount: processedTemplates.length,
+        totalCount: req.files.length,
+        templates: processedTemplates,
+        errors: errors
+      });
     } catch (error) {
-      console.error("Error uploading template:", error);
-      const errorMessage = error instanceof Error ? error.message : "Failed to upload template";
+      console.error("Error uploading templates:", error);
+      const errorMessage = error instanceof Error ? error.message : "Failed to upload templates";
       res.status(500).json({ message: errorMessage });
     }
   });

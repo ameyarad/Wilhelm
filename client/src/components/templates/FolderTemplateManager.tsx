@@ -19,7 +19,7 @@ export default function FolderTemplateManager() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const [selectedFolder, setSelectedFolder] = useState<string>("General");
   const [newFolderName, setNewFolderName] = useState("");
@@ -52,29 +52,18 @@ export default function FolderTemplateManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({
-        title: "Template uploaded successfully",
-        description: "Your template has been processed and saved.",
-      });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
-      setFile(null);
+      setFiles([]);
       // Don't reset folder selection after upload
     },
     onError: (error) => {
       console.error('Upload error:', error);
       if (isUnauthorizedError(error)) {
-        toast({
-          title: "Authentication required",
-          description: "Please log in to upload templates.",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Upload failed",
-          description: error.message || "Failed to upload template. Please try again.",
-          variant: "destructive",
-        });
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
       }
+      // No toast messages
     },
   });
 
