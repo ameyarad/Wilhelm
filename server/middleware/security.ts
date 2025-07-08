@@ -8,6 +8,11 @@ import { Request, Response, NextFunction } from "express";
 
 // HTTPS Redirect Middleware
 export function enforceHTTPS(req: Request, res: Response, next: NextFunction) {
+  // Allow well-known endpoints for SSL validation
+  if (req.url.startsWith('/.well-known/') || req.url === '/health') {
+    return next();
+  }
+  
   if (process.env.NODE_ENV === "production" && !req.secure && req.get("x-forwarded-proto") !== "https") {
     const httpsUrl = `https://${req.get("host")}${req.url}`;
     return res.redirect(301, httpsUrl);
@@ -24,7 +29,7 @@ export const securityHeaders = helmet({
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:", "https:", "blob:"],
-      connectSrc: ["'self'", "https://api.groq.com", "https://apis.replit.com", "wss:"],
+      connectSrc: ["'self'", "https://api.groq.com", "https://apis.replit.com", "wss://*.replit.app", "wss://*.replit.dev"],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],

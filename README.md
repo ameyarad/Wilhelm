@@ -95,7 +95,7 @@ wilhelm/
    npm run dev
    ```
 
-The application will be available at `http://localhost:5173`
+The application will be available at `http://localhost:5173` (development) or `https://your-domain.replit.app` (production)
 
 ## 📚 Usage
 

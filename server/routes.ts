@@ -26,10 +26,46 @@ const upload = multer({
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoint (no auth required)
   app.get('/health', (req, res) => {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
+    
     res.json({ 
       status: 'ok', 
       timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV || 'development'
+      environment: process.env.NODE_ENV || 'development',
+      secure: isSecure,
+      host: req.get('host'),
+      protocol: req.protocol,
+      headers: {
+        'x-forwarded-proto': req.headers['x-forwarded-proto'],
+        'x-forwarded-for': req.headers['x-forwarded-for']
+      },
+      ssl: {
+        enforced: isProduction,
+        ready: isProduction ? isSecure : true
+      }
+    });
+  });
+
+  // SSL readiness check endpoint (no auth required)
+  app.get('/.well-known/ssl-check', (req, res) => {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
+    
+    res.set({
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
+    
+    res.json({
+      ssl_ready: true,
+      environment: process.env.NODE_ENV || 'development',
+      secure_connection: isSecure,
+      https_enforced: isProduction,
+      host: req.get('host'),
+      user_agent: req.get('user-agent'),
+      timestamp: new Date().toISOString()
     });
   });
 
