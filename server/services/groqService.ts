@@ -140,83 +140,37 @@ Guidelines:
         },
         {
           role: "user",
-          content: `Example 1:
-Template: Both lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable.
+          content: `Template: EXAMINATION: Chest X-Ray
+INDICATION: [indication]
+TECHNIQUE: [technique]
+FINDINGS: [findings]
+IMPRESSION: [impression]
 
-Dictated Findings: Chest x-ray. Consolidation in right lung middle zone.
-
-Generated Report:
-Consolidation in right lung middle zone. Rest of the lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable.`
+Dictated Findings: PA and lateral chest x-ray shows clear lungs, normal heart size, no pneumothorax`
         },
         {
           role: "assistant",
           content: `EXAMINATION: Chest X-Ray
 INDICATION: Clinical evaluation
 TECHNIQUE: PA and lateral chest radiographs
-FINDINGS: The lungs are clear bilaterally without consolidation, effusion, or pneumothorax. Cardiac silhouette is normal in size and configuration. Mediastinal contours are unremarkable.
+FINDINGS: The lungs are clear bilaterally without consolidation, effusion, or pneumothorax. Cardiac silhouette is normal in size and configuration.
 IMPRESSION: Normal chest radiograph.`
         },
         {
           role: "user",
-          content: `Example 2:
-Template: CT Head
-Template Structure:
-EXAMINATION: CT Head without contrast
+          content: `Template: EXAMINATION: CT Head without contrast
 CLINICAL HISTORY: [history]
-TECHNIQUE: [technique]
 FINDINGS: [findings]
 IMPRESSION: [impression]
 
-Dictated Findings: CT head without contrast shows no acute intracranial abnormality, ventricles normal size
-
-Generated Report:
-EXAMINATION: CT Head without contrast
-CLINICAL HISTORY: Clinical evaluation
-TECHNIQUE: Axial CT images of the head were obtained without intravenous contrast
-FINDINGS: No acute intracranial hemorrhage, mass effect, or midline shift. The ventricular system is normal in size and configuration. Gray-white matter differentiation is preserved. No abnormal extra-axial collections.
-IMPRESSION: No acute intracranial abnormality.`
+Dictated Findings: CT head shows no acute abnormality, ventricles normal size`
         },
         {
           role: "assistant",
           content: `EXAMINATION: CT Head without contrast
 CLINICAL HISTORY: Clinical evaluation
-TECHNIQUE: Axial CT images of the head were obtained without intravenous contrast
-FINDINGS: No acute intracranial hemorrhage, mass effect, or midline shift. The ventricular system is normal in size and configuration. Gray-white matter differentiation is preserved. No abnormal extra-axial collections.
+FINDINGS: No acute intracranial hemorrhage, mass effect, or midline shift. The ventricular system is normal in size and configuration.
 IMPRESSION: No acute intracranial abnormality.`
-        },
-        {
-          role: "user",
-          content: `Example 3:
-Template: Abdominal Ultrasound
-Template Structure:
-EXAMINATION: Abdominal Ultrasound
-INDICATION: [indication]
-FINDINGS:
-Liver: [liver findings]
-Gallbladder: [gb findings]
-Kidneys: [kidney findings]
-IMPRESSION: [impression]
-
-Dictated Findings: Liver normal size and echotexture, gallbladder normal, kidneys normal bilaterally
-
-Generated Report:
-EXAMINATION: Abdominal Ultrasound
-INDICATION: Clinical evaluation
-FINDINGS:
-Liver: Normal size and echotexture without focal lesions
-Gallbladder: Normal wall thickness, no stones or sludge
-Kidneys: Normal size and echotexture bilaterally, no hydronephrosis or stones
-IMPRESSION: Normal abdominal ultrasound.`
-        },
-        {
-          role: "assistant",
-          content: `EXAMINATION: Abdominal Ultrasound
-INDICATION: Clinical evaluation
-FINDINGS:
-Liver: Normal size and echotexture without focal lesions
-Gallbladder: Normal wall thickness, no stones or sludge
-Kidneys: Normal size and echotexture bilaterally, no hydronephrosis or stones
-IMPRESSION: Normal abdominal ultrasound.`
         },
         {
           role: "user",
