@@ -64,7 +64,7 @@ export default function TemplateUpload({ compact = false, defaultFolder }: Templ
       'application/msword',
       'text/plain'
     ];
-    
+
     if (!allowedTypes.includes(selectedFile.type)) {
       toast({
         title: "Invalid File Type",
@@ -73,14 +73,14 @@ export default function TemplateUpload({ compact = false, defaultFolder }: Templ
       });
       return;
     }
-    
+
     setFile(selectedFile);
   };
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setDragOver(false);
-    
+
     const droppedFile = e.dataTransfer.files[0];
     if (droppedFile) {
       handleFileSelect(droppedFile);
@@ -118,7 +118,7 @@ export default function TemplateUpload({ compact = false, defaultFolder }: Templ
     formData.append('template', file);
     formData.append('category', category);
     formData.append('folder', folder);
-    
+
     uploadMutation.mutate({ formData, folder });
   };
 
@@ -145,15 +145,16 @@ export default function TemplateUpload({ compact = false, defaultFolder }: Templ
             .docx, .doc, .txt files
           </p>
         </div>
-        
+
         <input
           id="file-input"
           type="file"
           accept=".docx,.doc,.txt"
           onChange={handleFileChange}
           className="hidden"
+          multiple
         />
-        
+
         <Select value={category} onValueChange={setCategory}>
           <SelectTrigger className="h-8 text-sm">
             <SelectValue placeholder="Select category" />
@@ -166,7 +167,7 @@ export default function TemplateUpload({ compact = false, defaultFolder }: Templ
             <SelectItem value="Custom">Custom</SelectItem>
           </SelectContent>
         </Select>
-        
+
         <Button 
           onClick={handleUpload} 
           disabled={!file || !category || uploadMutation.isPending}
@@ -211,15 +212,16 @@ export default function TemplateUpload({ compact = false, defaultFolder }: Templ
             Supports .docx, .doc, .txt files
           </p>
         </div>
-        
+
         <input
           id="file-input-full"
           type="file"
           accept=".docx,.doc,.txt"
           onChange={handleFileChange}
           className="hidden"
+          multiple
         />
-        
+
         <div className="space-y-2">
           <Label htmlFor="category">Category</Label>
           <Select value={category} onValueChange={setCategory}>
@@ -235,7 +237,7 @@ export default function TemplateUpload({ compact = false, defaultFolder }: Templ
             </SelectContent>
           </Select>
         </div>
-        
+
         <Button 
           onClick={handleUpload} 
           disabled={!file || !category || uploadMutation.isPending}
