@@ -4,7 +4,6 @@ import { useAuth } from "@/hooks/useAuth";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import { 
-  Mail, 
   MessageSquare, 
   Github,
   Globe
@@ -44,42 +43,20 @@ export default function Contact() {
 
             {/* Contact Methods */}
             <div className="grid md:grid-cols-2 gap-6 mb-8">
-              {/* Email */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Mail className="w-6 h-6 text-nhs-blue" />
-                    <span>Email</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-nhs-dark-grey/80 leading-relaxed mb-4">
-                    For technical support, feature requests, or general inquiries about Wilhelm.
-                  </p>
-                  <Button 
-                    className="w-full bg-nhs-blue hover:bg-nhs-dark-blue text-white"
-                    onClick={() => window.open('mailto:ameya005@gmail.com?subject=Wilhelm%20Inquiry', '_blank')}
-                  >
-                    <Mail className="w-4 h-4 mr-2" />
-                    Send Email
-                  </Button>
-                </CardContent>
-              </Card>
-
               {/* Feedback Form */}
-              <Card>
+              <Card className="col-span-2">
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <MessageSquare className="w-6 h-6 text-nhs-blue" />
-                    <span className="text-center">Contact And Send Feedback</span>
+                    <span>Send Feedback</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-nhs-dark-grey/80 leading-relaxed mb-4">
-                    Share your experience, report bugs, or suggest improvements.
+                    Share your experience, report bugs, or suggest improvements. Your feedback helps make Wilhelm better.
                   </p>
                   <form 
-                    action="https://formspree.io/f/xanydqpw" 
+                    action="https://formspree.io/ameya005@gmail.com" 
                     method="POST" 
                     className="space-y-4"
                   >
@@ -103,10 +80,23 @@ export default function Contact() {
                       <input
                         type="email"
                         id="email"
-                        name="email"
+                        name="_replyto"
                         required
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-nhs-blue focus:border-transparent"
                         placeholder="your@email.com"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="subject" className="block text-sm font-medium text-nhs-dark-grey mb-1">
+                        Subject
+                      </label>
+                      <input
+                        type="text"
+                        id="subject"
+                        name="_subject"
+                        required
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-nhs-blue focus:border-transparent"
+                        placeholder="Wilhelm Feedback"
                       />
                     </div>
                     <div>
@@ -116,12 +106,13 @@ export default function Contact() {
                       <textarea
                         id="message"
                         name="message"
-                        rows={4}
+                        rows={6}
                         required
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-nhs-blue focus:border-transparent resize-none"
                         placeholder="Your feedback, bug report, or feature request..."
                       ></textarea>
                     </div>
+                    <input type="hidden" name="_next" value="https://wilhelm-ai.replit.app/contact" />
                     <Button 
                       type="submit"
                       className="w-full bg-nhs-blue hover:bg-nhs-dark-blue text-white"
