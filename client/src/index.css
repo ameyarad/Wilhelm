@@ -42,11 +42,15 @@
   border: 1px solid hsl(214, 32%, 91%);
   border-top: none;
   border-radius: 0 0 8px 8px;
-  font-family: inherit;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
   line-height: 1.6;
   overflow-y: auto;
   height: 350px;
+  /* Enhanced cross-platform text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .ql-toolbar {
@@ -68,10 +72,16 @@
 .ql-editor {
   padding: 16px;
   min-height: 300px;
-  font-family: inherit;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
   line-height: 1.6;
   color: hsl(210, 29%, 24%);
+  /* Enhanced cross-platform text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* Consistent spacing across platforms */
+  letter-spacing: 0.025em;
 }
 
 .ql-editor p {

@@ -287,27 +287,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
               const WordExtractor = await import('word-extractor');
               const extractor = new WordExtractor.default();
               const extracted = await extractor.extract(file.buffer);
-              content = extracted.getBody();
-              console.log("Successfully extracted text from .doc file, content length:", content.length);
+              
+              // Get the raw text content
+              let rawContent = extracted.getBody();
+              
+              // Convert plain text to HTML to preserve basic formatting
+              content = rawContent
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>')
+                .replace(/^/, '<p>')
+                .replace(/$/, '</p>')
+                .replace(/<p><\/p>/g, ''); // Remove empty paragraphs
+              
+              console.log("Successfully extracted and formatted text from .doc file, content length:", content.length);
             } catch (docError) {
               console.error("Error extracting from .doc file:", docError);
-              // Fallback: manual text extraction using improved regex
+              // Fallback: manual text extraction using improved regex with basic formatting
               const utf8Text = file.buffer.toString('utf-8');
               const textMatches = utf8Text.match(/[\w\s\.\,\:\;\!\?\-\(\)\[\]]{8,}/g);
               if (textMatches && textMatches.length > 0) {
-                content = textMatches
+                let rawContent = textMatches
                   .filter(match => match.trim().length > 5) // Filter out short fragments
                   .join(' ')
                   .replace(/\s+/g, ' ')
                   .trim();
+                
+                // Convert to HTML formatting
+                content = rawContent
+                  .replace(/\n\n/g, '</p><p>')
+                  .replace(/\n/g, '<br>')
+                  .replace(/^/, '<p>')
+                  .replace(/$/, '</p>')
+                  .replace(/<p><\/p>/g, '');
               } else {
-                content = "Error: Could not extract readable text from this .doc file. Please try uploading as .docx or .txt format.";
+                content = "<p>Error: Could not extract readable text from this .doc file. Please try uploading as .docx or .txt format.</p>";
               }
-              console.log("Fallback .doc processing, content length:", content.length);
+              console.log("Fallback .doc processing with formatting, content length:", content.length);
             }
           } else {
-            // For .txt files
-            content = file.buffer.toString('utf-8');
+            // For .txt files, convert to HTML to preserve basic formatting
+            const rawContent = file.buffer.toString('utf-8');
+            content = rawContent
+              .replace(/\n\n/g, '</p><p>')
+              .replace(/\n/g, '<br>')
+              .replace(/^/, '<p>')
+              .replace(/$/, '</p>')
+              .replace(/<p><\/p>/g, ''); // Remove empty paragraphs
           }
 
           const template = await templateService.processUploadedTemplate(

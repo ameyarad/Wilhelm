@@ -307,7 +307,7 @@ export function securityErrorHandler(err: any, req: Request, res: Response, next
 export const fileUploadSecurity = {
   limits: {
     fileSize: 50 * 1024 * 1024, // 50MB max file size
-    files: 5 // Max 5 files per upload
+    // No file count limit - users can upload unlimited templates
   },
   fileFilter: (req: Request, file: Express.Multer.File, cb: Function) => {
     // Only allow specific file types

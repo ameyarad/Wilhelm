@@ -109,6 +109,16 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
+- July 08, 2025. Removed template upload limit and enhanced document formatting
+  - Removed 5 file limit restriction on template uploads - users can now upload unlimited templates
+  - Enhanced document processing to preserve formatting across all platforms (Windows, macOS, Linux)
+  - Improved .doc file processing to convert plain text to HTML format preserving line breaks and structure
+  - Enhanced .docx file processing to maintain rich HTML formatting from mammoth conversion
+  - Improved .txt file processing to preserve basic line breaks and paragraph structure
+  - Added cross-platform font rendering improvements with system fonts for consistent display
+  - Enhanced CSS with -webkit-font-smoothing and -moz-osx-font-smoothing for better text rendering
+  - Added text-rendering: optimizeLegibility for improved readability across operating systems
+  - Fixed formatting preservation issues particularly on macOS through enhanced HTML conversion
 - July 08, 2025. Mobile responsive UI improvements and terminology updates
   - Fixed mobile responsive UI issues with rich text editor buttons overlapping
   - Made save/cancel buttons stack vertically on mobile devices with proper spacing
