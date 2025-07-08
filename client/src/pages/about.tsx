@@ -44,6 +44,19 @@ export default function About() {
               <p className="text-nhs-dark-grey/70 text-lg text-center">Free And Open Source Medical Imaging Reporting AI Agent</p>
             </div>
 
+            {/* Wilhelm Roentgen Information */}
+            <Card className="mb-8 border-nhs-dark-blue bg-nhs-pale-blue">
+              <CardContent className="p-4 md:p-6">
+                <div className="text-nhs-dark-blue">
+                  <p className="font-medium text-center text-sm md:text-base">
+                    Wilhelm is named after Wilhelm Conrad Roentgen, the Nobel prize winning physicist who discovered X-rays. 
+                    Medical imaging and radiology in the 21st century stands on his shoulders. The Wilhelm logo is based on 
+                    the first ever X-ray (of Wilhelm's wife Bertha's hand) and meant to represent human - AI collaboration.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Core Workflow */}
             <Card className="mb-8">
               <CardHeader>
