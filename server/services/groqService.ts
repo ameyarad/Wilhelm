@@ -142,35 +142,41 @@ Guidelines:
           role: "user",
           content: `Template: EXAMINATION: Chest X-Ray
 INDICATION: [indication]
-TECHNIQUE: [technique]
+TECHNIQUE: [technique]  
 FINDINGS: [findings]
 IMPRESSION: [impression]
 
-Dictated Findings: PA and lateral chest x-ray shows clear lungs, normal heart size, no pneumothorax`
-        },
-        {
-          role: "assistant",
-          content: `EXAMINATION: Chest X-Ray
+Dictated Findings: PA and lateral chest x-ray shows clear lungs, normal heart size, no pneumothorax
+
+Expected Output:
+EXAMINATION: Chest X-Ray
 INDICATION: Clinical evaluation
 TECHNIQUE: PA and lateral chest radiographs
 FINDINGS: The lungs are clear bilaterally without consolidation, effusion, or pneumothorax. Cardiac silhouette is normal in size and configuration.
 IMPRESSION: Normal chest radiograph.`
         },
         {
+          role: "assistant",
+          content: "I understand the format. I will generate a complete radiology report by filling in the template structure with the dictated findings, using professional medical terminology."
+        },
+        {
           role: "user",
           content: `Template: EXAMINATION: CT Head without contrast
 CLINICAL HISTORY: [history]
-FINDINGS: [findings]
+FINDINGS: [findings] 
 IMPRESSION: [impression]
 
-Dictated Findings: CT head shows no acute abnormality, ventricles normal size`
-        },
-        {
-          role: "assistant",
-          content: `EXAMINATION: CT Head without contrast
+Dictated Findings: CT head shows no acute abnormality, ventricles normal size
+
+Expected Output:
+EXAMINATION: CT Head without contrast
 CLINICAL HISTORY: Clinical evaluation
 FINDINGS: No acute intracranial hemorrhage, mass effect, or midline shift. The ventricular system is normal in size and configuration.
 IMPRESSION: No acute intracranial abnormality.`
+        },
+        {
+          role: "assistant", 
+          content: "I will merge the dictated findings into the template structure with appropriate medical terminology and formatting."
         },
         {
           role: "user",
