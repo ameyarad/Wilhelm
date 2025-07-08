@@ -108,10 +108,10 @@ export default function Reports() {
       
       await navigator.clipboard.writeText(plainText);
       setError("");
-      console.log("Report copied to clipboard");
+      // Report copied successfully
     } catch (error) {
       setError("Failed to copy report content.");
-      console.error("Copy failed:", error);
+      // Copy operation failed
     }
   };
 

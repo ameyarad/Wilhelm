@@ -131,8 +131,7 @@ export default function FolderTemplateManager() {
     const formData = new FormData();
     formData.append('template', file);
     
-    console.log('Uploading file:', file.name, file.size, file.type);
-    console.log('FormData entries:', Array.from(formData.entries()));
+    // Uploading template file
     
     const folder = showNewFolder ? newFolderName : selectedFolder;
     uploadMutation.mutate({ formData, folder });

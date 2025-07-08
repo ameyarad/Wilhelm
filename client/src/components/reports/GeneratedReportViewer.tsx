@@ -93,13 +93,13 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
     },
     onSuccess: () => {
       setError("");
-      console.log("Report saved successfully");
+      // Report saved successfully
       queryClient.invalidateQueries({ queryKey: ['/api/reports'] });
       onClose();
     },
     onError: (error) => {
       setError("Failed to save report");
-      console.error("Save error:", error);
+      // Save operation failed
     },
   });
 
@@ -176,10 +176,10 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
       
       await navigator.clipboard.writeText(plainText);
       setError("");
-      console.log("Report copied to clipboard");
+      // Report copied to clipboard
     } catch (error) {
       setError("Failed to copy report");
-      console.error("Copy failed:", error);
+      // Copy operation failed
     }
   };
 

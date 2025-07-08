@@ -62,12 +62,12 @@ export function useVoiceRecording() {
 
       mediaRecorder.start(); // Record continuously without chunking
       setIsRecording(true);
-      console.log("Recording started");
+      // Recording started successfully
       
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to start recording";
       setError(errorMessage);
-      console.error("Recording error:", errorMessage);
+      // Recording initialization failed
     }
   }, []);
 
@@ -75,7 +75,7 @@ export function useVoiceRecording() {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
-      console.log("Recording stopped, processing audio...");
+      // Recording stopped, processing audio
     }
   }, [isRecording]);
 
@@ -104,12 +104,12 @@ export function useVoiceRecording() {
 
       const result = await response.json();
       setTranscript(result.text.trim()); // Trim whitespace
-      console.log("Transcription completed");
+      // Transcription completed successfully
       
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to transcribe audio";
       setError(errorMessage);
-      console.error("Transcription error:", errorMessage);
+      // Transcription failed
     }
   }, []);
 

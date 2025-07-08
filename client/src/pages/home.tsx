@@ -62,7 +62,7 @@ export default function Home() {
         return;
       }
       setError("Failed to generate report. Please try again.");
-      console.error("Report generation error:", error);
+      // Report generation failed
     },
   });
 
@@ -76,7 +76,7 @@ export default function Home() {
   useEffect(() => {
     if (recordingError) {
       setError("Recording error: " + recordingError);
-      console.error("Recording error:", recordingError);
+      // Recording failed
     }
   }, [recordingError]);
 
