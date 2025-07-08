@@ -1,5 +1,4 @@
 import { useState, useCallback, useRef } from "react";
-import { useToast } from "@/hooks/use-toast";
 
 export function useVoiceRecording() {
   const [isRecording, setIsRecording] = useState(false);
@@ -7,7 +6,6 @@ export function useVoiceRecording() {
   const [error, setError] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
-  const { toast } = useToast();
 
   const startRecording = useCallback(async () => {
     try {
@@ -64,33 +62,22 @@ export function useVoiceRecording() {
 
       mediaRecorder.start(); // Record continuously without chunking
       setIsRecording(true);
+      console.log("Recording started");
       
-      toast({
-        title: "Recording Started",
-        description: "Speak clearly into your microphone",
-      });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to start recording";
       setError(errorMessage);
-      toast({
-        title: "Recording Error",
-        description: errorMessage,
-        variant: "destructive",
-      });
+      console.error("Recording error:", errorMessage);
     }
-  }, [toast]);
+  }, []);
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
-      
-      toast({
-        title: "Recording Stopped",
-        description: "Processing your audio...",
-      });
+      console.log("Recording stopped, processing audio...");
     }
-  }, [isRecording, toast]);
+  }, [isRecording]);
 
   const transcribeAudio = useCallback(async (audioBlob: Blob) => {
     try {
@@ -117,21 +104,14 @@ export function useVoiceRecording() {
 
       const result = await response.json();
       setTranscript(result.text.trim()); // Trim whitespace
+      console.log("Transcription completed");
       
-      toast({
-        title: "Transcription Complete",
-        description: "Your audio has been converted to text",
-      });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to transcribe audio";
       setError(errorMessage);
-      toast({
-        title: "Transcription Error",
-        description: errorMessage,
-        variant: "destructive",
-      });
+      console.error("Transcription error:", errorMessage);
     }
-  }, [toast]);
+  }, []);
 
   const clearTranscript = useCallback(() => {
     setTranscript("");

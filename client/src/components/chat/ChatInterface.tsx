@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { useVoiceRecording } from "@/hooks/useVoiceRecording";
 import { apiRequest } from "@/lib/queryClient";
@@ -22,8 +21,8 @@ import {
 export default function ChatInterface() {
   const [message, setMessage] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
   const { user } = useAuth();
   const queryClient = useQueryClient();
   
@@ -54,21 +53,13 @@ export default function ChatInterface() {
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
+        setError("Unauthorized access. Redirecting to login...");
         setTimeout(() => {
           window.location.href = "/api/login";
         }, 500);
         return;
       }
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
-        variant: "destructive",
-      });
+      setError("Failed to send message. Please try again.");
     },
   });
 
@@ -95,21 +86,13 @@ export default function ChatInterface() {
     onError: (error) => {
       setIsProcessing(false);
       if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
+        setError("Unauthorized access. Redirecting to login...");
         setTimeout(() => {
           window.location.href = "/api/login";
         }, 500);
         return;
       }
-      toast({
-        title: "Error",
-        description: "Failed to generate report. Please try again.",
-        variant: "destructive",
-      });
+      setError("Failed to generate report. Please try again.");
     },
   });
 
@@ -124,13 +107,9 @@ export default function ChatInterface() {
 
   useEffect(() => {
     if (recordingError) {
-      toast({
-        title: "Recording Error",
-        description: recordingError,
-        variant: "destructive",
-      });
+      setError(recordingError);
     }
-  }, [recordingError, toast]);
+  }, [recordingError]);
 
   // Auto-scroll to bottom
   useEffect(() => {

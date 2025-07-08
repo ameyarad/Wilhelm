@@ -1,0 +1,311 @@
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import { body, validationResult } from "express-validator";
+import cors from "cors";
+import compression from "compression";
+import hpp from "hpp";
+import { Request, Response, NextFunction } from "express";
+
+// HTTPS Redirect Middleware
+export function enforceHTTPS(req: Request, res: Response, next: NextFunction) {
+  if (process.env.NODE_ENV === "production" && !req.secure && req.get("x-forwarded-proto") !== "https") {
+    const httpsUrl = `https://${req.get("host")}${req.url}`;
+    return res.redirect(301, httpsUrl);
+  }
+  next();
+}
+
+// Security Headers Configuration
+export const securityHeaders = helmet({
+  contentSecurityPolicy: process.env.NODE_ENV === "production" ? {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://apis.replit.com", "https://replit.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https:", "blob:"],
+      connectSrc: ["'self'", "https://api.groq.com", "https://apis.replit.com", "wss:"],
+      frameSrc: ["'none'"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'"]
+    }
+  } : false, // Disable CSP in development to avoid Vite conflicts
+  crossOriginEmbedderPolicy: false,
+  hsts: process.env.NODE_ENV === "production" ? {
+    maxAge: 31536000,
+    includeSubDomains: true,
+    preload: true
+  } : false,
+  noSniff: true,
+  frameguard: { action: 'deny' },
+  xssFilter: true,
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" }
+});
+
+// CORS Configuration
+export const corsOptions = cors({
+  origin: process.env.NODE_ENV === "production" 
+    ? function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        const allowedOrigins = [
+          /\.replit\.dev$/,
+          /\.replit\.app$/,
+          /^https:\/\/[a-zA-Z0-9\-]+\.replit\.dev$/,
+          /^https:\/\/[a-zA-Z0-9\-]+\.replit\.app$/
+        ];
+        
+        const isAllowed = allowedOrigins.some(pattern => {
+          if (pattern instanceof RegExp) {
+            return pattern.test(origin);
+          }
+          return pattern === origin;
+        });
+        
+        if (isAllowed) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      }
+    : true, // Allow all origins in development,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: [
+    'Origin',
+    'X-Requested-With',
+    'Content-Type',
+    'Accept',
+    'Authorization',
+    'Cache-Control',
+    'Pragma'
+  ],
+  exposedHeaders: ['Content-Range', 'X-Content-Range'],
+  maxAge: 86400 // 24 hours
+});
+
+// Rate Limiting
+export const generalRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // Limit each IP to 1000 requests per windowMs
+  message: {
+    error: "Too many requests from this IP, please try again later.",
+    retryAfter: "15 minutes"
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: (req) => {
+    // Skip rate limiting for health checks and static files
+    return req.path === '/health' || req.path.startsWith('/assets/');
+  }
+});
+
+export const apiRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 API requests per windowMs
+  message: {
+    error: "Too many API requests from this IP, please try again later.",
+    retryAfter: "15 minutes"
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+export const aiRateLimit = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 10, // Limit each IP to 10 AI requests per minute
+  message: {
+    error: "Too many AI requests from this IP, please slow down.",
+    retryAfter: "1 minute"
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+export const uploadRateLimit = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5, // Limit each IP to 5 uploads per minute
+  message: {
+    error: "Too many upload requests from this IP, please slow down.",
+    retryAfter: "1 minute"
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+// Input Validation Middleware
+export const validateTextInput = [
+  body('content')
+    .trim()
+    .isLength({ min: 1, max: 50000 })
+    .escape()
+    .withMessage('Content must be between 1 and 50000 characters'),
+  
+  body('title')
+    .optional()
+    .trim()
+    .isLength({ min: 1, max: 200 })
+    .escape()
+    .withMessage('Title must be between 1 and 200 characters'),
+];
+
+export const validateReportInput = [
+  body('findings')
+    .trim()
+    .isLength({ min: 1, max: 10000 })
+    .escape()
+    .withMessage('Findings must be between 1 and 10000 characters'),
+];
+
+export const validateIdParam = [
+  body('id')
+    .isInt({ min: 1 })
+    .withMessage('ID must be a positive integer'),
+];
+
+// Validation Error Handler
+export function handleValidationErrors(req: Request, res: Response, next: NextFunction) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      error: "Validation failed",
+      details: errors.array()
+    });
+  }
+  next();
+}
+
+// Request Sanitization
+export function sanitizeRequest(req: Request, res: Response, next: NextFunction) {
+  // Remove null bytes and other dangerous characters
+  const sanitizeString = (str: string): string => {
+    if (typeof str !== 'string') return str;
+    return str
+      .replace(/\0/g, '') // Remove null bytes
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '') // Remove control characters
+      .trim();
+  };
+
+  const sanitizeObject = (obj: any): any => {
+    if (typeof obj === 'string') {
+      return sanitizeString(obj);
+    }
+    if (Array.isArray(obj)) {
+      return obj.map(sanitizeObject);
+    }
+    if (typeof obj === 'object' && obj !== null) {
+      const sanitized: any = {};
+      for (const [key, value] of Object.entries(obj)) {
+        sanitized[sanitizeString(key)] = sanitizeObject(value);
+      }
+      return sanitized;
+    }
+    return obj;
+  };
+
+  if (req.body) {
+    req.body = sanitizeObject(req.body);
+  }
+  if (req.query) {
+    req.query = sanitizeObject(req.query);
+  }
+  if (req.params) {
+    req.params = sanitizeObject(req.params);
+  }
+
+  next();
+}
+
+// Additional Security Middleware
+export const additionalSecurity = [
+  compression(), // Gzip compression
+  hpp(), // HTTP Parameter Pollution protection
+  
+  // X-Content-Type-Options
+  (req: Request, res: Response, next: NextFunction) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    next();
+  },
+  
+  // X-Frame-Options
+  (req: Request, res: Response, next: NextFunction) => {
+    res.setHeader('X-Frame-Options', 'DENY');
+    next();
+  },
+  
+  // X-XSS-Protection
+  (req: Request, res: Response, next: NextFunction) => {
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    next();
+  },
+  
+  // Permissions Policy
+  (req: Request, res: Response, next: NextFunction) => {
+    res.setHeader('Permissions-Policy', 
+      'geolocation=(), microphone=(self), camera=(), payment=(), usb=()');
+    next();
+  },
+  
+  // Secure session cookies
+  (req: Request, res: Response, next: NextFunction) => {
+    if (process.env.NODE_ENV === 'production') {
+      res.cookie = new Proxy(res.cookie, {
+        apply: function(target, thisArg, argumentsList) {
+          if (argumentsList[2]) {
+            argumentsList[2] = {
+              ...argumentsList[2],
+              secure: true,
+              httpOnly: true,
+              sameSite: 'strict'
+            };
+          }
+          return target.apply(thisArg, argumentsList);
+        }
+      });
+    }
+    next();
+  }
+];
+
+// Error handling middleware
+export function securityErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
+  // Don't expose error details in production
+  if (process.env.NODE_ENV === 'production') {
+    console.error('Security error:', err);
+    return res.status(500).json({ 
+      error: 'Internal server error',
+      timestamp: new Date().toISOString(),
+      requestId: req.headers['x-request-id'] || 'unknown'
+    });
+  }
+  
+  next(err);
+}
+
+// File upload security
+export const fileUploadSecurity = {
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB max file size
+    files: 5 // Max 5 files per upload
+  },
+  fileFilter: (req: Request, file: Express.Multer.File, cb: Function) => {
+    // Only allow specific file types
+    const allowedMimes = [
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+      'application/msword', // .doc
+      'text/plain', // .txt
+      'audio/webm', // .webm
+      'audio/mp3', // .mp3
+      'audio/wav', // .wav
+      'audio/mpeg' // .mp3
+    ];
+    
+    if (allowedMimes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only documents and audio files are allowed.'));
+    }
+  }
+};

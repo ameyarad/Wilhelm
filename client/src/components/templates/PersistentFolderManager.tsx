@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -32,7 +32,7 @@ import { Template, Folder as FolderType } from "@/../../shared/schema";
 
 export default function PersistentFolderManager() {
   const { user } = useAuth();
-  const { toast } = useToast();
+  const [error, setError] = useState("");
   const queryClient = useQueryClient();
   
   const [file, setFile] = useState<File | null>(null);
@@ -75,15 +75,12 @@ export default function PersistentFolderManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({ title: "Template uploaded successfully" });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
       setFile(null);
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
-        toast({ title: "Authentication required", variant: "destructive" });
       } else {
-        toast({ title: "Upload failed", description: error.message, variant: "destructive" });
       }
     },
   });
@@ -95,13 +92,11 @@ export default function PersistentFolderManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({ title: "Folder created successfully" });
       queryClient.invalidateQueries({ queryKey: ['/api/folders'] });
       setNewFolderName("");
       setShowNewFolder(false);
     },
     onError: (error) => {
-      toast({ title: "Failed to create folder", description: error.message, variant: "destructive" });
     },
   });
 
@@ -112,13 +107,11 @@ export default function PersistentFolderManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({ title: "Template moved successfully" });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
       setDraggedTemplate(null);
       setDraggedOverFolder(null);
     },
     onError: (error) => {
-      toast({ title: "Move failed", description: error.message, variant: "destructive" });
     },
   });
 
@@ -129,11 +122,9 @@ export default function PersistentFolderManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({ title: "Template deleted successfully" });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
     },
     onError: (error) => {
-      toast({ title: "Delete failed", description: error.message, variant: "destructive" });
     },
   });
 
@@ -144,12 +135,10 @@ export default function PersistentFolderManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({ title: "Folder deleted", description: "Templates moved to General folder" });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
       queryClient.invalidateQueries({ queryKey: ['/api/folders'] });
     },
     onError: (error) => {
-      toast({ title: "Delete failed", description: error.message, variant: "destructive" });
     },
   });
 
@@ -177,11 +166,6 @@ export default function PersistentFolderManager() {
     ];
     
     if (!allowedTypes.includes(selectedFile.type)) {
-      toast({
-        title: "Invalid file type",
-        description: "Please select a .docx, .doc, or .txt file.",
-        variant: "destructive",
-      });
       return;
     }
     

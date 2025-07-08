@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,11 +27,11 @@ import {
 export default function Home() {
   const { user: userData, isAuthenticated, isLoading } = useAuth();
   const user = userData as User;
-  const { toast } = useToast();
   const [message, setMessage] = useState("");
   const [generatedReport, setGeneratedReport] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isReportViewerOpen, setIsReportViewerOpen] = useState(false);
+  const [error, setError] = useState("");
   
   const {
     isRecording,
@@ -52,29 +51,19 @@ export default function Home() {
       setGeneratedReport(result.report);
       setIsProcessing(false);
       setIsReportViewerOpen(true);
-      toast({
-        title: "Report Generated",
-        description: `Using template: ${result.templateUsed}`,
-      });
+      setError("");
+      console.log("Report generated successfully using template:", result.templateUsed);
     },
     onError: (error) => {
       setIsProcessing(false);
       if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
         setTimeout(() => {
           window.location.href = "/api/login";
         }, 500);
         return;
       }
-      toast({
-        title: "Error",
-        description: "Failed to generate report. Please try again.",
-        variant: "destructive",
-      });
+      setError("Failed to generate report. Please try again.");
+      console.error("Report generation error:", error);
     },
   });
 
@@ -87,39 +76,28 @@ export default function Home() {
 
   useEffect(() => {
     if (recordingError) {
-      toast({
-        title: "Recording Error",
-        description: recordingError,
-        variant: "destructive",
-      });
+      setError("Recording error: " + recordingError);
+      console.error("Recording error:", recordingError);
     }
-  }, [recordingError, toast]);
+  }, [recordingError]);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      toast({
-        title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
-        variant: "destructive",
-      });
       setTimeout(() => {
         window.location.href = "/api/login";
       }, 500);
       return;
     }
-  }, [isAuthenticated, isLoading, toast]);
+  }, [isAuthenticated, isLoading]);
 
   const handleGenerateReport = () => {
     if (!message.trim()) {
-      toast({
-        title: "No Findings",
-        description: "Please enter or dictate your findings first.",
-        variant: "destructive",
-      });
+      setError("Please enter or dictate your findings first.");
       return;
     }
 
     setIsProcessing(true);
+    setError("");
     generateReportMutation.mutate(message.trim());
   };
 
@@ -134,16 +112,11 @@ export default function Home() {
   const handleCopyReport = async () => {
     try {
       await navigator.clipboard.writeText(generatedReport);
-      toast({
-        title: "Copied",
-        description: "Report copied to clipboard",
-      });
+      setError("");
+      console.log("Report copied to clipboard");
     } catch (error) {
-      toast({
-        title: "Copy Failed",
-        description: "Failed to copy report",
-        variant: "destructive",
-      });
+      setError("Failed to copy report");
+      console.error("Copy failed:", error);
     }
   };
 
@@ -170,6 +143,25 @@ export default function Home() {
         <main className="flex-1 p-4 md:p-6 overflow-y-auto flex items-center justify-center">
           <div className="w-full max-w-4xl space-y-4 md:space-y-6">
 
+
+            {/* Error Display */}
+            {error && (
+              <Card className="border-red-200 bg-red-50">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-2 text-red-700">
+                    <span className="text-sm font-medium">{error}</span>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => setError("")}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      ×
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Chat Interface */}
             <Card>

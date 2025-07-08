@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +16,7 @@ import { Template } from "@/../../shared/schema";
 
 export default function FolderTemplateManager() {
   const { user } = useAuth();
-  const { toast } = useToast();
+  const [error, setError] = useState("");
   const queryClient = useQueryClient();
   
   const [files, setFiles] = useState<File[]>([]);
@@ -63,7 +63,6 @@ export default function FolderTemplateManager() {
           window.location.href = "/api/login";
         }, 500);
       }
-      // No toast messages
     },
   });
 
@@ -74,19 +73,10 @@ export default function FolderTemplateManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({
-        title: "Template deleted",
-        description: "Template has been removed successfully.",
-      });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
     },
     onError: (error) => {
       console.error('Delete error:', error);
-      toast({
-        title: "Delete failed",
-        description: error.message || "Failed to delete template.",
-        variant: "destructive",
-      });
     },
   });
 
@@ -110,11 +100,6 @@ export default function FolderTemplateManager() {
     ];
     
     if (!allowedTypes.includes(selectedFile.type)) {
-      toast({
-        title: "Invalid file type",
-        description: "Please select a .docx, .doc, or .txt file.",
-        variant: "destructive",
-      });
       return;
     }
     

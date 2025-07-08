@@ -58,7 +58,6 @@ export default function SimpleTemplateManager() {
         }, 500);
         return;
       }
-      // No toast message - silently handle errors
     },
   });
 
@@ -71,7 +70,6 @@ export default function SimpleTemplateManager() {
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
     },
     onError: (error) => {
-      // No toast message - silently handle errors
     },
   });
 

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useToast } from "@/hooks/use-toast";
+
 import { Template } from "@shared/schema";
 import { Eye, Copy, Edit, FileText, Calendar } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
@@ -16,21 +16,12 @@ interface TemplateViewerProps {
 
 export default function TemplateViewer({ template, onEdit }: TemplateViewerProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { toast } = useToast();
+  const [error, setError] = useState("");
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(template.content);
-      toast({
-        title: "Copied",
-        description: "Template content copied to clipboard",
-      });
     } catch (error) {
-      toast({
-        title: "Copy Failed",
-        description: "Failed to copy template content",
-        variant: "destructive",
-      });
     }
   };
 

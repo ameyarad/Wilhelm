@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
+
 import { Copy, Save, Download, FileText } from "lucide-react";
 
 interface ReportEditorProps {
@@ -21,21 +21,12 @@ export default function ReportEditor({
 }: ReportEditorProps) {
   const [editableContent, setEditableContent] = useState(content);
   const [isEditing, setIsEditing] = useState(false);
-  const { toast } = useToast();
+  const [error, setError] = useState("");
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(editableContent);
-      toast({
-        title: "Copied",
-        description: "Report content copied to clipboard",
-      });
     } catch (error) {
-      toast({
-        title: "Copy Failed",
-        description: "Failed to copy report content",
-        variant: "destructive",
-      });
     }
   };
 
@@ -43,10 +34,6 @@ export default function ReportEditor({
     if (onSave) {
       onSave(editableContent);
       setIsEditing(false);
-      toast({
-        title: "Saved",
-        description: "Report has been saved successfully",
-      });
     }
   };
 

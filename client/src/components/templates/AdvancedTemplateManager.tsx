@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,7 +36,7 @@ import { Template } from "@/../../shared/schema";
 
 export default function AdvancedTemplateManager() {
   const { user } = useAuth();
-  const { toast } = useToast();
+  const [error, setError] = useState("");
   const queryClient = useQueryClient();
   
   const [file, setFile] = useState<File | null>(null);
@@ -75,15 +75,12 @@ export default function AdvancedTemplateManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({ title: "Template uploaded successfully" });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
       setFile(null);
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
-        toast({ title: "Authentication required", variant: "destructive" });
       } else {
-        toast({ title: "Upload failed", description: error.message, variant: "destructive" });
       }
     },
   });
@@ -95,13 +92,11 @@ export default function AdvancedTemplateManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({ title: "Template moved successfully" });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
       setDraggedTemplate(null);
       setDraggedOverFolder(null);
     },
     onError: (error) => {
-      toast({ title: "Move failed", description: error.message, variant: "destructive" });
     },
   });
 
@@ -129,12 +124,10 @@ export default function AdvancedTemplateManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({ title: "Template copied successfully" });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
       setClipboardTemplate(null);
     },
     onError: (error) => {
-      toast({ title: "Copy failed", description: error.message, variant: "destructive" });
     },
   });
 
@@ -145,11 +138,9 @@ export default function AdvancedTemplateManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({ title: "Template deleted successfully" });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
     },
     onError: (error) => {
-      toast({ title: "Delete failed", description: error.message, variant: "destructive" });
     },
   });
 
@@ -160,11 +151,9 @@ export default function AdvancedTemplateManager() {
       return response.json();
     },
     onSuccess: () => {
-      toast({ title: "Folder deleted", description: "Templates moved to General folder" });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
     },
     onError: (error) => {
-      toast({ title: "Delete failed", description: error.message, variant: "destructive" });
     },
   });
 
@@ -186,11 +175,6 @@ export default function AdvancedTemplateManager() {
     ];
     
     if (!allowedTypes.includes(selectedFile.type)) {
-      toast({
-        title: "Invalid file type",
-        description: "Please select a .docx, .doc, or .txt file.",
-        variant: "destructive",
-      });
       return;
     }
     
@@ -246,12 +230,10 @@ export default function AdvancedTemplateManager() {
 
   const handleCopyTemplate = (template: Template) => {
     setClipboardTemplate({ template, operation: 'copy' });
-    toast({ title: "Template copied to clipboard" });
   };
 
   const handleCutTemplate = (template: Template) => {
     setClipboardTemplate({ template, operation: 'cut' });
-    toast({ title: "Template cut to clipboard" });
   };
 
   const handlePasteTemplate = (targetFolder: string) => {

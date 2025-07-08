@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import ReactQuill from "react-quill";
@@ -19,7 +18,7 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
   const [content, setContent] = useState("");
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
-  const { toast } = useToast();
+  const [error, setError] = useState("");
   const queryClient = useQueryClient();
   const quillRef = useRef<ReactQuill>(null);
 
@@ -93,29 +92,20 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
       return response.json();
     },
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Report saved successfully",
-      });
+      setError("");
+      console.log("Report saved successfully");
       queryClient.invalidateQueries({ queryKey: ['/api/reports'] });
       onClose();
     },
     onError: (error) => {
-      toast({
-        title: "Error",
-        description: "Failed to save report",
-        variant: "destructive",
-      });
+      setError("Failed to save report");
+      console.error("Save error:", error);
     },
   });
 
   const handleSave = () => {
     if (!content.trim()) {
-      toast({
-        title: "Validation Error",
-        description: "Report content is required",
-        variant: "destructive",
-      });
+      setError("Report content is required");
       return;
     }
 
@@ -150,16 +140,11 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
       const plainText = tempElement.textContent || tempElement.innerText || content;
       
       await navigator.clipboard.writeText(plainText);
-      toast({
-        title: "Copied",
-        description: "Report copied to clipboard",
-      });
+      setError("");
+      console.log("Report copied to clipboard");
     } catch (error) {
-      toast({
-        title: "Copy Failed",
-        description: "Failed to copy report",
-        variant: "destructive",
-      });
+      setError("Failed to copy report");
+      console.error("Copy failed:", error);
     }
   };
 

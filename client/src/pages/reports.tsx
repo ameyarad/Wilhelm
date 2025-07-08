@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useToast } from "@/hooks/use-toast";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import GeneratedReportViewer from "@/components/reports/GeneratedReportViewer";
@@ -15,10 +14,10 @@ import { apiRequest } from "@/lib/queryClient";
 
 export default function Reports() {
   const { isAuthenticated, isLoading } = useAuth();
-  const { toast } = useToast();
   const queryClient = useQueryClient();
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const [error, setError] = useState("");
 
   const { data: reports, isLoading: reportsLoading } = useQuery({
     queryKey: ['/api/reports'],
@@ -27,17 +26,12 @@ export default function Reports() {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      toast({
-        title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
-        variant: "destructive",
-      });
       setTimeout(() => {
         window.location.href = "/api/login";
       }, 500);
       return;
     }
-  }, [isAuthenticated, isLoading, toast]);
+  }, [isAuthenticated, isLoading]);
 
   if (isLoading || reportsLoading) {
     return (
@@ -113,16 +107,11 @@ export default function Reports() {
       const plainText = tempDiv.textContent || tempDiv.innerText || '';
       
       await navigator.clipboard.writeText(plainText);
-      toast({
-        title: "Report Copied",
-        description: "Report content has been copied to clipboard.",
-      });
+      setError("");
+      console.log("Report copied to clipboard");
     } catch (error) {
-      toast({
-        title: "Copy Failed",
-        description: "Failed to copy report content.",
-        variant: "destructive",
-      });
+      setError("Failed to copy report content.");
+      console.error("Copy failed:", error);
     }
   };
 
@@ -135,19 +124,14 @@ export default function Reports() {
     try {
       await apiRequest("DELETE", `/api/reports/${reportId}`, {});
       
-      toast({
-        title: "Report deleted",
-        description: "The report has been deleted successfully.",
-      });
+      setError("");
+      console.log("Report deleted successfully");
       
       // Refresh the reports list
       queryClient.invalidateQueries({ queryKey: ['/api/reports'] });
     } catch (error) {
-      toast({
-        title: "Failed to delete report",
-        description: "Please try again.",
-        variant: "destructive",
-      });
+      setError("Failed to delete report. Please try again.");
+      console.error("Delete failed:", error);
     }
   };
 

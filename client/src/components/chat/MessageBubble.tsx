@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
 import { ChatMessage, User } from "@shared/schema";
 import { formatDistanceToNow } from "date-fns";
 import { Copy, Edit, FileText, Bot } from "lucide-react";
@@ -13,21 +12,13 @@ interface MessageBubbleProps {
 }
 
 export default function MessageBubble({ message, user }: MessageBubbleProps) {
-  const { toast } = useToast();
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(message.content);
-      toast({
-        title: "Copied",
-        description: "Message copied to clipboard",
-      });
+      console.log("Message copied to clipboard");
     } catch (error) {
-      toast({
-        title: "Copy Failed",
-        description: "Failed to copy message",
-        variant: "destructive",
-      });
+      console.error("Failed to copy message:", error);
     }
   };
 

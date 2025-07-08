@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { CloudUpload, Upload, Loader2 } from "lucide-react";
@@ -21,7 +20,7 @@ export default function TemplateUpload({ compact = false, defaultFolder }: Templ
   const [category, setCategory] = useState("Custom");
   const [folder, setFolder] = useState(defaultFolder || "General");
   const [dragOver, setDragOver] = useState(false);
-  const { toast } = useToast();
+  const [error, setError] = useState("");
   const queryClient = useQueryClient();
 
   const uploadMutation = useMutation({
@@ -30,31 +29,17 @@ export default function TemplateUpload({ compact = false, defaultFolder }: Templ
       return response.json();
     },
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: "Template uploaded successfully",
-      });
       setFile(null);
       setCategory("");
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
-        toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
-          variant: "destructive",
-        });
         setTimeout(() => {
           window.location.href = "/api/login";
         }, 500);
         return;
       }
-      toast({
-        title: "Upload Failed",
-        description: "Failed to upload template. Please try again.",
-        variant: "destructive",
-      });
     },
   });
 
@@ -66,11 +51,6 @@ export default function TemplateUpload({ compact = false, defaultFolder }: Templ
     ];
 
     if (!allowedTypes.includes(selectedFile.type)) {
-      toast({
-        title: "Invalid File Type",
-        description: "Please select a .docx, .doc, or .txt file",
-        variant: "destructive",
-      });
       return;
     }
 
@@ -106,11 +86,6 @@ export default function TemplateUpload({ compact = false, defaultFolder }: Templ
 
   const handleUpload = () => {
     if (!file || !category) {
-      toast({
-        title: "Missing Information",
-        description: "Please select a file and category",
-        variant: "destructive",
-      });
       return;
     }
 

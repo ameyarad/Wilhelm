@@ -7,10 +7,32 @@ import { templateService } from "./services/templateService";
 import { insertTemplateSchema, insertReportSchema, insertChatMessageSchema } from "@shared/schema";
 import multer from "multer";
 import { ZodError } from "zod";
+import {
+  apiRateLimit,
+  aiRateLimit,
+  uploadRateLimit,
+  validateTextInput,
+  validateReportInput,
+  validateIdParam,
+  handleValidationErrors,
+  fileUploadSecurity
+} from "./middleware/security";
 
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ 
+  storage: multer.memoryStorage(),
+  ...fileUploadSecurity
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Health check endpoint (no auth required)
+  app.get('/health', (req, res) => {
+    res.json({ 
+      status: 'ok', 
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'development'
+    });
+  });
+
   // No default templates - users will upload their own
 
   // Auth middleware

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useToast } from "@/hooks/use-toast";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Template } from "@shared/schema";
@@ -23,7 +23,7 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
   const [folder, setFolder] = useState("General");
-  const { toast } = useToast();
+  const [error, setError] = useState("");
   const queryClient = useQueryClient();
   const quillRef = useRef<ReactQuill>(null);
   const [canUndo, setCanUndo] = useState(false);
@@ -70,42 +70,21 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
       return response.json();
     },
     onSuccess: () => {
-      toast({
-        title: "Success",
-        description: template ? "Template updated successfully" : "Template created successfully",
-      });
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
       onClose();
     },
     onError: (error) => {
-      toast({
-        title: "Error",
-        description: "Failed to save template",
-        variant: "destructive",
-      });
     },
   });
 
   const handleSave = () => {
     if (!name.trim()) {
-      toast({
-        title: "Validation Error",
-        description: "Template name is required",
-        variant: "destructive",
-      });
       return;
     }
 
     if (!content.trim()) {
-      toast({
-        title: "Validation Error",
-        description: "Template content is required",
-        variant: "destructive",
-      });
       return;
     }
-
-
 
     saveMutation.mutate({
       name: name.trim(),

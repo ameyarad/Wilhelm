@@ -1,10 +1,30 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import {
+  enforceHTTPS,
+  securityHeaders,
+  corsOptions,
+  generalRateLimit,
+  additionalSecurity,
+  sanitizeRequest,
+  securityErrorHandler
+} from "./middleware/security";
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
+// Security middleware - minimal for development, full for production
+if (process.env.NODE_ENV === "production") {
+  app.use(enforceHTTPS);
+  app.use(securityHeaders);
+  app.use(generalRateLimit);
+  app.use(...additionalSecurity);
+}
+app.use(corsOptions);
+app.use(sanitizeRequest);
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -39,12 +59,23 @@ app.use((req, res, next) => {
 (async () => {
   const server = await registerRoutes(app);
 
+  // Security error handler
+  app.use(securityErrorHandler);
+  
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
+    const message = process.env.NODE_ENV === 'production' 
+      ? "Internal Server Error" 
+      : err.message || "Internal Server Error";
 
-    res.status(status).json({ message });
-    throw err;
+    res.status(status).json({ 
+      message,
+      timestamp: new Date().toISOString()
+    });
+    
+    if (process.env.NODE_ENV !== 'production') {
+      throw err;
+    }
   });
 
   // importantly only setup vite in development and after

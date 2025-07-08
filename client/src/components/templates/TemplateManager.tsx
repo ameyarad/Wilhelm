@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
+
 import { Template } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +15,6 @@ import { FileText, Edit, Trash2, Plus, Folder, FolderPlus } from "lucide-react";
 import TemplateUpload from "./TemplateUpload";
 
 export default function TemplateManager() {
-  const { toast } = useToast();
   const queryClient = useQueryClient();
   const [selectedFolder, setSelectedFolder] = useState<string>("All");
   const [newFolderName, setNewFolderName] = useState("");
@@ -44,17 +43,8 @@ export default function TemplateManager() {
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
       queryClient.invalidateQueries({ queryKey: ['/api/templates/folders'] });
       setEditingTemplate(null);
-      toast({
-        title: "Template Updated",
-        description: "Template has been updated successfully",
-      });
     },
     onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to update template",
-        variant: "destructive",
-      });
     },
   });
 
@@ -65,17 +55,8 @@ export default function TemplateManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
       queryClient.invalidateQueries({ queryKey: ['/api/templates/folders'] });
-      toast({
-        title: "Template Deleted",
-        description: "Template has been deleted successfully",
-      });
     },
     onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to delete template",
-        variant: "destructive",
-      });
     },
   });
 
@@ -87,17 +68,8 @@ export default function TemplateManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/templates'] });
       queryClient.invalidateQueries({ queryKey: ['/api/templates/folders'] });
-      toast({
-        title: "Template Created",
-        description: "New template has been created successfully",
-      });
     },
     onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to create template",
-        variant: "destructive",
-      });
     },
   });
 
