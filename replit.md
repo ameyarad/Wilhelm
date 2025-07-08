@@ -109,6 +109,17 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
+- July 08, 2025. Enhanced social media sharing and custom domain optimization
+  - Updated all social media descriptions to "Free and Open Source AI Agent For Medical Imaging Reporting"
+  - Fixed custom domain functionality by updating CORS configuration to include wilhelmai.net and www.wilhelmai.net
+  - Enhanced Open Graph meta tags with secure URLs, image dimensions, and alt text
+  - Added WhatsApp-specific meta tags including thumbnail and og:image:url
+  - Updated Twitter/X card information with proper image alt text and creator attribution
+  - Added cache-busting parameters to logo URLs for better social media image refresh
+  - Fixed Content Security Policy to allow custom domain connections in connectSrc directive
+  - Updated canonical URLs and structured data to reference new domain
+  - Enhanced manifest.json with updated branding and descriptions
+  - Custom domains now fully functional with proper CORS and CSP configuration
 - July 14, 2025. Fixed Whisper API transcription and improved mobile responsiveness
   - Added rate limiting to AI transcription endpoints (aiRateLimit middleware)
   - Increased request body size limits from 10MB to 50MB for audio file uploads
