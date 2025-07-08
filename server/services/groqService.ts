@@ -140,31 +140,20 @@ Guidelines:
         },
         {
           role: "user",
-          content: `Template: Findings: Both lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable. Impression: No significant abnormality.
+          content: `Template: Chest X-ray
 
-Dictated Findings: Chest X-ray. Consolidation in right lung middle zone.
+Template Structure:
+Both lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable.
 
-Expected Output:
-Findings: Consolidation in right lung middle zone. Rest of the lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable. Impression: Consolidation in right lung middle zone`,
+Dictated Findings:
+Chest X-ray. Consolidation in right lung middle zone.
+
+Please generate a complete radiology report by merging the dictated findings into the template structure.`,
         },
         {
           role: "assistant",
           content:
-            "I understand the format. I will generate a complete radiology report by filling in the template structure with the dictated findings, using professional medical terminology.",
-        },
-        {
-          role: "user",
-          content: `Findings: Cerebral hemispheres are normal. Cerebellum appears normal. Ventricles are normal size. No acute intracranial hemorrhage, mass effect, or midline shift. Impression: No significant abnormality.
-
-Dictated Findings: CT head normal template
-
-Expected Output:
-Findings: Cerebral hemispheres are normal. Cerebellum appears normal. Ventricles are normal size. No acute intracranial hemorrhage, mass effect, or midline shift. Impression: No significant abnormality.`,
-        },
-        {
-          role: "assistant",
-          content:
-            "I will merge the dictated findings into the template structure with appropriate medical terminology and formatting.",
+            "Consolidation in right lung middle zone. Rest of the lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable.",
         },
         {
           role: "user",
