@@ -116,8 +116,10 @@ Changelog:
   - Updated How to Use page subheading and My Templates subheading with new terminology
   - Enhanced mobile touch targets and button layouts for better mobile experience
   - Updated meta tags, manifest.json, and documentation with "medical imaging" terminology
-  - Added red warning text box on main page emphasizing template upload requirements
+  - Added red warning text box on main page emphasizing template upload requirements (later changed to NHS blue theme)
   - Improved mobile CSS with better dialog sizing and overflow handling
+  - Added "Upload Templates" button on main page with NHS blue theme linking to My Templates page
+  - Fixed contact page feedback form by updating CSP security configuration to allow Formspree submissions
 - July 08, 2025. Enhanced social media sharing and custom domain optimization
   - Updated all social media descriptions to "Free and Open Source AI Agent For Medical Imaging Reporting"
   - Fixed custom domain functionality by updating CORS configuration to include wilhelmai.net and www.wilhelmai.net

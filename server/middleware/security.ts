@@ -33,7 +33,7 @@ export const securityHeaders = helmet({
       frameSrc: ["'none'"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
-      formAction: ["'self'"]
+      formAction: ["'self'", "https://formspree.io"]
     }
   } : false, // Disable CSP in development to avoid Vite conflicts
   crossOriginEmbedderPolicy: false,

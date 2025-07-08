@@ -13,6 +13,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { cn } from "@/lib/utils";
 import { User } from "@shared/schema";
+import { Link } from "wouter";
 import { 
   Mic, 
   MicOff, 
@@ -318,6 +319,15 @@ export default function Home() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Upload Templates Button */}
+            <div className="mt-4 flex justify-center">
+              <Link href="/templates">
+                <button className="bg-nhs-blue hover:bg-nhs-dark-blue text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 text-sm md:text-base">
+                  Upload Templates
+                </button>
+              </Link>
+            </div>
 
           </div>
         </main>
