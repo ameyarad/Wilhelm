@@ -22,6 +22,12 @@ export class GroqService {
       const timestamp = Date.now();
       const filename = `audio_${timestamp}_${Math.random().toString(36).substring(7)}.webm`;
 
+      console.log("Starting transcription with Groq:", {
+        bufferSize: audioBuffer.length,
+        filename: filename,
+        apiKeyPresent: !!process.env.GROQ_API_KEY
+      });
+
       const transcription = await groq.audio.transcriptions.create({
         file: new File([audioBuffer], filename, { type: "audio/webm" }),
         model: "whisper-large-v3-turbo",
@@ -31,13 +37,20 @@ export class GroqService {
         temperature: 0.0, // Deterministic output
       });
 
+      console.log("Transcription successful, text length:", transcription.text.length);
+
       return {
         text: transcription.text.trim(), // Trim any whitespace
         confidence: 0.95,
       };
     } catch (error) {
-      console.error("Transcription error:", error);
-      throw new Error("Failed to transcribe audio");
+      console.error("Detailed transcription error:", {
+        error: error,
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
+        apiKeyPresent: !!process.env.GROQ_API_KEY
+      });
+      throw new Error(`Failed to transcribe audio: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
   }
 

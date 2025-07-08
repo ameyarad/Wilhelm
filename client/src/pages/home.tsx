@@ -124,12 +124,12 @@ export default function Home() {
   }
 
   return (
-    <div className="flex h-screen bg-nhs-light-grey">
+    <div className="flex h-screen bg-nhs-light-grey overflow-hidden">
       <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300">
+      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300 overflow-hidden">
         <Header />
-        <main className="flex-1 p-4 md:p-6 overflow-y-auto flex items-center justify-center">
-          <div className="w-full max-w-4xl space-y-4 md:space-y-6">
+        <main className="flex-1 p-2 sm:p-4 md:p-6 overflow-y-auto overflow-x-hidden">
+          <div className="w-full max-w-4xl mx-auto space-y-3 sm:space-y-4 md:space-y-6">
 
 
             {/* Error Display */}
@@ -241,16 +241,14 @@ export default function Home() {
 
             {/* Instructional Text */}
             <Card className="mt-4">
-              <CardContent className="p-6">
-                <div className="text-sm text-nhs-dark-grey/80 leading-relaxed space-y-3">
+              <CardContent className="p-3 md:p-6">
+                <div className="text-xs md:text-sm text-nhs-dark-grey/80 leading-relaxed space-y-2 md:space-y-3">
                   <p className="font-medium text-center">
-                    Please ensure you have the appropriate report template uploaded before starting dictation. 
-                    Please name your templates as per their modality and scan type. Wilhelm selects your 
-                    report template based on the template's name, like a real transcriptionist!
+                    Ensure templates are uploaded and named by modality/scan type. 
+                    Wilhelm selects templates based on their names.
                   </p>
-                  <p className="font-medium text-center">
-                    Wilhelm works best on a desktop / Mac or a laptop / Macbook. Please select "Request Desktop Site", 
-                    "Desktop Site" or similar option and view the desktop version on your mobile for best performance.
+                  <p className="font-medium text-center text-[10px] md:text-xs">
+                    For best mobile experience, use "Request Desktop Site" option.
                   </p>
                 </div>
               </CardContent>

@@ -314,12 +314,17 @@ export const fileUploadSecurity = {
       'application/msword', // .doc
       'text/plain', // .txt
       'audio/webm', // .webm
+      'audio/webm;codecs=opus', // .webm with opus codec
       'audio/mp3', // .mp3
       'audio/wav', // .wav
-      'audio/mpeg' // .mp3
+      'audio/mpeg', // .mp3
+      'audio/ogg', // .ogg
+      'audio/x-wav', // .wav alternative
+      'audio/wave' // .wav alternative
     ];
     
-    if (allowedMimes.includes(file.mimetype)) {
+    // Check if the MIME type is allowed or if it starts with audio/
+    if (allowedMimes.includes(file.mimetype) || file.mimetype.startsWith('audio/')) {
       cb(null, true);
     } else {
       cb(new Error('Invalid file type. Only documents and audio files are allowed.'));

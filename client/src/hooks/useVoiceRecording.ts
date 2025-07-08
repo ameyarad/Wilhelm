@@ -99,12 +99,17 @@ export function useVoiceRecording() {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+        console.error('Transcription failed:', {
+          status: response.status,
+          error: errorData
+        });
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
       setTranscript(result.text.trim()); // Trim whitespace
-      // Transcription completed successfully
+      console.log('Transcription successful'); // Transcription completed successfully
       
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to transcribe audio";

@@ -109,6 +109,18 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
+- July 14, 2025. Fixed Whisper API transcription and improved mobile responsiveness
+  - Added rate limiting to AI transcription endpoints (aiRateLimit middleware)
+  - Increased request body size limits from 10MB to 50MB for audio file uploads
+  - Enhanced file upload security to accept all audio MIME types including webm with opus codec
+  - Added detailed error logging to transcription service for better debugging
+  - Fixed mobile UI responsiveness issues:
+    - Removed centered flex layout to prevent chat box visibility issues
+    - Made instructional text more compact with smaller font sizes on mobile
+    - Added overflow handling to prevent content being hidden by sidebar
+    - Improved padding and spacing for mobile screens
+  - Enhanced error handling in voice recording hook with detailed error messages
+  - Application now properly handles voice recordings on both desktop and mobile
 - July 08, 2025. Fixed deployment build errors and security middleware optimization
   - Resolved tsx dependency corruption by creating wrapper using @esbuild-kit/esm-loader
   - Fixed missing @jridgewell/set-array dependency preventing builds

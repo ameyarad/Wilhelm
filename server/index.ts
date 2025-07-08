@@ -23,8 +23,8 @@ if (process.env.NODE_ENV === "production") {
 app.use(corsOptions);
 app.use(sanitizeRequest);
 
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
 app.use((req, res, next) => {
   const start = Date.now();

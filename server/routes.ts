@@ -130,21 +130,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // AI routes
-  app.post('/api/ai/transcribe', isAuthenticated, upload.single('audio'), async (req: any, res) => {
+  app.post('/api/ai/transcribe', isAuthenticated, aiRateLimit, upload.single('audio'), async (req: any, res) => {
     try {
+      console.log("Transcribe request received:", {
+        hasFile: !!req.file,
+        fileSize: req.file?.size,
+        mimeType: req.file?.mimetype,
+        originalName: req.file?.originalname
+      });
+      
       if (!req.file) {
         return res.status(400).json({ message: "No audio file provided" });
       }
 
       const transcription = await groqService.transcribeAudio(req.file.buffer);
+      console.log("Transcription successful:", transcription.text.substring(0, 50) + "...");
       res.json(transcription);
     } catch (error) {
       console.error("Error transcribing audio:", error);
-      res.status(500).json({ message: "Failed to transcribe audio" });
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      res.status(500).json({ message: "Failed to transcribe audio", error: errorMessage });
     }
   });
 
-  app.post('/api/ai/generate-report', isAuthenticated, async (req: any, res) => {
+  app.post('/api/ai/generate-report', isAuthenticated, aiRateLimit, async (req: any, res) => {
     try {
       const { findings } = req.body;
       const userId = req.user.claims.sub;
