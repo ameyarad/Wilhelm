@@ -13,7 +13,11 @@ export function enforceHTTPS(req: Request, res: Response, next: NextFunction) {
     return next();
   }
   
-  if (process.env.NODE_ENV === "production" && !req.secure && req.get("x-forwarded-proto") !== "https") {
+  // Only enforce HTTPS in production and only on Replit domains
+  const host = req.get("host");
+  const isReplitDomain = host && (host.includes('.replit.app') || host.includes('.replit.dev'));
+  
+  if (process.env.NODE_ENV === "production" && isReplitDomain && !req.secure && req.get("x-forwarded-proto") !== "https") {
     const httpsUrl = `https://${req.get("host")}${req.url}`;
     return res.redirect(301, httpsUrl);
   }
@@ -35,7 +39,21 @@ export const securityHeaders = helmet({
       baseUri: ["'self'"],
       formAction: ["'self'", "https://formspree.io"]
     }
-  } : false, // Disable CSP in development to avoid Vite conflicts
+  } : {
+    // Development CSP - more permissive for local development
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-eval'", "'unsafe-inline'", "https://apis.replit.com", "https://replit.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https:", "http:", "blob:"],
+      connectSrc: ["'self'", "ws:", "wss:", "http:", "https:", "https://api.groq.com", "https://console.groq.com", "https://apis.replit.com", "wss://*.replit.app", "wss://*.replit.dev", "https://*.replit.app", "https://*.replit.dev"],
+      frameSrc: ["'none'"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"],
+      formAction: ["'self'", "https://formspree.io"]
+    }
+  },
   crossOriginEmbedderPolicy: false,
   hsts: process.env.NODE_ENV === "production" ? {
     maxAge: 31536000,
@@ -43,7 +61,7 @@ export const securityHeaders = helmet({
     preload: true
   } : false,
   noSniff: true,
-  frameguard: { action: 'deny' },
+  frameguard: process.env.NODE_ENV === "production" ? { action: 'deny' } : false,
   xssFilter: true,
   referrerPolicy: { policy: "strict-origin-when-cross-origin" }
 });
