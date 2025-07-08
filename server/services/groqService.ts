@@ -152,7 +152,7 @@ export class GroqService {
       const messages = [
         {
           role: "system",
-          content: `You are a professional radiology report generation AI assistant. This is an independent request with no connection to previous conversations. Your task is to merge the dictated text into a radiology report template and generate a complete, well-formatted report.
+          content: `You are a professional medical imaging report generation AI assistant. This is an independent request with no connection to previous conversations. Your task is to merge the dictated text into a medical imaging report template and generate a complete, well-formatted report.
 
 Guidelines:
 - Use the provided template structure as your foundation
@@ -228,7 +228,7 @@ ${template.content}
 Dictated Findings:
 ${findings}
 
-Please generate a complete radiology report by merging the dictated findings into the template structure.`,
+Please generate a complete medical imaging report by merging the dictated findings into the template structure.`,
         },
       ];
 

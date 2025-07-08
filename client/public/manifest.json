@@ -1,7 +1,7 @@
 {
   "name": "Wilhelm - Free and Open Source AI Agent For Medical Imaging Reporting",
   "short_name": "Wilhelm",
-  "description": "Free and Open Source AI Agent For Medical Imaging Reporting - AI-powered dictation and spell correction for radiology reports with intelligent templates and voice recognition.",
+  "description": "Free and Open Source AI Agent For Medical Imaging Reporting - AI-powered dictation and spell correction for medical imaging reports with intelligent templates and voice recognition.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#005EB8",
@@ -35,12 +35,12 @@
       "sizes": "1280x720",
       "type": "image/png",
       "platform": "wide",
-      "label": "Wilhelm Radiology Platform Dashboard"
+      "label": "Wilhelm Medical Imaging Platform Dashboard"
     }
   ],
   "related_applications": [],
   "prefer_related_applications": false,
   "scope": "/",
-  "id": "wilhelm-radiology-ai",
+  "id": "wilhelm-medical-imaging-ai",
   "dir": "ltr"
 }

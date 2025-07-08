@@ -39,7 +39,7 @@ export default function HowToUse() {
           <div className="container mx-auto max-w-4xl">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-nhs-dark-blue mb-2 text-center">How To Use Wilhelm</h1>
-              <p className="text-nhs-dark-grey/70 text-lg text-center">Step-By-Step Guide For Creating AI-powered Radiology Reports</p>
+              <p className="text-nhs-dark-grey/70 text-lg text-center">Step-By-Step Guide For Creating AI-powered Medical Imaging Reports</p>
             </div>
 
             {/* Step 1: Template Upload */}
@@ -55,7 +55,7 @@ export default function HowToUse() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-nhs-dark-grey/80 leading-relaxed mb-4">
-                  Before generating reports, upload your radiology templates to the system.
+                  Before generating reports, upload your medical imaging templates to the system.
                 </p>
                 <ul className="text-sm text-nhs-dark-grey/80 space-y-2 ml-4">
                   <li>• Navigate to "My Templates" in the sidebar</li>

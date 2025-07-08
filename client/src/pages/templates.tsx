@@ -41,7 +41,7 @@ export default function Templates() {
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-nhs-blue mb-2">My Templates</h1>
               <p className="text-gray-600">
-                Upload and manage your radiology report templates
+                Upload and manage your medical imaging report templates
               </p>
             </div>
 

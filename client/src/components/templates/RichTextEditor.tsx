@@ -158,7 +158,7 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="w-[95vw] max-w-4xl h-[90vh] md:h-[85vh] flex flex-col mobile-dialog">
+      <DialogContent className="w-[95vw] max-w-4xl h-[90vh] md:h-[85vh] flex flex-col mobile-dialog overflow-hidden">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center gap-2 text-sm md:text-base">
             <FileText className="h-4 w-4 md:h-5 md:w-5 text-nhs-blue" />
@@ -219,14 +219,14 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
                 </Button>
               </div>
             </div>
-            <div className="flex-1 min-h-0">
+            <div className="flex-1 min-h-0 overflow-hidden">
               <ReactQuill
                 ref={quillRef}
                 theme="snow"
                 value={content}
                 onChange={handleTextChange}
                 className="scrollable-editor h-full"
-                style={{ height: '100%' }}
+                style={{ height: 'calc(100% - 50px)' }}
                 modules={modules}
                 formats={formats}
                 onKeyDown={(e) => {
@@ -250,15 +250,19 @@ export default function RichTextEditor({ template, isOpen, onClose }: RichTextEd
             </div>
           </div>
           
-          <div className="flex justify-end gap-2 pt-4">
-            <Button variant="outline" onClick={handleClose}>
+          <div className="flex flex-col sm:flex-row justify-end gap-2 pt-4 flex-shrink-0">
+            <Button 
+              variant="outline" 
+              onClick={handleClose}
+              className="w-full sm:w-auto order-2 sm:order-1"
+            >
               <X className="h-4 w-4 mr-2" />
               Cancel
             </Button>
             <Button 
               onClick={handleSave}
               disabled={saveMutation.isPending}
-              className="bg-nhs-blue hover:bg-nhs-blue/90"
+              className="bg-nhs-blue hover:bg-nhs-blue/90 w-full sm:w-auto order-1 sm:order-2"
             >
               <Save className="h-4 w-4 mr-2" />
               {saveMutation.isPending ? "Saving..." : "Save Template"}

@@ -38,7 +38,7 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ### Database Schema
 - **Users**: Core user information with Replit Auth integration
-- **Templates**: Radiology report templates with categories
+- **Templates**: Medical imaging report templates with categories
 - **Reports**: Generated reports with metadata
 - **Chat Messages**: Conversation history for AI interactions
 - **Sessions**: Authentication session storage

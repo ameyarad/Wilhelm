@@ -474,6 +474,18 @@
     flex-shrink: 0;
   }
   
+  /* Enhanced Mobile Button Layout Fix */
+  .mobile-dialog .flex.flex-col.sm\\:flex-row.justify-end {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .mobile-dialog .flex.flex-col.sm\\:flex-row.justify-end button {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+  
   .scrollable-editor .ql-toolbar button:hover {
     background: #f3f4f6;
   }
