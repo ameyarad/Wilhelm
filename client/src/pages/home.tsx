@@ -294,10 +294,10 @@ export default function Home() {
             )}
 
             {/* Important Warning Text */}
-            <Card className="mt-4 border-red-500 bg-red-50">
-              <CardContent className="p-3 md:p-6">
-                <div className="text-red-700 space-y-2 md:space-y-3">
-                  <p className="font-medium text-center">
+            <Card className="mt-4 border-nhs-dark-blue bg-nhs-pale-blue">
+              <CardContent className="p-3 md:p-4">
+                <div className="text-nhs-dark-blue space-y-1 md:space-y-2">
+                  <p className="font-medium text-center text-xs md:text-sm">
                     <strong>Important:</strong> Wilhelm will not work without appropriate report templates. 
                     Please upload report templates related to your dictation or create new templates in the 
                     My Templates section first! Ensure templates are named by modality and scan type 
