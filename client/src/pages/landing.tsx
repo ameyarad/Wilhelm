@@ -28,27 +28,27 @@ export default function Landing() {
         <div className="max-w-6xl w-full space-y-12">
           {/* Header */}
           <div className={`text-center text-white transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="flex items-center justify-center space-x-4 mb-8">
+            <div className="flex items-center justify-center space-x-2 sm:space-x-4 mb-8">
               <img 
                 src="/wilhelm-logo.png" 
                 alt="Wilhelm - AI Radiology Reporting Platform" 
-                className="w-28 h-28 md:w-32 md:h-32 filter drop-shadow-2xl"
+                className="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 filter drop-shadow-2xl flex-shrink-0"
                 loading="eager"
               />
               
-              <h1 className="text-7xl md:text-8xl font-bold text-white">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight">
                 Wilhelm
               </h1>
             </div>
-            <p className="text-2xl text-white/90 max-w-3xl mx-auto mb-12 leading-relaxed font-bold">Free and Open Source Medical Imaging Reporting AI Agent | Transcription To Final Formatted Report In A Second | Upload, Edit and Save Your Report Templates</p>
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl text-white/90 max-w-3xl mx-auto mb-12 leading-relaxed font-bold px-4">Free and Open Source Medical Imaging Reporting AI Agent | Transcription To Final Formatted Report In A Second | Upload, Edit and Save Your Report Templates</p>
             
-            <div className="mb-16 flex justify-center">
+            <div className="mb-16 flex justify-center px-4">
               <Button 
                 onClick={handleLogin}
                 size="lg" 
-                className="bg-gradient-to-r from-white to-gray-100 hover:from-gray-100 hover:to-white text-nhs-blue px-16 py-8 text-xl font-semibold shadow-2xl transform transition-all duration-500 hover:scale-105 hover:shadow-3xl group border-0"
+                className="bg-gradient-to-r from-white to-gray-100 hover:from-gray-100 hover:to-white text-nhs-blue px-8 sm:px-12 md:px-16 py-4 sm:py-6 md:py-8 text-lg sm:text-xl font-semibold shadow-2xl transform transition-all duration-500 hover:scale-105 hover:shadow-3xl group border-0"
               >
-                <Sparkles className="w-6 h-6 mr-3 group-hover:animate-spin" />
+                <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 group-hover:animate-spin" />
                 Start Reporting
               </Button>
             </div>
