@@ -1,7 +1,7 @@
 {
-  "name": "Wilhelm - AI-Powered Radiology Reporting Platform",
+  "name": "Wilhelm - Medical Imaging Reporting AI Agent | Free and Open Source",
   "short_name": "Wilhelm",
-  "description": "Advanced AI-powered radiology reporting platform for medical imaging professionals. Streamline CT, MRI, X-ray, ultrasound, and nuclear medicine report generation.",
+  "description": "Medical Imaging Reporting AI Agent | Free and Open Source - AI-powered dictation and spell correction for radiology reports with intelligent templates and voice recognition.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#005EB8",
