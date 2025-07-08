@@ -64,7 +64,7 @@ export function secureSessionMiddleware(req: Request, res: Response, next: NextF
     res.cookie = function(name: string, value: any, options: any = {}) {
       options.secure = true;
       options.httpOnly = true;
-      options.sameSite = 'strict';
+      options.sameSite = 'lax'; // Changed from 'strict' to 'lax' to allow OAuth flow
       return originalCookie.call(this, name, value, options);
     };
   }

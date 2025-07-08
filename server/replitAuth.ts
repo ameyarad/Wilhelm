@@ -38,9 +38,9 @@ export function getSession() {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true, // Always use secure cookies
+      secure: process.env.NODE_ENV === 'production', // Only secure in production
       maxAge: sessionTtl,
-      sameSite: 'strict', // Strict same-site policy
+      sameSite: 'lax', // Changed from 'strict' to 'lax' to allow OAuth flow
       path: '/',
       domain: undefined // Let the browser handle the domain
     },

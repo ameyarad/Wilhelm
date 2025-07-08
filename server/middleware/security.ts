@@ -269,7 +269,7 @@ export const additionalSecurity = [
       res.cookie = function(name: string, value: any, options: any = {}) {
         options.secure = true;
         options.httpOnly = true;
-        options.sameSite = 'strict';
+        options.sameSite = 'lax'; // Changed from 'strict' to 'lax' to allow OAuth flow
         return originalCookie.call(this, name, value, options);
       };
     }
@@ -311,7 +311,7 @@ export const additionalSecurity = [
               ...argumentsList[2],
               secure: true,
               httpOnly: true,
-              sameSite: 'strict'
+              sameSite: 'lax' // Changed from 'strict' to 'lax' to allow OAuth flow
             };
           }
           return target.apply(thisArg, argumentsList);

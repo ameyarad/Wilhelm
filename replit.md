@@ -109,6 +109,12 @@ The project follows a monorepo pattern with shared TypeScript definitions:
 
 ```
 Changelog:
+- January 09, 2025. Fixed Replit OAuth authentication flow blocked by strict cookie settings
+  - Changed all SameSite cookie attributes from 'strict' to 'lax' to allow OAuth redirects
+  - Modified session configuration in replitAuth.ts to use SameSite='lax'
+  - Updated security middleware in security.ts, ssl.ts, and securityConfig.ts
+  - OAuth flow now properly works with Replit authentication while maintaining security
+  - Cookies remain secure and httpOnly, only SameSite policy relaxed for OAuth compatibility
 - January 09, 2025. Comprehensive security hardening to address Google Safe Browsing warnings
   - Implemented multi-layer HTTPS enforcement with httpsRedirectMiddleware for all proxy configurations
   - Enhanced security headers with 2-year HSTS (63072000 seconds) for preload list eligibility

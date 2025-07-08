@@ -105,7 +105,7 @@ function ensureSecureCookie(cookie: string): string {
   
   if (!hasSecure) attributes.push('Secure');
   if (!hasHttpOnly) attributes.push('HttpOnly');
-  if (!hasSameSite) attributes.push('SameSite=Strict');
+  if (!hasSameSite) attributes.push('SameSite=Lax'); // Changed from Strict to Lax for OAuth flow
   
   return attributes.join('; ');
 }
