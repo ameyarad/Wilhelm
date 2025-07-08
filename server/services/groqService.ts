@@ -44,6 +44,7 @@ export class GroqService {
   async selectTemplate(
     findings: string,
     availableTemplates: Array<{ name: string; content: string }>,
+    sessionId?: string,
   ): Promise<string> {
     try {
       const templateList = availableTemplates.map((t) => t.name).join(", ");
@@ -51,7 +52,7 @@ export class GroqService {
       const messages = [
         {
           role: "system",
-          content: `You are a radiology template-selection assistant. Output ONLY valid JSON matching this schema: {\"template\": <string>}. Available templates: ${templateList}`,
+          content: `You are a radiology template-selection assistant. Each request is independent. Output ONLY valid JSON matching this schema: {\"template\": <string>}. Available templates: ${templateList}. Session ID: ${sessionId || 'unknown'}`,
         },
         {
           role: "user",
@@ -65,6 +66,9 @@ export class GroqService {
         temperature: 0.1,
         top_p: 0.6,
         max_tokens: 100,
+        // Add context isolation parameters
+        seed: Math.floor(Math.random() * 1000000), // Random seed for isolation
+        user: sessionId, // User parameter for session isolation
       });
 
       const response = completion.choices[0]?.message?.content;
@@ -91,10 +95,14 @@ export class GroqService {
     availableTemplates: Array<{ name: string; content: string }>,
   ): Promise<ReportGenerationResult> {
     try {
+      // Generate unique session ID for context isolation
+      const sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+      
       // Step 1: Select the most appropriate template
       const selectedTemplateName = await this.selectTemplate(
         findings,
         availableTemplates,
+        sessionId,
       );
       const selectedTemplate =
         availableTemplates.find((t) => t.name === selectedTemplateName) ||
@@ -104,10 +112,11 @@ export class GroqService {
         throw new Error("No templates available");
       }
 
-      // Step 2: Generate the report using the selected template
+      // Step 2: Generate the report using the selected template with session isolation
       const reportContent = await this.mergeWithTemplate(
         findings,
         selectedTemplate,
+        sessionId,
       );
 
       return {
@@ -124,36 +133,21 @@ export class GroqService {
   async mergeWithTemplate(
     findings: string,
     template: { name: string; content: string },
+    sessionId?: string,
   ): Promise<string> {
     try {
       const messages = [
         {
           role: "system",
-          content: `You are a professional radiology report generation AI assistant. Your task is to merge the dictated text into a radiology report template and generate a complete, well-formatted report.
+          content: `You are a professional radiology report generation AI assistant. This is an independent request with no connection to previous conversations. Your task is to merge the dictated text into a radiology report template and generate a complete, well-formatted report.
 
 Guidelines:
 - Use the provided template structure as your foundation
 - Fill in all relevant sections with information from the clinical findings
 - Maintain professional medical language and format
 - Include appropriate medical terminology
-- Output only the final formatted report, no additional text or explanations`,
-        },
-        {
-          role: "user",
-          content: `Template: Chest X-ray
-
-Template Structure:
-Both lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable.
-
-Dictated Findings:
-Chest X-ray. Consolidation in right lung middle zone.
-
-Please generate a complete radiology report by merging the dictated findings into the template structure.`,
-        },
-        {
-          role: "assistant",
-          content:
-            "Consolidation in right lung middle zone. Rest of the lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable.",
+- Output only the final formatted report, no additional text or explanations
+- Session ID: ${sessionId || 'unknown'}`,
         },
         {
           role: "user",
@@ -175,6 +169,9 @@ Please generate a complete radiology report by merging the dictated findings int
         temperature: 0.1,
         top_p: 0.7,
         max_tokens: 1000,
+        // Add context isolation parameters
+        seed: Math.floor(Math.random() * 1000000), // Random seed for isolation
+        user: sessionId, // User parameter for session isolation
       });
 
       const response = completion.choices[0]?.message?.content;
