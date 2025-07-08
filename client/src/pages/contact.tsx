@@ -35,10 +35,7 @@ export default function Contact() {
         <main className="flex-1 p-4 md:p-6 overflow-y-auto">
           <div className="container mx-auto max-w-4xl">
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-nhs-dark-blue mb-2 text-center">Contact</h1>
-              <p className="text-nhs-dark-grey/70 text-lg text-center">
-                Get in touch with the Wilhelm development team
-              </p>
+              <h1 className="text-3xl font-bold text-nhs-dark-blue mb-2 text-center">Contact and Feedback</h1>
             </div>
 
             {/* Contact Methods */}
