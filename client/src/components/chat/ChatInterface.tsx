@@ -144,6 +144,11 @@ export default function ChatInterface() {
     if (isRecording) {
       stopRecording();
     } else {
+      // Check if we're on HTTPS (required for microphone access)
+      if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+        setError("Microphone access requires HTTPS. Please use a secure connection.");
+        return;
+      }
       startRecording();
     }
   };

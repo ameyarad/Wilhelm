@@ -29,6 +29,16 @@ export function useVoiceRecording() {
           noiseSuppression: true,
           sampleRate: 44100,
         } 
+      }).catch((err) => {
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+          throw new Error("Microphone permission denied. Please allow microphone access in your browser settings.");
+        } else if (err.name === 'NotFoundError') {
+          throw new Error("No microphone found. Please connect a microphone and try again.");
+        } else if (err.name === 'NotReadableError') {
+          throw new Error("Microphone is being used by another application. Please close other apps using the microphone.");
+        } else {
+          throw new Error(`Failed to access microphone: ${err.message}`);
+        }
       });
 
       // Create fresh MediaRecorder instance for complete isolation

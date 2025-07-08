@@ -104,6 +104,11 @@ export default function Home() {
     if (isRecording) {
       stopRecording();
     } else {
+      // Check if we're on HTTPS (required for microphone access)
+      if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+        setError("Microphone access requires HTTPS. Please use a secure connection.");
+        return;
+      }
       startRecording();
     }
   };
@@ -136,13 +141,26 @@ export default function Home() {
             {error && (
               <Card className="border-red-200 bg-red-50">
                 <CardContent className="p-4">
-                  <div className="flex items-center space-x-2 text-red-700">
-                    <span className="text-sm font-medium">{error}</span>
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <span className="text-sm font-medium text-red-700">{error}</span>
+                      {error.includes("Microphone permission denied") && (
+                        <div className="mt-2 text-xs text-red-600">
+                          <p className="font-medium">To enable microphone access:</p>
+                          <ul className="list-disc list-inside mt-1 space-y-1">
+                            <li>Click the lock/info icon in your browser's address bar</li>
+                            <li>Find "Microphone" settings</li>
+                            <li>Change from "Block" to "Allow"</li>
+                            <li>Refresh the page and try again</li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
                     <Button 
                       variant="ghost" 
                       size="sm" 
                       onClick={() => setError("")}
-                      className="text-red-500 hover:text-red-700"
+                      className="text-red-500 hover:text-red-700 ml-2"
                     >
                       ×
                     </Button>
@@ -183,6 +201,7 @@ export default function Home() {
                           : "text-nhs-blue hover:text-nhs-dark-blue"
                       }`}
                       disabled={isProcessing}
+                      title={isRecording ? "Stop recording" : "Start voice recording"}
                     >
                       {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                     </Button>
