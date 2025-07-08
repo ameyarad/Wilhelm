@@ -101,10 +101,10 @@ export default function Reports() {
 
   const handleCopyReport = async (report: Report) => {
     try {
-      // Strip HTML tags for plain text copy
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = report.content;
-      const plainText = tempDiv.textContent || tempDiv.innerText || '';
+      // Strip HTML tags for plain text copy using DOMParser (safer than innerHTML)
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(report.content, 'text/html');
+      const plainText = doc.body.textContent || doc.body.innerText || '';
       
       await navigator.clipboard.writeText(plainText);
       setError("");
