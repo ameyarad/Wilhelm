@@ -52,7 +52,7 @@ export class GroqService {
       const messages = [
         {
           role: "system",
-          content: `You are a radiology template-selection assistant. Each request is independent. Output ONLY valid JSON matching this schema: {\"template\": <string>}. Available templates: ${templateList}. Session ID: ${sessionId || 'unknown'}`,
+          content: `You are a radiology template-selection assistant. Each request is independent. Output ONLY valid JSON matching this schema: {\"template\": <string>}. Available templates: ${templateList}. Session ID: ${sessionId || "unknown"}`,
         },
         {
           role: "user",
@@ -97,7 +97,7 @@ export class GroqService {
     try {
       // Generate unique session ID for context isolation
       const sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
-      
+
       // Step 1: Select the most appropriate template
       const selectedTemplateName = await this.selectTemplate(
         findings,
@@ -144,10 +144,14 @@ export class GroqService {
 Guidelines:
 - Use the provided template structure as your foundation
 - Fill in all relevant sections with information from the clinical findings
+- DELETE or MODIFY any template line that conflicts with the dictation.  
+- Example: if template says “Both lungs are normal” but dictation mentions consolidation, replace with  
+    “Consolidation in the right lower lobe. The remainder of the lungs are clear.”  
+- KEEP template negatives that are not contradicted (e.g. “No pleural effusion”). 
 - Maintain professional medical language and format
 - Include appropriate medical terminology
 - Output only the final formatted report, no additional text or explanations
-- Session ID: ${sessionId || 'unknown'}`,
+- Session ID: ${sessionId || "unknown"}`,
         },
         // Few-shot example (user)
         {
@@ -176,7 +180,7 @@ Referrer: Dr Smith, Orthopaedics
 - intact PCL, MCL, LCL
 - small joint effusion
 - no meniscal tear
-          `.trim()
+          `.trim(),
         },
         // Few-shot example (assistant)
         {
@@ -198,7 +202,7 @@ There is a full-thickness mid-substance rupture of the anterior cruciate ligamen
 
 **IMPRESSION:**
 Complete ACL rupture with secondary bone contusions; otherwise unremarkable internal derangement.
-          `.trim()
+          `.trim(),
         },
         // Actual user request
         {
