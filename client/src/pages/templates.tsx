@@ -32,11 +32,11 @@ export default function Templates() {
   }
 
   return (
-    <div className="min-h-screen bg-nhs-light-grey">
-      <Header />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 ml-16 lg:ml-64 p-6">
+    <div className="flex h-screen bg-nhs-light-grey">
+      <Sidebar />
+      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300">
+        <Header />
+        <main className="flex-1 p-4 md:p-6 overflow-y-auto">
           <div className="max-w-4xl mx-auto">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-nhs-blue mb-2">My Templates</h1>
