@@ -129,40 +129,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/ai/enhance-findings', isAuthenticated, async (req: any, res) => {
-    try {
-      const { findings } = req.body;
-      
-      if (!findings) {
-        return res.status(400).json({ message: "Findings are required" });
-      }
-
-      // Moderate input content
-      const moderation = await groqService.moderateContent(findings);
-      if (!moderation.isSafe) {
-        return res.status(400).json({ 
-          message: 'Content moderation failed', 
-          violations: moderation.violations 
-        });
-      }
-
-      const enhancedFindings = await groqService.enhanceFindings(findings);
-      
-      // Moderate enhanced findings
-      const enhancedModeration = await groqService.moderateContent(enhancedFindings);
-      if (!enhancedModeration.isSafe) {
-        return res.status(500).json({ 
-          message: 'Enhanced findings failed moderation', 
-          violations: enhancedModeration.violations 
-        });
-      }
-      
-      res.json({ enhancedFindings });
-    } catch (error) {
-      console.error("Error enhancing findings:", error);
-      res.status(500).json({ message: "Failed to enhance findings" });
-    }
-  });
+  
 
   // Template routes
   app.get('/api/templates', isAuthenticated, async (req: any, res) => {

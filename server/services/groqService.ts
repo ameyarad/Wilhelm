@@ -172,43 +172,7 @@ Please generate a complete radiology report by merging the dictated findings int
     }
   }
 
-  async enhanceFindings(findings: string): Promise<string> {
-    try {
-      const prompt = `As a radiologist, please review and enhance the following clinical findings. Correct any obvious errors, standardize medical terminology, and ensure clarity while maintaining the original meaning:
-
-Original Findings:
-${findings}
-
-Please provide enhanced findings that are:
-1. Medically accurate
-2. Properly formatted
-3. Using standard radiology terminology
-4. Clear and concise`;
-
-      const completion = await groq.chat.completions.create({
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a professional radiologist. Enhance clinical findings while maintaining accuracy and using standard medical terminology.",
-          },
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-        model: "llama-3.1-8b-instant",
-        temperature: 0.1,
-        top_p: 0.7,
-        max_tokens: 500,
-      });
-
-      return completion.choices[0]?.message?.content || findings;
-    } catch (error) {
-      console.error("Findings enhancement error:", error);
-      return findings; // Return original if enhancement fails
-    }
-  }
+  
 
   async moderateContent(
     content: string,
