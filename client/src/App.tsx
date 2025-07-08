@@ -12,6 +12,9 @@ import Reports from "@/pages/reports";
 import About from "@/pages/about";
 import HowToUse from "@/pages/how-to-use";
 import Contact from "@/pages/contact";
+import CookieConsent from "@/components/layout/CookieConsent";
+import PrivacyPolicy from "@/pages/privacy-policy";
+import CookiePolicy from "@/pages/cookie-policy";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -29,6 +32,8 @@ function Router() {
           <Route path="/about" component={About} />
           <Route path="/how-to-use" component={HowToUse} />
           <Route path="/contact" component={Contact} />
+          <Route path="/privacy-policy" component={PrivacyPolicy} />
+          <Route path="/cookie-policy" component={CookiePolicy} />
         </>
       )}
       <Route component={NotFound} />
@@ -41,6 +46,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Router />
+        <CookieConsent />
       </TooltipProvider>
     </QueryClientProvider>
   );

@@ -87,14 +87,22 @@ export async function setupAuth(app: Express) {
     verified(null, user);
   };
 
-  for (const domain of process.env
-    .REPLIT_DOMAINS!.split(",")) {
+  // Support both HTTP (dev) and HTTPS (prod) callbacks
+  const domains = process.env.REPLIT_DOMAINS!.split(",");
+  
+  // Add localhost for development
+  if (process.env.NODE_ENV !== 'production') {
+    domains.push('localhost:5000');
+  }
+  
+  for (const domain of domains) {
+    const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
     const strategy = new Strategy(
       {
         name: `replitauth:${domain}`,
         config,
         scope: "openid email profile offline_access",
-        callbackURL: `https://${domain}/api/callback`,
+        callbackURL: `${protocol}://${domain}/api/callback`,
       },
       verify,
     );
@@ -105,14 +113,28 @@ export async function setupAuth(app: Express) {
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
   app.get("/api/login", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    // Use req.get('host') to include port in hostname
+    const host = req.get('host') || req.hostname;
+    const strategyName = `replitauth:${host}`;
+    
+    if (!passport._strategies[strategyName]) {
+      console.error(`No strategy found for ${strategyName}. Available:`, Object.keys(passport._strategies));
+      return res.status(500).json({ 
+        message: "Authentication not configured for this domain",
+        hostname: host,
+        availableStrategies: Object.keys(passport._strategies)
+      });
+    }
+    
+    passport.authenticate(strategyName, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    const host = req.get('host') || req.hostname;
+    passport.authenticate(`replitauth:${host}`, {
       successReturnToOrRedirect: "/",
       failureRedirect: "/api/login",
     })(req, res, next);
