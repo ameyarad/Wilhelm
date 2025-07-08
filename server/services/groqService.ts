@@ -21,7 +21,7 @@ export class GroqService {
       // Generate unique filename to ensure complete isolation between calls
       const timestamp = Date.now();
       const filename = `audio_${timestamp}_${Math.random().toString(36).substring(7)}.webm`;
-      
+
       const transcription = await groq.audio.transcriptions.create({
         file: new File([audioBuffer], filename, { type: "audio/webm" }),
         model: "whisper-large-v3-turbo",
@@ -43,24 +43,20 @@ export class GroqService {
 
   async selectTemplate(
     findings: string,
-    availableTemplates: Array<{ name: string; content: string }>
+    availableTemplates: Array<{ name: string; content: string }>,
   ): Promise<string> {
     try {
-
-
-      const templateList = availableTemplates
-        .map(t => t.name)
-        .join(", ");
+      const templateList = availableTemplates.map((t) => t.name).join(", ");
 
       const messages = [
         {
           role: "system",
-          content: `You are a radiology template-selection assistant. Output ONLY valid JSON matching this schema: {\"template\": <string>}. Available templates: ${templateList}`
+          content: `You are a radiology template-selection assistant. Output ONLY valid JSON matching this schema: {\"template\": <string>}. Available templates: ${templateList}`,
         },
         {
           role: "user",
-          content: `Classify the following findings and select the most appropriate template:\n${findings}`
-        }
+          content: `Select the most appropriate report template:\n${findings}`,
+        },
       ];
 
       const completion = await groq.chat.completions.create({
@@ -92,19 +88,27 @@ export class GroqService {
 
   async generateReport(
     findings: string,
-    availableTemplates: Array<{ name: string; content: string }>
+    availableTemplates: Array<{ name: string; content: string }>,
   ): Promise<ReportGenerationResult> {
     try {
       // Step 1: Select the most appropriate template
-      const selectedTemplateName = await this.selectTemplate(findings, availableTemplates);
-      const selectedTemplate = availableTemplates.find(t => t.name === selectedTemplateName) || availableTemplates[0];
+      const selectedTemplateName = await this.selectTemplate(
+        findings,
+        availableTemplates,
+      );
+      const selectedTemplate =
+        availableTemplates.find((t) => t.name === selectedTemplateName) ||
+        availableTemplates[0];
 
       if (!selectedTemplate) {
         throw new Error("No templates available");
       }
 
       // Step 2: Generate the report using the selected template
-      const reportContent = await this.mergeWithTemplate(findings, selectedTemplate);
+      const reportContent = await this.mergeWithTemplate(
+        findings,
+        selectedTemplate,
+      );
 
       return {
         report: reportContent,
@@ -119,22 +123,20 @@ export class GroqService {
 
   async mergeWithTemplate(
     findings: string,
-    template: { name: string; content: string }
+    template: { name: string; content: string },
   ): Promise<string> {
     try {
       const messages = [
         {
           role: "system",
-          content: `You are a professional radiologist AI assistant. Your task is to merge clinical findings into a radiology report template and generate a complete, well-formatted report.
+          content: `You are a professional radiology report generation AI assistant. Your task is to merge the dictated text into a radiology report template and generate a complete, well-formatted report.
 
 Guidelines:
 - Use the provided template structure as your foundation
 - Fill in all relevant sections with information from the clinical findings
 - Maintain professional medical language and format
 - Include appropriate medical terminology
-- If findings don't specify certain details, use appropriate medical language like "No acute abnormalities detected" or "Within normal limits"
-- Ensure the report flows logically and reads naturally
-- Output only the final formatted report, no additional text or explanations`
+- Output only the final formatted report, no additional text or explanations`,
         },
         {
           role: "user",
@@ -143,11 +145,11 @@ Guidelines:
 Template Structure:
 ${template.content}
 
-Clinical Findings:
+Dictated Findings:
 ${findings}
 
-Please generate a complete radiology report by merging the clinical findings into the template structure.`
-        }
+Please generate a complete radiology report by merging the dictated findings into the template structure.`,
+        },
       ];
 
       const completion = await groq.chat.completions.create({
@@ -187,7 +189,8 @@ Please provide enhanced findings that are:
         messages: [
           {
             role: "system",
-            content: "You are a professional radiologist. Enhance clinical findings while maintaining accuracy and using standard medical terminology.",
+            content:
+              "You are a professional radiologist. Enhance clinical findings while maintaining accuracy and using standard medical terminology.",
           },
           {
             role: "user",
@@ -207,7 +210,9 @@ Please provide enhanced findings that are:
     }
   }
 
-  async moderateContent(content: string): Promise<{ isSafe: boolean; violations: string[] }> {
+  async moderateContent(
+    content: string,
+  ): Promise<{ isSafe: boolean; violations: string[] }> {
     // Content moderation temporarily disabled due to model decommissioning
     // Always return safe for now
     return { isSafe: true, violations: [] };
