@@ -134,9 +134,18 @@ export default function GeneratedReportViewer({ report, isOpen, onClose }: Gener
 
   const handleCopy = async () => {
     try {
-      // Create a temporary element to extract plain text from HTML
+      // Safely extract plain text from HTML content without XSS risk
       const tempElement = document.createElement('div');
-      tempElement.innerHTML = content;
+      
+      // Sanitize HTML by removing script tags and other dangerous elements
+      const sanitizedContent = content
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+        .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+        .replace(/on\w+="[^"]*"/gi, '')
+        .replace(/on\w+='[^']*'/gi, '')
+        .replace(/javascript:/gi, '');
+      
+      tempElement.innerHTML = sanitizedContent;
       const plainText = tempElement.textContent || tempElement.innerText || content;
       
       await navigator.clipboard.writeText(plainText);
