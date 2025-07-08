@@ -10,12 +10,18 @@ import {
   sanitizeRequest,
   securityErrorHandler
 } from "./middleware/security";
+import { enhancedSSLMiddleware } from "./middleware/ssl";
 
 const app = express();
 
+// Trust proxy for Replit deployments
+if (process.env.NODE_ENV === "production") {
+  app.set('trust proxy', true);
+}
+
 // Security middleware - minimal for development, full for production
 if (process.env.NODE_ENV === "production") {
-  app.use(enforceHTTPS);
+  app.use(enhancedSSLMiddleware); // Enhanced SSL handling for Replit deployment
   app.use(securityHeaders);
   app.use(generalRateLimit);
   app.use(...additionalSecurity);

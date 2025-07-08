@@ -50,12 +50,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // SSL readiness check endpoint (no auth required)
   app.get('/.well-known/ssl-check', (req, res) => {
     const isProduction = process.env.NODE_ENV === 'production';
-    const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https';
+    const isSecure = req.secure || 
+                    req.headers['x-forwarded-proto'] === 'https' ||
+                    req.headers['x-forwarded-ssl'] === 'on' ||
+                    req.headers['cloudfront-forwarded-proto'] === 'https';
     
     res.set({
       'Cache-Control': 'no-cache, no-store, must-revalidate',
       'Pragma': 'no-cache',
-      'Expires': '0'
+      'Expires': '0',
+      'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+      'X-Content-Type-Options': 'nosniff',
+      'X-Frame-Options': 'DENY',
+      'X-XSS-Protection': '1; mode=block'
     });
     
     res.json({
@@ -64,6 +71,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       secure_connection: isSecure,
       https_enforced: isProduction,
       host: req.get('host'),
+      protocol: req.protocol,
+      headers: {
+        'x-forwarded-proto': req.headers['x-forwarded-proto'],
+        'x-forwarded-ssl': req.headers['x-forwarded-ssl'],
+        'x-forwarded-for': req.headers['x-forwarded-for'],
+        'cloudfront-forwarded-proto': req.headers['cloudfront-forwarded-proto']
+      },
       user_agent: req.get('user-agent'),
       timestamp: new Date().toISOString()
     });

@@ -13,9 +13,17 @@ export function enforceHTTPS(req: Request, res: Response, next: NextFunction) {
     return next();
   }
   
-  if (process.env.NODE_ENV === "production" && !req.secure && req.get("x-forwarded-proto") !== "https") {
-    const httpsUrl = `https://${req.get("host")}${req.url}`;
-    return res.redirect(301, httpsUrl);
+  // Check for HTTPS in production - enhanced for Replit deployment
+  if (process.env.NODE_ENV === "production") {
+    const isHttps = req.secure || 
+                   req.get("x-forwarded-proto") === "https" ||
+                   req.get("x-forwarded-ssl") === "on" ||
+                   req.get("cloudfront-forwarded-proto") === "https";
+    
+    if (!isHttps) {
+      const httpsUrl = `https://${req.get("host")}${req.url}`;
+      return res.redirect(301, httpsUrl);
+    }
   }
   next();
 }
@@ -38,14 +46,19 @@ export const securityHeaders = helmet({
   } : false, // Disable CSP in development to avoid Vite conflicts
   crossOriginEmbedderPolicy: false,
   hsts: process.env.NODE_ENV === "production" ? {
-    maxAge: 31536000,
+    maxAge: 31536000, // 1 year
     includeSubDomains: true,
     preload: true
   } : false,
   noSniff: true,
   frameguard: { action: 'deny' },
   xssFilter: true,
-  referrerPolicy: { policy: "strict-origin-when-cross-origin" }
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+  // Additional security headers for SSL/TLS
+  permittedCrossDomainPolicies: false,
+  dnsPrefetchControl: { allow: false },
+  ieNoOpen: true,
+  hidePoweredBy: true
 });
 
 // CORS Configuration
@@ -241,6 +254,20 @@ export function sanitizeRequest(req: Request, res: Response, next: NextFunction)
 export const additionalSecurity = [
   compression(), // Gzip compression
   hpp(), // HTTP Parameter Pollution protection
+  
+  // Force secure cookies in production
+  (req: Request, res: Response, next: NextFunction) => {
+    if (process.env.NODE_ENV === "production") {
+      const originalCookie = res.cookie;
+      res.cookie = function(name: string, value: any, options: any = {}) {
+        options.secure = true;
+        options.httpOnly = true;
+        options.sameSite = 'strict';
+        return originalCookie.call(this, name, value, options);
+      };
+    }
+    next();
+  },
   
   // X-Content-Type-Options
   (req: Request, res: Response, next: NextFunction) => {
