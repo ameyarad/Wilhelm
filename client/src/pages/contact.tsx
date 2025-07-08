@@ -45,7 +45,6 @@ export default function Contact() {
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <MessageSquare className="w-6 h-6 text-nhs-blue" />
-                    <span>Send Feedback</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -170,7 +169,7 @@ export default function Contact() {
         {/* Footer */}
         <footer className="bg-white border-t border-gray-200 p-2 text-center">
           <div className="text-xs text-nhs-dark-grey/70">
-            <p className="font-bold">© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
+            <p className="font-normal">© 2025 Ameya Kawthalkar. Wilhelm is for educational and research purposes only. Not for clinical use.</p>
           </div>
         </footer>
       </div>
