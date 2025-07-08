@@ -29,7 +29,7 @@ export const securityHeaders = helmet({
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:", "https:", "blob:"],
-      connectSrc: ["'self'", "https://api.groq.com", "https://console.groq.com", "https://apis.replit.com", "wss://*.replit.app", "wss://*.replit.dev", "https://*.replit.app", "https://*.replit.dev"],
+      connectSrc: ["'self'", "https://api.groq.com", "https://console.groq.com", "https://apis.replit.com", "wss://*.replit.app", "wss://*.replit.dev", "https://*.replit.app", "https://*.replit.dev", "https://wilhelmai.net", "https://www.wilhelmai.net"],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"],
       baseUri: ["'self'"],
@@ -59,7 +59,9 @@ export const corsOptions = cors({
           /\.replit\.dev$/,
           /\.replit\.app$/,
           /^https:\/\/[a-zA-Z0-9\-]+\.replit\.dev$/,
-          /^https:\/\/[a-zA-Z0-9\-]+\.replit\.app$/
+          /^https:\/\/[a-zA-Z0-9\-]+\.replit\.app$/,
+          'https://wilhelmai.net',
+          'https://www.wilhelmai.net'
         ];
         
         const isAllowed = allowedOrigins.some(pattern => {
