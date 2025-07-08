@@ -145,14 +145,49 @@ export default function Home() {
                     <div className="flex-1">
                       <span className="text-sm font-medium text-red-700">{error}</span>
                       {error.includes("Microphone permission denied") && (
-                        <div className="mt-2 text-xs text-red-600">
+                        <div className="mt-2 text-xs text-red-600 space-y-2">
                           <p className="font-medium">To enable microphone access:</p>
-                          <ul className="list-disc list-inside mt-1 space-y-1">
-                            <li>Click the lock/info icon in your browser's address bar</li>
-                            <li>Find "Microphone" settings</li>
-                            <li>Change from "Block" to "Allow"</li>
-                            <li>Refresh the page and try again</li>
-                          </ul>
+                          
+                          <div className="border-l-2 border-red-400 pl-3">
+                            <p className="font-medium text-red-700">Quick Fix:</p>
+                            <ol className="list-decimal list-inside mt-1 space-y-1">
+                              <li>Look for a microphone icon in your address bar (right side)</li>
+                              <li>If blocked, click it and select "Allow"</li>
+                              <li>Refresh the page</li>
+                            </ol>
+                          </div>
+
+                          <div className="border-l-2 border-red-400 pl-3">
+                            <p className="font-medium text-red-700">Chrome/Edge:</p>
+                            <ol className="list-decimal list-inside mt-1 space-y-1">
+                              <li>Click the three dots menu → Settings</li>
+                              <li>Search for "Site Settings" → Microphone</li>
+                              <li>Add this site to "Allowed" list</li>
+                            </ol>
+                          </div>
+
+                          <div className="border-l-2 border-red-400 pl-3">
+                            <p className="font-medium text-red-700">Firefox:</p>
+                            <ol className="list-decimal list-inside mt-1 space-y-1">
+                              <li>Click the menu → Settings</li>
+                              <li>Privacy & Security → Permissions → Microphone</li>
+                              <li>Click "Settings" and allow this site</li>
+                            </ol>
+                          </div>
+
+                          <div className="border-l-2 border-red-400 pl-3">
+                            <p className="font-medium text-red-700">Safari:</p>
+                            <ol className="list-decimal list-inside mt-1 space-y-1">
+                              <li>Safari menu → Settings for This Website</li>
+                              <li>Set Microphone to "Allow"</li>
+                            </ol>
+                          </div>
+
+                          <div className="mt-3 p-2 bg-red-100 rounded">
+                            <p className="text-xs font-medium text-red-800">
+                              💡 Tip: After allowing microphone access, you may need to refresh this page or close and reopen your browser for the changes to take effect.
+                            </p>
+                          </div>
                         </div>
                       )}
                     </div>

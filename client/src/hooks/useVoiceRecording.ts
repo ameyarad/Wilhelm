@@ -23,6 +23,29 @@ export function useVoiceRecording() {
         mediaRecorderRef.current = null;
       }
 
+      // First, check if we can query permissions
+      if (navigator.permissions && navigator.permissions.query) {
+        try {
+          const result = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+          console.log('Microphone permission state:', result.state);
+          
+          // If permission was previously denied, prompt user to reset
+          if (result.state === 'denied') {
+            console.log('Permission previously denied - user needs to manually reset in browser settings');
+          }
+        } catch (e) {
+          console.log('Cannot query microphone permission:', e);
+        }
+      }
+      
+      // Log current location for debugging
+      console.log('Current location:', {
+        protocol: window.location.protocol,
+        hostname: window.location.hostname,
+        href: window.location.href,
+        isSecure: window.location.protocol === 'https:' || window.location.hostname === 'localhost'
+      });
+
       const stream = await navigator.mediaDevices.getUserMedia({ 
         audio: {
           echoCancellation: true,
@@ -30,14 +53,21 @@ export function useVoiceRecording() {
           sampleRate: 44100,
         } 
       }).catch((err) => {
+        console.error('Microphone access error:', err.name, err.message);
         if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-          throw new Error("Microphone permission denied. Please allow microphone access in your browser settings.");
+          throw new Error("Microphone permission denied. If you don't see the permission option in your address bar, try: 1) Open browser settings, 2) Search for 'Site Settings' or 'Privacy', 3) Find 'Microphone' permissions, 4) Allow this site to use microphone.");
         } else if (err.name === 'NotFoundError') {
           throw new Error("No microphone found. Please connect a microphone and try again.");
         } else if (err.name === 'NotReadableError') {
           throw new Error("Microphone is being used by another application. Please close other apps using the microphone.");
+        } else if (err.name === 'AbortError') {
+          throw new Error("Microphone access was aborted. Please try again.");
+        } else if (err.name === 'NotSupportedError') {
+          throw new Error("Microphone access is not supported in this browser. Please use Chrome, Firefox, or Edge.");
+        } else if (err.name === 'SecurityError') {
+          throw new Error("Microphone access blocked due to security settings. Please ensure you're using HTTPS.");
         } else {
-          throw new Error(`Failed to access microphone: ${err.message}`);
+          throw new Error(`Failed to access microphone: ${err.name} - ${err.message}`);
         }
       });
 
