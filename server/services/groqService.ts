@@ -141,22 +141,12 @@ Guidelines:
         {
           role: "user",
           content: `Example 1:
-Template: Chest X-Ray
-Template Structure:
-EXAMINATION: Chest X-Ray
-INDICATION: [indication]
-TECHNIQUE: [technique]
-FINDINGS: [findings]
-IMPRESSION: [impression]
+Template: Both lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable.
 
-Dictated Findings: PA and lateral chest x-ray shows clear lungs, normal heart size, no pneumothorax
+Dictated Findings: Chest x-ray. Consolidation in right lung middle zone.
 
 Generated Report:
-EXAMINATION: Chest X-Ray
-INDICATION: Clinical evaluation
-TECHNIQUE: PA and lateral chest radiographs
-FINDINGS: The lungs are clear bilaterally without consolidation, effusion, or pneumothorax. Cardiac silhouette is normal in size and configuration. Mediastinal contours are unremarkable.
-IMPRESSION: Normal chest radiograph.`
+Consolidation in right lung middle zone. Rest of the lungs appear normal. Mediastinal silhouette appears normal. Visualized bones are unremarkable.`
         },
         {
           role: "assistant",
