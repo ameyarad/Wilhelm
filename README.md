@@ -5,7 +5,7 @@
 [![React](https://img.shields.io/badge/React-18-blue)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 
-> An advanced AI-powered radiology reporting platform designed to streamline medical documentation through intelligent template management and AI-generated reports.
+> An AI-powered radiology reporting platform designed to streamline reporting through voice transcription, automatic template selection and formatting.
 
 ## ⚠️ Important Notice
 
