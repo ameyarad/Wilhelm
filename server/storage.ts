@@ -38,6 +38,7 @@ export interface IStorage {
   // Report operations
   getReports(userId: string): Promise<Report[]>;
   getReport(id: number): Promise<Report | undefined>;
+  getReportForUser(id: number, userId: string): Promise<Report | undefined>;
   createReport(report: InsertReport): Promise<Report>;
   updateReport(id: number, report: Partial<InsertReport>): Promise<Report>;
   deleteReport(id: number): Promise<void>;
@@ -157,6 +158,15 @@ export class DatabaseStorage implements IStorage {
 
   async getReport(id: number): Promise<Report | undefined> {
     const [report] = await db.select().from(reports).where(eq(reports.id, id));
+    return report;
+  }
+  
+  // SECURITY: Get report with user verification
+  async getReportForUser(id: number, userId: string): Promise<Report | undefined> {
+    const [report] = await db
+      .select()
+      .from(reports)
+      .where(and(eq(reports.id, id), eq(reports.userId, userId)));
     return report;
   }
 

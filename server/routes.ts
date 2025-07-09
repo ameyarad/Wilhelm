@@ -259,9 +259,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Get available templates for this user
+      // Get available templates for this user ONLY
       const templates = await storage.getTemplates(userId);
+      
+      // Log template access for security audit
+      console.log(`User ${userId} accessing ${templates.length} templates`);
+      
+      // Include template ID for better tracking and isolation
       const templatesForAI = templates.map(t => ({
+        id: t.id,
         name: t.name,
         content: t.content,
       }));
@@ -477,11 +483,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/templates/:id', isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
       const id = parseInt(req.params.id);
       const template = await storage.getTemplate(id);
       
       if (!template) {
         return res.status(404).json({ message: "Template not found" });
+      }
+      
+      // CRITICAL: Verify template belongs to requesting user
+      if (template.userId !== userId) {
+        console.warn(`User ${userId} attempted to access template ${id} belonging to user ${template.userId}`);
+        return res.status(403).json({ message: "Access denied" });
       }
 
       res.json(template);
@@ -650,10 +663,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/reports/:id', isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
       const id = parseInt(req.params.id);
-      const report = await storage.getReport(id);
+      const report = await storage.getReportForUser(id, userId);
       
       if (!report) {
+        console.warn(`User ${userId} attempted to access report ${id} - not found or access denied`);
         return res.status(404).json({ message: "Report not found" });
       }
 
@@ -666,8 +681,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.put('/api/reports/:id', isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
       const id = parseInt(req.params.id);
       const reportData = insertReportSchema.partial().parse(req.body);
+      
+      // Verify report belongs to user
+      const existingReport = await storage.getReportForUser(id, userId);
+      if (!existingReport) {
+        console.warn(`User ${userId} attempted to update report ${id} - access denied`);
+        return res.status(404).json({ message: "Report not found" });
+      }
       
       const report = await storage.updateReport(id, reportData);
       res.json(report);
@@ -683,7 +706,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.delete('/api/reports/:id', isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
       const id = parseInt(req.params.id);
+      
+      // Verify report belongs to user
+      const report = await storage.getReportForUser(id, userId);
+      if (!report) {
+        console.warn(`User ${userId} attempted to delete report ${id} - access denied`);
+        return res.status(404).json({ message: "Report not found" });
+      }
+      
       await storage.deleteReport(id);
       res.json({ message: "Report deleted successfully" });
     } catch (error) {

@@ -75,7 +75,7 @@ export class GroqService {
 
   async selectTemplate(
     findings: string,
-    availableTemplates: Array<{ name: string; content: string }>,
+    availableTemplates: Array<{ id: number; name: string; content: string }>,
     userId?: string,
   ): Promise<string> {
     try {
@@ -85,7 +85,7 @@ export class GroqService {
       const messages = [
         {
           role: "system",
-          content: `You are a medical imaging template-selection assistant. Each request is completely independent with no memory of previous conversations. Output ONLY valid JSON matching this schema: {\"template\": <string>}. Available templates: ${templateList}. Session: ${context.sessionId}`,
+          content: `You are a medical imaging template-selection assistant. This is a completely isolated request with no memory of any previous conversations, users, or templates. You can ONLY select from the templates provided for THIS specific user. Output ONLY valid JSON matching this schema: {\"template\": <string>}. Available templates for user ${userId}: ${templateList}. Session: ${context.sessionId}`,
         },
         {
           role: "user",
@@ -130,7 +130,7 @@ export class GroqService {
 
   async generateReport(
     findings: string,
-    availableTemplates: Array<{ name: string; content: string }>,
+    availableTemplates: Array<{ id: number; name: string; content: string }>,
     userId?: string,
   ): Promise<ReportGenerationResult> {
     try {
@@ -183,7 +183,7 @@ export class GroqService {
 
   async mergeWithTemplate(
     findings: string,
-    template: { name: string; content: string },
+    template: { id: number; name: string; content: string },
     userId?: string,
   ): Promise<string> {
     try {
