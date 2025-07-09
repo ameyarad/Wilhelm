@@ -144,7 +144,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       cookies: {
         secure: true,
         httpOnly: true,
-        sameSite: 'strict'
+        sameSite: 'lax' // Allow OAuth flow
       },
       certification: {
         ready_for_ssl: true,
