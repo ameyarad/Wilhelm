@@ -1,7 +1,12 @@
 import { Groq } from "groq-sdk";
+import https from "https";
 
+// Configure Groq client with proper SSL handling
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY || "",
+  httpAgent: process.env.NODE_ENV !== 'production' ? new https.Agent({
+    rejectUnauthorized: false // Allow self-signed certificates in development
+  }) : undefined
 });
 
 export interface TranscriptionResult {

@@ -14,6 +14,11 @@ import { enhancedSSLMiddleware, secureSessionMiddleware } from "./middleware/ssl
 import { applySecurityHeaders, validateHTTPS } from "./middleware/securityConfig";
 import { httpsRedirectMiddleware } from "./middleware/httpsRedirect";
 
+// Handle self-signed certificate errors in development
+if (process.env.NODE_ENV !== 'production') {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
+
 const app = express();
 
 // Trust proxy for Replit deployments
