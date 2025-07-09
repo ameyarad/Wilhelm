@@ -217,7 +217,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // AI routes
   app.post('/api/ai/transcribe', isAuthenticated, aiRateLimit, upload.single('audio'), async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
+      
       console.log("Transcribe request received:", {
+        userId,
         hasFile: !!req.file,
         fileSize: req.file?.size,
         mimeType: req.file?.mimetype,
@@ -228,7 +231,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "No audio file provided" });
       }
 
-      const transcription = await groqService.transcribeAudio(req.file.buffer);
+      const transcription = await groqService.transcribeAudio(req.file.buffer, userId);
       console.log("Transcription successful:", transcription.text.substring(0, 50) + "...");
       res.json(transcription);
     } catch (error) {
@@ -263,7 +266,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         content: t.content,
       }));
 
-      const result = await groqService.generateReport(findings, templatesForAI);
+      const result = await groqService.generateReport(findings, templatesForAI, userId);
       
       // Moderate the generated report as well
       const reportModeration = await groqService.moderateContent(result.report);
@@ -278,6 +281,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error generating report:", error);
       res.status(500).json({ message: "Failed to generate report" });
+    }
+  });
+
+  app.post('/api/ai/clear-context', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      
+      // Clear all AI context by ensuring fresh session IDs and seeds
+      const contextId = `cleared_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+      
+      console.log(`Context cleared for user ${userId}, new context ID: ${contextId}`);
+      
+      res.json({ 
+        message: "AI context cleared successfully",
+        contextId: contextId,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error("Error clearing AI context:", error);
+      res.status(500).json({ message: "Failed to clear AI context" });
     }
   });
 

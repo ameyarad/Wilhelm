@@ -16,15 +16,31 @@ export interface ReportGenerationResult {
 }
 
 export class GroqService {
-  async transcribeAudio(audioBuffer: Buffer): Promise<TranscriptionResult> {
+  // Private context isolation helper to generate fresh session parameters
+  private generateFreshContext(userId?: string): {
+    sessionId: string;
+    seed: number;
+    timestamp: string;
+  } {
+    const timestamp = Date.now();
+    const randomId = Math.random().toString(36).substring(7);
+    return {
+      sessionId: `${userId || 'anon'}_${timestamp}_${randomId}`,
+      seed: Math.floor(Math.random() * 1000000), // Random seed for deterministic but isolated responses
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  async transcribeAudio(audioBuffer: Buffer, userId?: string): Promise<TranscriptionResult> {
     try {
       // Generate unique filename to ensure complete isolation between calls
-      const timestamp = Date.now();
-      const filename = `audio_${timestamp}_${Math.random().toString(36).substring(7)}.webm`;
+      const context = this.generateFreshContext(userId);
+      const filename = `audio_${context.sessionId}.webm`;
 
       console.log("Starting transcription with Groq:", {
         bufferSize: audioBuffer.length,
         filename: filename,
+        sessionId: context.sessionId,
         apiKeyPresent: !!process.env.GROQ_API_KEY
       });
 
@@ -37,7 +53,10 @@ export class GroqService {
         temperature: 0.0, // Deterministic output
       });
 
-      console.log("Transcription successful, text length:", transcription.text.length);
+      console.log("Transcription successful:", {
+        textLength: transcription.text.length,
+        sessionId: context.sessionId
+      });
 
       return {
         text: transcription.text.trim(), // Trim any whitespace
@@ -57,19 +76,20 @@ export class GroqService {
   async selectTemplate(
     findings: string,
     availableTemplates: Array<{ name: string; content: string }>,
-    sessionId?: string,
+    userId?: string,
   ): Promise<string> {
     try {
+      const context = this.generateFreshContext(userId);
       const templateList = availableTemplates.map((t) => t.name).join(", ");
 
       const messages = [
         {
           role: "system",
-          content: `You are a radiology template-selection assistant. Each request is independent. Output ONLY valid JSON matching this schema: {\"template\": <string>}. Available templates: ${templateList}. Session ID: ${sessionId || "unknown"}`,
+          content: `You are a medical imaging template-selection assistant. Each request is completely independent with no memory of previous conversations. Output ONLY valid JSON matching this schema: {\"template\": <string>}. Available templates: ${templateList}. Session: ${context.sessionId}`,
         },
         {
           role: "user",
-          content: `Select the most appropriate report template:\n${findings}`,
+          content: `Select the most appropriate report template for these findings:\n${findings}`,
         },
       ];
 
@@ -79,15 +99,20 @@ export class GroqService {
         temperature: 0.1,
         top_p: 0.6,
         max_tokens: 100,
-        // Add context isolation parameters
-        seed: Math.floor(Math.random() * 1000000), // Random seed for isolation
-        user: sessionId, // User parameter for session isolation
+        // Enhanced context isolation parameters
+        seed: context.seed, // Fresh random seed for complete isolation
+        user: context.sessionId, // Unique session ID for request isolation
       });
 
       const response = completion.choices[0]?.message?.content;
       if (!response) {
         throw new Error("No response from AI");
       }
+
+      console.log("Template selection:", {
+        sessionId: context.sessionId,
+        selectedTemplate: response.substring(0, 50) + "..."
+      });
 
       try {
         const parsed = JSON.parse(response);
@@ -106,16 +131,23 @@ export class GroqService {
   async generateReport(
     findings: string,
     availableTemplates: Array<{ name: string; content: string }>,
+    userId?: string,
   ): Promise<ReportGenerationResult> {
     try {
-      // Generate unique session ID for context isolation
-      const sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+      // Generate fresh context for complete isolation
+      const context = this.generateFreshContext(userId);
 
-      // Step 1: Select the most appropriate template
+      console.log("Starting report generation:", {
+        sessionId: context.sessionId,
+        templateCount: availableTemplates.length,
+        findingsLength: findings.length
+      });
+
+      // Step 1: Select the most appropriate template with fresh context
       const selectedTemplateName = await this.selectTemplate(
         findings,
         availableTemplates,
-        sessionId,
+        userId,
       );
       const selectedTemplate =
         availableTemplates.find((t) => t.name === selectedTemplateName) ||
@@ -125,12 +157,18 @@ export class GroqService {
         throw new Error("No templates available");
       }
 
-      // Step 2: Generate the report using the selected template with session isolation
+      // Step 2: Generate the report using the selected template with fresh context
       const reportContent = await this.mergeWithTemplate(
         findings,
         selectedTemplate,
-        sessionId,
+        userId,
       );
+
+      console.log("Report generation completed:", {
+        sessionId: context.sessionId,
+        templateUsed: selectedTemplate.name,
+        reportLength: reportContent.length
+      });
 
       return {
         report: reportContent,
@@ -146,9 +184,11 @@ export class GroqService {
   async mergeWithTemplate(
     findings: string,
     template: { name: string; content: string },
-    sessionId?: string,
+    userId?: string,
   ): Promise<string> {
     try {
+      const context = this.generateFreshContext(userId);
+      
       const messages = [
         {
           role: "system",
@@ -164,7 +204,7 @@ Guidelines:
 - Maintain professional medical language and format
 - Include appropriate medical terminology
 - Output only the final formatted report, no additional text or explanations
-- Session ID: ${sessionId || "unknown"}`,
+- Session: ${context.sessionId} | Time: ${context.timestamp}`,
         },
         // Few-shot example (user)
         {
@@ -238,15 +278,21 @@ Please generate a complete medical imaging report by merging the dictated findin
         temperature: 0.1,
         top_p: 0.7,
         max_tokens: 1000,
-        // Add context isolation parameters
-        seed: Math.floor(Math.random() * 1000000), // Random seed for isolation
-        user: sessionId, // User parameter for session isolation
+        // Enhanced context isolation parameters
+        seed: context.seed, // Fresh random seed for complete isolation
+        user: context.sessionId, // Unique session ID for request isolation
       });
 
       const response = completion.choices[0]?.message?.content;
       if (!response) {
         throw new Error("No response from Groq API");
       }
+
+      console.log("Template merge completed:", {
+        sessionId: context.sessionId,
+        templateName: template.name,
+        outputLength: response.length
+      });
 
       return response.trim();
     } catch (error) {

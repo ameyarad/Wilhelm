@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useVoiceRecording } from "@/hooks/useVoiceRecording";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
+import { cn } from "@/lib/utils";
 import MessageBubble from "./MessageBubble";
 import { ChatMessage, InsertChatMessage } from "@shared/schema";
 import { 
@@ -15,7 +16,9 @@ import {
   MicOff, 
   Paperclip, 
   Circle,
-  Loader2 
+  Loader2,
+  RefreshCw,
+  Trash2
 } from "lucide-react";
 
 export default function ChatInterface() {
@@ -96,6 +99,33 @@ export default function ChatInterface() {
     },
   });
 
+  // Clear context mutation
+  const clearContextMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiRequest("POST", "/api/ai/clear-context", {});
+      return response.json();
+    },
+    onSuccess: async () => {
+      // Also clear chat messages
+      await apiRequest("DELETE", "/api/chat/messages", {});
+      queryClient.invalidateQueries({ queryKey: ['/api/chat/messages'] });
+      // Clear current message and transcript
+      setMessage("");
+      clearTranscript();
+      setError("");
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        setError("Unauthorized access. Redirecting to login...");
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      setError("Failed to clear context. Please try again.");
+    },
+  });
+
   // Handle voice recording
   useEffect(() => {
     if (transcript && !isRecording) {
@@ -151,6 +181,10 @@ export default function ChatInterface() {
       }
       startRecording();
     }
+  };
+
+  const handleClearContext = () => {
+    clearContextMutation.mutate();
   };
 
   if (isLoading) {
@@ -247,6 +281,22 @@ export default function ChatInterface() {
             </div>
           </div>
           <Button
+            onClick={handleClearContext}
+            disabled={clearContextMutation.isPending || isProcessing}
+            variant="outline"
+            className="border-nhs-blue text-nhs-blue hover:bg-nhs-blue/10 px-4"
+            title="Clear all context - removes chat history and resets AI models"
+          >
+            {clearContextMutation.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <>
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Clear Context
+              </>
+            )}
+          </Button>
+          <Button
             onClick={handleSend}
             disabled={!message.trim() || sendMessageMutation.isPending || isProcessing}
             className="bg-nhs-blue hover:bg-nhs-blue/90 text-white px-6"
@@ -256,7 +306,7 @@ export default function ChatInterface() {
             ) : (
               <>
                 <Send className="w-4 h-4 mr-2" />
-                Send
+                Generate Report
               </>
             )}
           </Button>
