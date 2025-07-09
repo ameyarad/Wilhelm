@@ -1,4 +1,4 @@
-# Wilhelm - AI-Powered Radiology Reporting Platform
+# Wilhelm - Free and Open Source Medical Imaging Reporting AI Agent
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-16%2B-green)](https://nodejs.org/)
@@ -180,7 +180,7 @@ The application will be available at `http://localhost:5173` (development) or `h
 
 ## 🤝 Contributing
 
-We welcome contributions from the medical and developer communities!
+Wilhelm welcomes contributions from the medical and developer communities!
 
 ### Getting Started
 
@@ -205,33 +205,25 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👨‍💻 Author
 
 **Ameya Kawthalkar**
-- Created Wilhelm as an educational tool for radiology professionals
-- Focused on streamlining medical documentation workflows
+- Created Wilhelm as an educational tool for radiology trainees and radiologists
+- Wilhelm is intended to spur the creation of more open source solutions to streamline medical imaging workflows
 
 ## 🙏 Acknowledgments
 
-- Built with modern web technologies for optimal performance
-- Designed with healthcare professionals in mind
-- Inspired by the need for efficient medical documentation
-- Special thanks to the open-source community
+Built with ❤️ by a radiologist for radiologists and professionals practising medical imaging around the world
 
 ## 📞 Support
 
 For questions, feedback, or contributions:
 - Open an issue on GitHub
 - Contact through the application's contact form
-- Join discussions about features and improvements
+
 
 ## 🔮 Future Roadmap
 
-- [ ] DICOM image integration
-- [ ] Advanced AI model selection
-- [ ] Multi-institutional template sharing
-- [ ] Real-time collaboration features
-- [ ] Advanced analytics and reporting
-- [ ] Mobile app development
-- [ ] Integration with EHR systems
-
+- [ ] GDPR and HIPAA compliant local free and open source model
+- [ ] DICOM reader integration 
+- [ ] In-built template library
 ---
 
 **Remember**: Wilhelm is for educational and research purposes only. Always consult qualified healthcare professionals for medical decisions.
