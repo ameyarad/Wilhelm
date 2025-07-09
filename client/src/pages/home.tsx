@@ -8,7 +8,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
 import GeneratedReportViewer from "@/components/reports/GeneratedReportViewer";
 import { useVoiceRecording } from "@/hooks/useVoiceRecording";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { cn } from "@/lib/utils";
@@ -21,7 +21,8 @@ import {
   Loader2,
   FileText,
   Brain,
-  Eye
+  Eye,
+  RefreshCw
 } from "lucide-react";
 
 export default function Home() {
@@ -32,6 +33,7 @@ export default function Home() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isReportViewerOpen, setIsReportViewerOpen] = useState(false);
   const [error, setError] = useState("");
+  const queryClient = useQueryClient();
   
   const {
     isRecording,
@@ -67,6 +69,31 @@ export default function Home() {
     },
   });
 
+  // Clear context mutation
+  const clearContextMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiRequest("DELETE", "/api/chat/messages");
+      return response.json();
+    },
+    onSuccess: () => {
+      setMessage("");
+      setGeneratedReport("");
+      setError("");
+      queryClient.invalidateQueries({ queryKey: ['/api/chat/messages'] });
+      // Context cleared successfully
+    },
+    onError: (error) => {
+      if (isUnauthorizedError(error)) {
+        setError("Unauthorized access. Redirecting to login...");
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 500);
+        return;
+      }
+      setError("Failed to clear context. Please try again.");
+    },
+  });
+
   // Handle voice recording
   useEffect(() => {
     if (transcript && !isRecording) {
@@ -99,6 +126,10 @@ export default function Home() {
     setIsProcessing(true);
     setError("");
     generateReportMutation.mutate(message.trim());
+  };
+
+  const handleClearContext = () => {
+    clearContextMutation.mutate();
   };
 
   const toggleRecording = () => {
@@ -245,25 +276,45 @@ export default function Home() {
 
                 </div>
 
-                <Button
-                  onClick={handleGenerateReport}
-                  disabled={!message.trim() || isProcessing}
-                  className="w-full bg-nhs-blue hover:bg-nhs-blue/90 text-white"
-                  size="lg"
-                >
-                  {isProcessing ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                      Generating Report...
-                    </>
-                  ) : (
-                    <>
-                      <FileText className="w-4 h-4 mr-2" />
-                      <span className="hidden sm:inline">Generate Report</span>
-                      <span className="sm:hidden">Generate</span>
-                    </>
-                  )}
-                </Button>
+                <div className="flex space-x-3">
+                  <Button
+                    onClick={handleClearContext}
+                    disabled={clearContextMutation.isPending || isProcessing}
+                    variant="outline"
+                    className="border-nhs-blue text-nhs-blue hover:bg-nhs-blue/10"
+                    size="lg"
+                    title="Clear all context - removes chat history and resets AI models"
+                  >
+                    {clearContextMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <>
+                        <RefreshCw className="w-4 h-4 mr-2" />
+                        <span className="hidden sm:inline">Clear Context</span>
+                        <span className="sm:hidden">Clear</span>
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    onClick={handleGenerateReport}
+                    disabled={!message.trim() || isProcessing}
+                    className="flex-1 bg-nhs-blue hover:bg-nhs-blue/90 text-white"
+                    size="lg"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                        Generating Report...
+                      </>
+                    ) : (
+                      <>
+                        <FileText className="w-4 h-4 mr-2" />
+                        <span className="hidden sm:inline">Generate Report</span>
+                        <span className="sm:hidden">Generate</span>
+                      </>
+                    )}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
 
